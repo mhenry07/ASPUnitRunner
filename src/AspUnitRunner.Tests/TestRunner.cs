@@ -20,5 +20,12 @@ namespace AspUnitRunner.Tests {
             Assert.That(results.Errors, Is.EqualTo(0));
             Assert.That(results.Failures, Is.EqualTo(0));
         }
+
+        [Test]
+        public void Failing_test_should_return_a_failure() {
+            Runner runner = new Runner();
+            Results results = runner.Run();
+            Assert.That(results.Failures, Is.EqualTo(1));
+        }
     }
 }
