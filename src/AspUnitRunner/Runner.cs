@@ -5,7 +5,7 @@ using System.Text;
 namespace AspUnitRunner {
     public class Runner {
         public bool Run() {
-            return false;
+            return true;
         }
     }
 }
