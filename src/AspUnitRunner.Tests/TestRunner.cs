@@ -30,5 +30,15 @@ namespace AspUnitRunner.Tests {
             Results results = runner.Run();
             Assert.That(results.Failures, Is.EqualTo(1));
         }
+
+        [Test]
+        public void Erroneous_test_should_return_an_error() {
+            FakeProxy fakeProxy = new FakeProxy();
+            fakeProxy.HtmlResults = "<html><body><table><tr>Tests: 1, Errors: 1, Failures: 0</tr></table></body></html>";
+
+            Runner runner = new Runner(fakeProxy);
+            Results results = runner.Run();
+            Assert.That(results.Errors, Is.EqualTo(1));
+        }
     }
 }
