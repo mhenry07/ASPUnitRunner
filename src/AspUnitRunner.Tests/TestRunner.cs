@@ -12,5 +12,13 @@ namespace AspUnitRunner.Tests {
             Runner runner = new Runner();
             Assert.That(runner.Run(), Is.TypeOf<Results>());
         }
+
+        [Test]
+        public void Passing_tests_should_return_no_errors_or_failures() {
+            Runner runner = new Runner();
+            Results results = runner.Run();
+            Assert.That(results.Errors, Is.EqualTo(0));
+            Assert.That(results.Failures, Is.EqualTo(0));
+        }
     }
 }
