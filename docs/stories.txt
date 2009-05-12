@@ -25,22 +25,22 @@ Scenario 2.1: Tests run
 Given the ASPUnit tests can run
 And communication with the server is successful
 When I run the tests
-Then they run ??
+Then results should be returned
 
 Scenario 3.1: Passing tests
 Given the ASPUnit tests all pass
 When I run the tests
-Then my NUnit test passes
+Then there are no errors or failures
 
 Scenario 3.2: Failing test
 Given an ASPUnit test fails
 When I run the tests
-Then my NUnit test fails
+Then there is 1 or more failure
 And the number of failing tests is reported
 
 Scenario 3.3: Test error
 Given an ASPUnit test causes an error
 When I run the tests
-Then my NUnit test fails
+Then there is 1 or more error
 And the number of erroneous tests is reported
 

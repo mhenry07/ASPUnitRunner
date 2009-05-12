@@ -8,9 +8,9 @@ namespace AspUnitRunner.Tests {
     [TestFixture]
     public class TestRunner {
         [Test]
-        public void Should_run_tests() {
+        public void Running_tests_should_return_results() {
             Runner runner = new Runner();
-            Assert.That(runner.Run(), Is.True);
+            Assert.That(runner.Run(), Is.TypeOf<Results>());
         }
     }
 }
