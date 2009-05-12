@@ -1,4 +1,6 @@
 *.suo
 *.user
+*.VisualState.xml
+TestResult.xml
 src/*/bin/*
 src/*/obj/*
