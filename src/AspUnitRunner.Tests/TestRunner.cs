@@ -23,7 +23,10 @@ namespace AspUnitRunner.Tests {
 
         [Test]
         public void Failing_test_should_return_a_failure() {
-            Runner runner = new Runner();
+            FakeProxy fakeProxy = new FakeProxy();
+            fakeProxy.HtmlResults = "<html><body><table><tr>Tests: 1, Errors: 0, Failures: 1</tr></table></body></html>";
+
+            Runner runner = new Runner(fakeProxy);
             Results results = runner.Run();
             Assert.That(results.Failures, Is.EqualTo(1));
         }
