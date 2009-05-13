@@ -10,6 +10,7 @@ namespace AspUnitRunner {
         public string GetTestResults(string uri, string postData, ICredentials credentials) {
             WebRequest request = WebRequest.Create(uri);
             request.Method = WebRequestMethods.Http.Post;
+            request.Credentials = credentials;
             request.ContentType = "application/x-www-form-urlencoded";
             SetPostData(request, postData);
 
