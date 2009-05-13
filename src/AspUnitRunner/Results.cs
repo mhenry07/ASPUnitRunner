@@ -12,6 +12,7 @@ namespace AspUnitRunner {
 
         public Results(string htmlResults) {
             ParseResults(htmlResults);
+            Details = htmlResults;
         }
 
         private void ParseResults(string htmlResults) {
