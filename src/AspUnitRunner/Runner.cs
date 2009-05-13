@@ -12,6 +12,7 @@ namespace AspUnitRunner {
 
         private IProxy _proxy;
         private string _baseUri;
+        private ICredentials _credentials;
 
         public Runner(string baseUri)
             : this(baseUri, new Proxy()) {
@@ -27,11 +28,12 @@ namespace AspUnitRunner {
 
         public Runner(string baseUri, ICredentials credentials, IProxy proxy) {
             _baseUri = baseUri;
+            _credentials = credentials;
             _proxy = proxy;
         }
 
         public Results Run(string testContainer) {
-            string htmlResults = _proxy.GetTestResults(GetUri(), GetPostData(testContainer));
+            string htmlResults = _proxy.GetTestResults(GetUri(), GetPostData(testContainer), _credentials);
             return new Results(htmlResults);
         }
 

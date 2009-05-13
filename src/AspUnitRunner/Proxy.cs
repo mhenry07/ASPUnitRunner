@@ -7,7 +7,7 @@ using System.IO;
 namespace AspUnitRunner {
     // Note: this class isn't under test (it depends on WebRequest and WebResponse which are hard to fake).
     class Proxy : IProxy {
-        public string GetTestResults(string uri, string postData) {
+        public string GetTestResults(string uri, string postData, ICredentials credentials) {
             WebRequest request = WebRequest.Create(uri);
             request.Method = WebRequestMethods.Http.Post;
             request.ContentType = "application/x-www-form-urlencoded";

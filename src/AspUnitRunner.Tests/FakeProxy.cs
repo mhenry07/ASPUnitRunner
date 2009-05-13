@@ -12,9 +12,10 @@ namespace AspUnitRunner.Tests {
 
         #region IProxy Members
 
-        public string GetTestResults(string uri, string postData) {
+        public string GetTestResults(string uri, string postData, ICredentials credentials) {
             Uri = uri;
             PostData = postData;
+            Credentials = credentials;
             return HtmlResults;
         }
 
