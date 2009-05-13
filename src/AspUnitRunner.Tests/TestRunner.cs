@@ -11,7 +11,7 @@ namespace AspUnitRunner.Tests {
         public void Running_tests_should_return_results() {
             FakeProxy fakeProxy = new FakeProxy();
             fakeProxy.HtmlResults = FormatTestSummary(1, 0, 0);
-            Runner runner = new Runner(fakeProxy);
+            Runner runner = new Runner("", fakeProxy);
             Assert.That(runner.Run(), Is.TypeOf<Results>());
         }
 
@@ -20,7 +20,7 @@ namespace AspUnitRunner.Tests {
             FakeProxy fakeProxy = new FakeProxy();
             fakeProxy.HtmlResults = FormatTestSummary(1, 0, 0);
 
-            Runner runner = new Runner(fakeProxy);
+            Runner runner = new Runner("", fakeProxy);
             Results results = runner.Run();
             Assert.That(results.Errors, Is.EqualTo(0));
             Assert.That(results.Failures, Is.EqualTo(0));
@@ -31,7 +31,7 @@ namespace AspUnitRunner.Tests {
             FakeProxy fakeProxy = new FakeProxy();
             fakeProxy.HtmlResults = FormatTestSummary(1, 0, 1);
 
-            Runner runner = new Runner(fakeProxy);
+            Runner runner = new Runner("", fakeProxy);
             Results results = runner.Run();
             Assert.That(results.Failures, Is.EqualTo(1));
         }
@@ -41,9 +41,18 @@ namespace AspUnitRunner.Tests {
             FakeProxy fakeProxy = new FakeProxy();
             fakeProxy.HtmlResults = FormatTestSummary(1, 1, 0);
 
-            Runner runner = new Runner(fakeProxy);
+            Runner runner = new Runner("", fakeProxy);
             Results results = runner.Run();
             Assert.That(results.Errors, Is.EqualTo(1));
+        }
+
+        [Test]
+        public void Should_pass_expected_uri_to_proxy() {
+            FakeProxy fakeProxy = new FakeProxy();
+            fakeProxy.HtmlResults = FormatTestSummary(1, 0, 0);
+            Runner runner = new Runner("http://path/to/test-runner", fakeProxy);
+            Results results = runner.Run();
+            Assert.That(fakeProxy.Url, Is.EqualTo("http://path/to/test-runner?UnitRunner=results"));
         }
 
         private string FormatTestSummary(int tests, int errors, int failures) {
