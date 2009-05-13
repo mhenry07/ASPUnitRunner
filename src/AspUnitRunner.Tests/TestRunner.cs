@@ -9,13 +9,18 @@ namespace AspUnitRunner.Tests {
     public class TestRunner {
         [Test]
         public void Running_tests_should_return_results() {
-            Runner runner = new Runner();
+            FakeProxy fakeProxy = new FakeProxy();
+            fakeProxy.HtmlResults = FormatTestSummary(1, 0, 0);
+            Runner runner = new Runner(fakeProxy);
             Assert.That(runner.Run(), Is.TypeOf<Results>());
         }
 
         [Test]
         public void Passing_tests_should_return_no_errors_or_failures() {
-            Runner runner = new Runner();
+            FakeProxy fakeProxy = new FakeProxy();
+            fakeProxy.HtmlResults = FormatTestSummary(1, 0, 0);
+
+            Runner runner = new Runner(fakeProxy);
             Results results = runner.Run();
             Assert.That(results.Errors, Is.EqualTo(0));
             Assert.That(results.Failures, Is.EqualTo(0));
@@ -24,7 +29,7 @@ namespace AspUnitRunner.Tests {
         [Test]
         public void Failing_test_should_return_a_failure() {
             FakeProxy fakeProxy = new FakeProxy();
-            fakeProxy.HtmlResults = "<html><body><table><tr>Tests: 1, Errors: 0, Failures: 1</tr></table></body></html>";
+            fakeProxy.HtmlResults = FormatTestSummary(1, 0, 1);
 
             Runner runner = new Runner(fakeProxy);
             Results results = runner.Run();
@@ -34,11 +39,16 @@ namespace AspUnitRunner.Tests {
         [Test]
         public void Erroneous_test_should_return_an_error() {
             FakeProxy fakeProxy = new FakeProxy();
-            fakeProxy.HtmlResults = "<html><body><table><tr>Tests: 1, Errors: 1, Failures: 0</tr></table></body></html>";
+            fakeProxy.HtmlResults = FormatTestSummary(1, 1, 0);
 
             Runner runner = new Runner(fakeProxy);
             Results results = runner.Run();
             Assert.That(results.Errors, Is.EqualTo(1));
+        }
+
+        private string FormatTestSummary(int tests, int errors, int failures) {
+            return String.Format("<html><body><table><tr>Tests: {0}, Errors: {1}, Failures: {2}</tr></table></body></html>",
+                tests, errors, failures);
         }
     }
 }
