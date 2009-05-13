@@ -18,7 +18,7 @@ namespace AspUnitRunner {
             _proxy = proxy;
         }
 
-        public Results Run() {
+        public Results Run(string testContainer) {
             string htmlResults = _proxy.GetTestResults(GetUri(), "");
             return new Results(htmlResults);
         }

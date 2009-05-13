@@ -12,7 +12,7 @@ namespace AspUnitRunner.Tests {
             FakeProxy fakeProxy = new FakeProxy();
             fakeProxy.HtmlResults = FormatTestSummary(1, 0, 0);
             Runner runner = new Runner("", fakeProxy);
-            Assert.That(runner.Run(), Is.TypeOf<Results>());
+            Assert.That(runner.Run(""), Is.TypeOf<Results>());
         }
 
         [Test]
@@ -21,7 +21,7 @@ namespace AspUnitRunner.Tests {
             fakeProxy.HtmlResults = FormatTestSummary(1, 0, 0);
 
             Runner runner = new Runner("", fakeProxy);
-            Results results = runner.Run();
+            Results results = runner.Run("");
             Assert.That(results.Errors, Is.EqualTo(0));
             Assert.That(results.Failures, Is.EqualTo(0));
         }
@@ -32,7 +32,7 @@ namespace AspUnitRunner.Tests {
             fakeProxy.HtmlResults = FormatTestSummary(1, 0, 1);
 
             Runner runner = new Runner("", fakeProxy);
-            Results results = runner.Run();
+            Results results = runner.Run("");
             Assert.That(results.Failures, Is.EqualTo(1));
         }
 
@@ -42,7 +42,7 @@ namespace AspUnitRunner.Tests {
             fakeProxy.HtmlResults = FormatTestSummary(1, 1, 0);
 
             Runner runner = new Runner("", fakeProxy);
-            Results results = runner.Run();
+            Results results = runner.Run("");
             Assert.That(results.Errors, Is.EqualTo(1));
         }
 
@@ -51,8 +51,17 @@ namespace AspUnitRunner.Tests {
             FakeProxy fakeProxy = new FakeProxy();
             fakeProxy.HtmlResults = FormatTestSummary(1, 0, 0);
             Runner runner = new Runner("http://path/to/test-runner", fakeProxy);
-            Results results = runner.Run();
+            Results results = runner.Run("");
             Assert.That(fakeProxy.Url, Is.EqualTo("http://path/to/test-runner?UnitRunner=results"));
+        }
+
+        [Test]
+        public void Should_pass_expected_data_to_proxy() {
+            FakeProxy fakeProxy = new FakeProxy();
+            fakeProxy.HtmlResults = FormatTestSummary(1, 0, 0);
+            Runner runner = new Runner("http://path/to/test-runner", fakeProxy);
+            Results results = runner.Run("TestContainer");
+            Assert.That(fakeProxy.PostData, Is.EqualTo("cboTestContainers=TestContainer&cboTestCases=All%20Test%20Cases&cmdRun=Run%20Tests"));
         }
 
         private string FormatTestSummary(int tests, int errors, int failures) {
