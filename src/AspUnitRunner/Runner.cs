@@ -19,7 +19,8 @@ namespace AspUnitRunner {
         }
 
         public Results Run(string testContainer) {
-            string htmlResults = _proxy.GetTestResults(GetUri(), "");
+            string htmlResults = _proxy.GetTestResults(GetUri(), 
+                "cboTestContainers=" + testContainer + "&cboTestCases=All%20Test%20Cases&cmdRun=Run%20Tests");
             return new Results(htmlResults);
         }
 
