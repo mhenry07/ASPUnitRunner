@@ -16,55 +16,6 @@ namespace AspUnitRunner.Tests {
         }
 
         [Test]
-        public void Passing_tests_should_return_no_errors_or_failures() {
-            FakeProxy fakeProxy = new FakeProxy();
-            fakeProxy.HtmlResults = FormatTestSummary(1, 0, 0);
-
-            Runner runner = new Runner("", fakeProxy);
-            Results results = runner.Run("");
-            Assert.That(results.Errors, Is.EqualTo(0));
-            Assert.That(results.Failures, Is.EqualTo(0));
-        }
-
-        [Test]
-        public void Failing_test_should_return_a_failure() {
-            FakeProxy fakeProxy = new FakeProxy();
-            fakeProxy.HtmlResults = FormatTestSummary(1, 0, 1);
-
-            Runner runner = new Runner("", fakeProxy);
-            Results results = runner.Run("");
-            Assert.That(results.Failures, Is.EqualTo(1));
-        }
-
-        [Test]
-        public void Erroneous_test_should_return_an_error() {
-            FakeProxy fakeProxy = new FakeProxy();
-            fakeProxy.HtmlResults = FormatTestSummary(1, 1, 0);
-
-            Runner runner = new Runner("", fakeProxy);
-            Results results = runner.Run("");
-            Assert.That(results.Errors, Is.EqualTo(1));
-        }
-
-        [Test]
-        public void Should_return_expected_test_count() {
-            FakeProxy fakeProxy = new FakeProxy();
-            fakeProxy.HtmlResults = FormatTestSummary(1, 0, 0);
-            Runner runner = new Runner("", fakeProxy);
-            Results results = runner.Run("");
-            Assert.That(results.Tests, Is.EqualTo(1));
-        }
-
-        [Test]
-        public void Should_return_expected_details() {
-            FakeProxy fakeProxy = new FakeProxy();
-            fakeProxy.HtmlResults = FormatTestSummary(1, 0, 0);
-            Runner runner = new Runner("", fakeProxy);
-            Results results = runner.Run("");
-            Assert.That(results.Details, Is.EqualTo(fakeProxy.HtmlResults));
-        }
-
-        [Test]
         public void Should_pass_expected_uri_to_proxy() {
             FakeProxy fakeProxy = new FakeProxy();
             fakeProxy.HtmlResults = FormatTestSummary(1, 0, 0);
@@ -82,7 +33,7 @@ namespace AspUnitRunner.Tests {
             Assert.That(fakeProxy.PostData, Is.EqualTo("cboTestContainers=TestContainer&cboTestCases=All+Test+Cases&cmdRun=Run+Tests"));
         }
 
-        private string FormatTestSummary(int tests, int errors, int failures) {
+        public static string FormatTestSummary(int tests, int errors, int failures) {
             return String.Format("<html><body><table><tr>Tests: {0}, Errors: {1}, Failures: {2}</tr></table></body></html>",
                 tests, errors, failures);
         }
