@@ -4,6 +4,8 @@ using System.Text;
 
 namespace AspUnitRunner {
     public class Runner {
+        private const string BaseQueryString = "?UnitRunner=results";
+
         private IProxy _proxy;
         private string _baseUri;
 
@@ -17,8 +19,12 @@ namespace AspUnitRunner {
         }
 
         public Results Run() {
-            string htmlResults = _proxy.GetTestResults(_baseUri + "?UnitRunner=results", "");
+            string htmlResults = _proxy.GetTestResults(GetUri(), "");
             return new Results(htmlResults);
+        }
+
+        private string GetUri() {
+            return _baseUri + BaseQueryString;
         }
     }
 }
