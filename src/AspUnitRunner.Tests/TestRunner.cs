@@ -56,6 +56,15 @@ namespace AspUnitRunner.Tests {
         }
 
         [Test]
+        public void Should_return_expected_details() {
+            FakeProxy fakeProxy = new FakeProxy();
+            fakeProxy.HtmlResults = FormatTestSummary(1, 0, 0);
+            Runner runner = new Runner("", fakeProxy);
+            Results results = runner.Run("");
+            Assert.That(results.Details, Is.EqualTo(fakeProxy.HtmlResults));
+        }
+
+        [Test]
         public void Should_pass_expected_uri_to_proxy() {
             FakeProxy fakeProxy = new FakeProxy();
             fakeProxy.HtmlResults = FormatTestSummary(1, 0, 0);

@@ -8,6 +8,7 @@ namespace AspUnitRunner {
         public int Tests { get; private set; }
         public int Errors { get; private set; }
         public int Failures { get; private set; }
+        public string Details { get; private set; }
 
         public Results(string htmlResults) {
             ParseResults(htmlResults);
