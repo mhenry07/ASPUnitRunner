@@ -52,7 +52,7 @@ namespace AspUnitRunner.Tests {
             fakeProxy.HtmlResults = FormatTestSummary(1, 0, 0);
             Runner runner = new Runner("http://path/to/test-runner", fakeProxy);
             Results results = runner.Run("");
-            Assert.That(fakeProxy.Url, Is.EqualTo("http://path/to/test-runner?UnitRunner=results"));
+            Assert.That(fakeProxy.Uri, Is.EqualTo("http://path/to/test-runner?UnitRunner=results"));
         }
 
         [Test]

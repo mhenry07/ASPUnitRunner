@@ -4,6 +4,6 @@ using System.Text;
 
 namespace AspUnitRunner {
     public interface IProxy {
-        string GetTestResults(string url, string postData);
+        string GetTestResults(string uri, string postData);
     }
 }
