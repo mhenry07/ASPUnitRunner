@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Web;
 
 namespace AspUnitRunner {
     public class Runner {
         private const string BaseQueryString = "?UnitRunner=results";
+        private const string AllTestCases = "All Test Cases";
+        private const string RunCommand = "Run Tests";
 
         private IProxy _proxy;
         private string _baseUri;
@@ -19,13 +22,17 @@ namespace AspUnitRunner {
         }
 
         public Results Run(string testContainer) {
-            string htmlResults = _proxy.GetTestResults(GetUri(), 
-                "cboTestContainers=" + testContainer + "&cboTestCases=All%20Test%20Cases&cmdRun=Run%20Tests");
+            string htmlResults = _proxy.GetTestResults(GetUri(), GetPostData(testContainer));
             return new Results(htmlResults);
         }
 
         private string GetUri() {
             return _baseUri + BaseQueryString;
+        }
+
+        private string GetPostData(string testContainer) {
+            return String.Format("cboTestContainers={0}&cboTestCases={1}&cmdRun={2}",
+                HttpUtility.UrlEncode(testContainer), HttpUtility.UrlEncode(AllTestCases), HttpUtility.UrlEncode(RunCommand));
         }
     }
 }

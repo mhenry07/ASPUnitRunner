@@ -61,7 +61,7 @@ namespace AspUnitRunner.Tests {
             fakeProxy.HtmlResults = FormatTestSummary(1, 0, 0);
             Runner runner = new Runner("http://path/to/test-runner", fakeProxy);
             Results results = runner.Run("TestContainer");
-            Assert.That(fakeProxy.PostData, Is.EqualTo("cboTestContainers=TestContainer&cboTestCases=All%20Test%20Cases&cmdRun=Run%20Tests"));
+            Assert.That(fakeProxy.PostData, Is.EqualTo("cboTestContainers=TestContainer&cboTestCases=All+Test+Cases&cmdRun=Run+Tests"));
         }
 
         private string FormatTestSummary(int tests, int errors, int failures) {
