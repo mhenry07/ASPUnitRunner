@@ -14,8 +14,9 @@ namespace AspUnitRunner {
         }
 
         private void ParseResults(string htmlResults) {
-            Regex regex = new Regex(@"Errors\:\s*(?<errors>\d+),\s*Failures\:\s*(?<failures>\d+)");
+            Regex regex = new Regex(@"Tests\:\s*(?<tests>\d+),\s*Errors\:\s*(?<errors>\d+),\s*Failures\:\s*(?<failures>\d+)");
             foreach (Match match in regex.Matches(htmlResults)) {
+                Tests = int.Parse(match.Groups["tests"].Value);
                 Errors = int.Parse(match.Groups["errors"].Value);
                 Failures = int.Parse(match.Groups["failures"].Value);
             }
