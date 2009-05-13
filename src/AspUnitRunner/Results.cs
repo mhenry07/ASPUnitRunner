@@ -5,6 +5,7 @@ using System.Text.RegularExpressions;
 
 namespace AspUnitRunner {
     public class Results {
+        public int Tests { get; private set; }
         public int Errors { get; private set; }
         public int Failures { get; private set; }
 
