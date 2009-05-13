@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using NUnit.Framework;
 using AspUnitRunner;
+using System.Net;
 
 namespace AspUnitRunner.Tests {
     [TestFixture]
@@ -33,6 +34,14 @@ namespace AspUnitRunner.Tests {
             Runner runner = new Runner("http://path/to/test-runner", _fakeProxy);
             Results results = runner.Run("TestContainer");
             Assert.That(_fakeProxy.PostData, Is.EqualTo("cboTestContainers=TestContainer&cboTestCases=All+Test+Cases&cmdRun=Run+Tests"));
+        }
+
+        [Test]
+        public void Should_pass_credentials_to_proxy() {
+            ICredentials credentials = new NetworkCredential("username", "password");
+            Runner runner = new Runner("", credentials, _fakeProxy);
+            Results results = runner.Run("");
+            Assert.That(_fakeProxy.Credentials, Is.EqualTo(credentials));
         }
 
         public static string FormatTestSummary(int tests, int errors, int failures) {

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Web;
+using System.Net;
 
 namespace AspUnitRunner {
     public class Runner {
@@ -15,8 +16,16 @@ namespace AspUnitRunner {
         public Runner(string baseUri)
             : this(baseUri, new Proxy()) {
         }
-        
-        public Runner(string baseUri, IProxy proxy) {
+
+        public Runner(string baseUri, ICredentials credentials)
+            : this(baseUri, credentials, new Proxy()) {
+        }
+
+        public Runner(string baseUri, IProxy proxy)
+            : this(baseUri, null, proxy) {
+        }
+
+        public Runner(string baseUri, ICredentials credentials, IProxy proxy) {
             _baseUri = baseUri;
             _proxy = proxy;
         }
