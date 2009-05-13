@@ -17,7 +17,7 @@ namespace AspUnitRunner {
         }
 
         public Results Run() {
-            string htmlResults = _proxy.GetTestResults("", "");
+            string htmlResults = _proxy.GetTestResults(_baseUri + "?UnitRunner=results", "");
             return new Results(htmlResults);
         }
     }
