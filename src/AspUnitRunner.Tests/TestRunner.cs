@@ -13,7 +13,7 @@ namespace AspUnitRunner.Tests {
             _proxy = MockRepository.GenerateStub<IProxy>();
             _proxy.Stub(x => x.GetTestResults("", "", null))
                 .IgnoreArguments()
-                .Return(FormatTestSummary(1, 0, 0));
+                .Return(TestResults.FormatTestSummary(1, 0, 0));
         }
 
         [Test]
@@ -42,11 +42,6 @@ namespace AspUnitRunner.Tests {
             Runner runner = new Runner("", credentials, _proxy);
             Results results = runner.Run("");
             _proxy.AssertWasCalled(x => x.GetTestResults(Arg<string>.Is.Anything, Arg<string>.Is.Anything, Arg.Is(credentials)));
-        }
-
-        public static string FormatTestSummary(int tests, int errors, int failures) {
-            return String.Format("<html><body><table><tr>Tests: {0}, Errors: {1}, Failures: {2}</tr></table></body></html>",
-                tests, errors, failures);
         }
     }
 }

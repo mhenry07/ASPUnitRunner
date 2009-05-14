@@ -39,8 +39,9 @@ namespace AspUnitRunner.Tests {
             Assert.That(results.Details, Is.EqualTo(htmlTestResults));
         }
 
-        private string FormatTestSummary(int tests, int errors, int failures) {
-            return TestRunner.FormatTestSummary(tests, errors, failures);
+        public static string FormatTestSummary(int tests, int errors, int failures) {
+            return String.Format("<html><body><table><tr>Tests: {0}, Errors: {1}, Failures: {2}</tr></table></body></html>",
+                tests, errors, failures);
         }
     }
 }
