@@ -6,11 +6,11 @@ using Rhino.Mocks;
 namespace AspUnitRunner.Tests {
     [TestFixture]
     public class TestRunner {
-        private IProxy _proxy;
+        private IAspProxy _proxy;
 
         [SetUp]
         public void Setup() {
-            _proxy = MockRepository.GenerateStub<IProxy>();
+            _proxy = MockRepository.GenerateStub<IAspProxy>();
             _proxy.Stub(x => x.GetTestResults("", "", null))
                 .IgnoreArguments()
                 .Return(TestResults.FormatTestSummary(1, 0, 0));

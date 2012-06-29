@@ -10,23 +10,23 @@ namespace AspUnitRunner {
         private const string AllTestCases = "All Test Cases";
         private const string RunCommand = "Run Tests";
 
-        private IProxy _proxy;
+        private IAspProxy _proxy;
         private string _baseUri;
         private ICredentials _credentials;
 
         public Runner(string baseUri)
-            : this(baseUri, new Proxy()) {
+            : this(baseUri, new AspProxy()) {
         }
 
         public Runner(string baseUri, ICredentials credentials)
-            : this(baseUri, credentials, new Proxy()) {
+            : this(baseUri, credentials, new AspProxy()) {
         }
 
-        public Runner(string baseUri, IProxy proxy)
+        public Runner(string baseUri, IAspProxy proxy)
             : this(baseUri, null, proxy) {
         }
 
-        public Runner(string baseUri, ICredentials credentials, IProxy proxy) {
+        public Runner(string baseUri, ICredentials credentials, IAspProxy proxy) {
             _baseUri = baseUri;
             _credentials = credentials;
             _proxy = proxy;
