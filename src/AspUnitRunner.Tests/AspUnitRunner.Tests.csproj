@@ -47,7 +47,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FakeWebRequestCreate.cs" />
+    <Compile Include="FakeRequestCreator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TestWebRequestFactory.cs" />
     <Compile Include="TestResults.cs" />
     <Compile Include="TestRunner.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

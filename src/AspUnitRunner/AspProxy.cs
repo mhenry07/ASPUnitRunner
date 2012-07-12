@@ -4,8 +4,17 @@ using System.Text;
 
 namespace AspUnitRunner {
     internal class AspProxy : IAspProxy {
+        private IWebRequestFactory _webRequestFactory;
+
+        public AspProxy() : this(new WebRequestFactory()) {
+        }
+
+        public AspProxy(IWebRequestFactory webRequestFactory) {
+            _webRequestFactory = webRequestFactory;
+        }
+
         public string GetTestResults(string uri, string postData, ICredentials credentials) {
-            WebRequest request = WebRequest.Create(uri);
+            var request = _webRequestFactory.Create(uri);
             request.Method = WebRequestMethods.Http.Post;
             request.Credentials = credentials;
             request.ContentType = "application/x-www-form-urlencoded";

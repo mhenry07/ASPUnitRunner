@@ -7,6 +7,7 @@ using Rhino.Mocks;
 namespace AspUnitRunner.Tests {
     [TestFixture]
     public class TestAspProxy {
+        IWebRequestFactory _factory;
         WebRequest _request;
         WebResponse _response;
         Stream _requestStream;
@@ -14,18 +15,19 @@ namespace AspUnitRunner.Tests {
 
         [SetUp]
         public void Setup() {
+            _factory = MockRepository.GenerateStub<IWebRequestFactory>();
             _request = MockRepository.GenerateStub<WebRequest>();
             _response = MockRepository.GenerateStub<WebResponse>();
             _requestStream = MockRepository.GenerateMock<Stream>();
             _responseStream = new MemoryStream();
+            _factory.Stub(x => x.Create(Arg<string>.Is.Anything))
+                .Return(_request);
             _request.Stub(x => x.GetRequestStream())
                 .Return(_requestStream);
             _request.Stub(x => x.GetResponse())
                 .Return(_response);
             _response.Stub(x => x.GetResponseStream())
                 .Return(_responseStream);
-
-            WebRequest.RegisterPrefix("fake:", new FakeWebRequestCreate(_request));
         }
 
         [TearDown]
@@ -43,7 +45,7 @@ namespace AspUnitRunner.Tests {
             _responseStream.Write(responseBytes, 0, responseBytes.Length);
             _responseStream.Position = 0;
 
-            var proxy = new AspProxy();
+            var proxy = new AspProxy(_factory);
             var results = proxy.GetTestResults("fake://host", postData, null);
 
             Assert.That(_request.Method, Is.EqualTo(WebRequestMethods.Http.Post));
