@@ -50,6 +50,7 @@
     <Compile Include="FakeRequestCreator.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="FakeTestFormatter.cs" />
     <Compile Include="TestWebRequestFactory.cs" />
     <Compile Include="TestResults.cs" />
     <Compile Include="TestRunner.cs" />

@@ -13,7 +13,7 @@ namespace AspUnitRunner.Tests {
             _proxy = MockRepository.GenerateStub<IAspProxy>();
             _proxy.Stub(proxy => proxy.GetTestResults("", "", null))
                 .IgnoreArguments()
-                .Return(TestResults.FormatTestSummary(1, 0, 0));
+                .Return(FakeTestFormatter.FormatSummary(1, 0, 0));
         }
 
         [Test]
