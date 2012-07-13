@@ -8,34 +8,34 @@ namespace AspUnitRunner {
         private const string RunCommand = "Run Tests";
 
         private readonly IAspProxy _proxy;
-        private readonly string _baseUri;
+        private readonly string _baseUrl;
         private readonly ICredentials _credentials;
 
-        public Runner(string baseUri)
-            : this(baseUri, new AspProxy()) {
+        public Runner(string baseUrl)
+            : this(baseUrl, new AspProxy()) {
         }
 
-        public Runner(string baseUri, ICredentials credentials)
-            : this(baseUri, credentials, new AspProxy()) {
+        public Runner(string baseUrl, ICredentials credentials)
+            : this(baseUrl, credentials, new AspProxy()) {
         }
 
-        public Runner(string baseUri, IAspProxy proxy)
-            : this(baseUri, null, proxy) {
+        public Runner(string baseUrl, IAspProxy proxy)
+            : this(baseUrl, null, proxy) {
         }
 
-        public Runner(string baseUri, ICredentials credentials, IAspProxy proxy) {
-            _baseUri = baseUri;
+        public Runner(string baseUrl, ICredentials credentials, IAspProxy proxy) {
+            _baseUrl = baseUrl;
             _credentials = credentials;
             _proxy = proxy;
         }
 
         public Results Run(string testContainer) {
-            var htmlResults = _proxy.GetTestResults(GetUri(), GetPostData(testContainer), _credentials);
+            var htmlResults = _proxy.GetTestResults(GetUrl(), GetPostData(testContainer), _credentials);
             return new Results(htmlResults);
         }
 
-        private string GetUri() {
-            return _baseUri + BaseQueryString;
+        private string GetUrl() {
+            return _baseUrl + BaseQueryString;
         }
 
         private string GetPostData(string testContainer) {

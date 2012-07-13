@@ -14,8 +14,8 @@ namespace AspUnitRunner {
             _webRequestFactory = webRequestFactory;
         }
 
-        public string GetTestResults(string uri, string postData, ICredentials credentials) {
-            var request = _webRequestFactory.Create(uri);
+        public string GetTestResults(string url, string postData, ICredentials credentials) {
+            var request = _webRequestFactory.Create(url);
             request.Method = WebRequestMethods.Http.Post;
             request.Credentials = credentials;
             request.ContentType = "application/x-www-form-urlencoded";

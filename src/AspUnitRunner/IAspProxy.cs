@@ -2,6 +2,6 @@
 
 namespace AspUnitRunner {
     public interface IAspProxy {
-        string GetTestResults(string uri, string postData, ICredentials credentials);
+        string GetTestResults(string url, string postData, ICredentials credentials);
     }
 }
