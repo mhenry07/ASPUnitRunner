@@ -23,29 +23,18 @@ namespace AspUnitRunner.Tests {
         }
 
         [Test]
-        public void Should_pass_expected_uri_to_proxy() {
-            var runner = new Runner("http://path/to/test-runner", _proxy);
-            var results = runner.Run("");
-            _proxy.AssertWasCalled(proxy =>
-                proxy.GetTestResults(
-                    Arg.Is("http://path/to/test-runner?UnitRunner=results"),
-                    Arg<string>.Is.Anything,
-                    Arg<ICredentials>.Is.Anything));
-        }
-
-        [Test]
-        public void Should_pass_expected_data_to_proxy() {
+        public void Running_tests_should_pass_expected_arguments_to_proxy() {
             var runner = new Runner("http://path/to/test-runner", _proxy);
             var results = runner.Run("TestContainer");
             _proxy.AssertWasCalled(proxy =>
                 proxy.GetTestResults(
-                    Arg<string>.Is.Anything,
+                    Arg.Is("http://path/to/test-runner?UnitRunner=results"),
                     Arg.Is("cboTestContainers=TestContainer&cboTestCases=All+Test+Cases&cmdRun=Run+Tests"),
-                    Arg<ICredentials>.Is.Anything));
+                    Arg<ICredentials>.Is.Null));
         }
 
         [Test]
-        public void Should_pass_credentials_to_proxy() {
+        public void Running_tests_with_credentials_should_pass_credentials_to_proxy() {
             ICredentials credentials = new NetworkCredential("username", "password");
             var runner = new Runner("", credentials, _proxy);
             var results = runner.Run("");
