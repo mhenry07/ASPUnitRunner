@@ -39,6 +39,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ResultParser.cs" />
     <Compile Include="IAspProxy.cs" />
     <Compile Include="IWebRequestFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

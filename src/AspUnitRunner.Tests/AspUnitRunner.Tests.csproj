@@ -51,8 +51,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="FakeTestFormatter.cs" />
-    <Compile Include="TestWebRequestFactory.cs" />
     <Compile Include="TestResults.cs" />
+    <Compile Include="TestWebRequestFactory.cs" />
+    <Compile Include="TestResultParser.cs" />
     <Compile Include="TestRunner.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestAspProxy.cs">
