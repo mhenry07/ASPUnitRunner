@@ -14,6 +14,11 @@ namespace AspUnitRunner.Tests {
             WebRequest.RegisterPrefix("fake:", _requestCreator);
         }
 
+        [TearDown]
+        public void TearDown() {
+            _requestCreator.Request = null;
+        }
+
         [Test]
         public void Create_should_create_expected_web_request() {
             var expectedRequest = MockRepository.GenerateStub<WebRequest>();

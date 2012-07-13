@@ -9,7 +9,7 @@ namespace AspUnitRunner.Tests {
         private IAspProxy _proxy;
 
         [SetUp]
-        public void Setup() {
+        public void SetUp() {
             _proxy = MockRepository.GenerateStub<IAspProxy>();
             _proxy.Stub(proxy => proxy.GetTestResults("", "", null))
                 .IgnoreArguments()

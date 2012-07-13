@@ -15,7 +15,7 @@ namespace AspUnitRunner.Tests {
         private Stream _responseStream;
 
         [SetUp]
-        public void Setup() {
+        public void SetUp() {
             _factory = MockRepository.GenerateStub<IWebRequestFactory>();
             _request = MockRepository.GenerateStub<WebRequest>();
             _response = MockRepository.GenerateStub<WebResponse>();
@@ -33,7 +33,7 @@ namespace AspUnitRunner.Tests {
 
         [TearDown]
         public void TearDown() {
-            _responseStream.Dispose();
+            _responseStream.Close();
         }
 
         [Test]
