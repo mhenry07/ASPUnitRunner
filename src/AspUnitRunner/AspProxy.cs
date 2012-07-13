@@ -6,7 +6,8 @@ namespace AspUnitRunner {
     internal class AspProxy : IAspProxy {
         private IWebRequestFactory _webRequestFactory;
 
-        public AspProxy() : this(new WebRequestFactory()) {
+        public AspProxy()
+            : this(new WebRequestFactory()) {
         }
 
         public AspProxy(IWebRequestFactory webRequestFactory) {
@@ -24,19 +25,18 @@ namespace AspUnitRunner {
         }
 
         private void SetPostData(WebRequest request, string postData) {
-            ASCIIEncoding encoding = new ASCIIEncoding();
-            byte[] postBytes = encoding.GetBytes(postData);
+            var encoding = new ASCIIEncoding();
+            var postBytes = encoding.GetBytes(postData);
             request.ContentLength = postBytes.Length;
-            using (Stream requestStream = request.GetRequestStream()) {
+            using (var requestStream = request.GetRequestStream()) {
                 requestStream.Write(postBytes, 0, postBytes.Length);
             }
         }
 
         private string GetResponse(WebRequest request) {
-            using (WebResponse response = request.GetResponse()) {
-                using (StreamReader responseStream = new StreamReader(response.GetResponseStream())) {
-                    return responseStream.ReadToEnd();
-                }
+            using (var response = request.GetResponse())
+            using (var responseStream = new StreamReader(response.GetResponseStream())) {
+                return responseStream.ReadToEnd();
             }
         }
     }

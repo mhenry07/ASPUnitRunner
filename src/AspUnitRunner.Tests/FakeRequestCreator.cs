@@ -6,7 +6,8 @@ namespace AspUnitRunner.Tests {
     internal sealed class FakeRequestCreator : IWebRequestCreate {
         private static readonly FakeRequestCreator _instance = new FakeRequestCreator();
 
-        private FakeRequestCreator() {}
+        private FakeRequestCreator() {
+        }
 
         public static FakeRequestCreator Instance {
             get {

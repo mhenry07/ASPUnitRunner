@@ -7,11 +7,11 @@ using Rhino.Mocks;
 namespace AspUnitRunner.Tests {
     [TestFixture]
     public class TestAspProxy {
-        IWebRequestFactory _factory;
-        WebRequest _request;
-        WebResponse _response;
-        Stream _requestStream;
-        Stream _responseStream;
+        private IWebRequestFactory _factory;
+        private WebRequest _request;
+        private WebResponse _response;
+        private Stream _requestStream;
+        private Stream _responseStream;
 
         [SetUp]
         public void Setup() {

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 
 namespace AspUnitRunner {
     public class Results {
@@ -16,7 +13,7 @@ namespace AspUnitRunner {
         }
 
         private void ParseResults(string htmlResults) {
-            Regex regex = new Regex(@"Tests\:\s*(?<tests>\d+),\s*Errors\:\s*(?<errors>\d+),\s*Failures\:\s*(?<failures>\d+)");
+            var regex = new Regex(@"Tests\:\s*(?<tests>\d+),\s*Errors\:\s*(?<errors>\d+),\s*Failures\:\s*(?<failures>\d+)");
             foreach (Match match in regex.Matches(htmlResults)) {
                 Tests = int.Parse(match.Groups["tests"].Value);
                 Errors = int.Parse(match.Groups["errors"].Value);

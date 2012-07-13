@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Net;
 using System.Web;
-using System.Net;
 
 namespace AspUnitRunner {
     public class Runner {
@@ -33,7 +30,7 @@ namespace AspUnitRunner {
         }
 
         public Results Run(string testContainer) {
-            string htmlResults = _proxy.GetTestResults(GetUri(), GetPostData(testContainer), _credentials);
+            var htmlResults = _proxy.GetTestResults(GetUri(), GetPostData(testContainer), _credentials);
             return new Results(htmlResults);
         }
 
@@ -42,7 +39,7 @@ namespace AspUnitRunner {
         }
 
         private string GetPostData(string testContainer) {
-            return String.Format("cboTestContainers={0}&cboTestCases={1}&cmdRun={2}",
+            return string.Format("cboTestContainers={0}&cboTestCases={1}&cmdRun={2}",
                 HttpUtility.UrlEncode(testContainer), HttpUtility.UrlEncode(AllTestCases), HttpUtility.UrlEncode(RunCommand));
         }
     }
