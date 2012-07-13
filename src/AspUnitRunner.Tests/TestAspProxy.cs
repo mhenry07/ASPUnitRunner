@@ -3,6 +3,7 @@ using System.Net;
 using System.Text;
 using NUnit.Framework;
 using Rhino.Mocks;
+using AspUnitRunner;
 
 namespace AspUnitRunner.Tests {
     [TestFixture]
@@ -20,13 +21,13 @@ namespace AspUnitRunner.Tests {
             _response = MockRepository.GenerateStub<WebResponse>();
             _requestStream = MockRepository.GenerateMock<Stream>();
             _responseStream = new MemoryStream();
-            _factory.Stub(x => x.Create(Arg<string>.Is.Anything))
+            _factory.Stub(factory => factory.Create(Arg<string>.Is.Anything))
                 .Return(_request);
-            _request.Stub(x => x.GetRequestStream())
+            _request.Stub(request => request.GetRequestStream())
                 .Return(_requestStream);
-            _request.Stub(x => x.GetResponse())
+            _request.Stub(request => request.GetResponse())
                 .Return(_response);
-            _response.Stub(x => x.GetResponseStream())
+            _response.Stub(response => response.GetResponseStream())
                 .Return(_responseStream);
         }
 
@@ -52,7 +53,7 @@ namespace AspUnitRunner.Tests {
             Assert.That(_request.Credentials, Is.Null);
             Assert.That(_request.ContentType, Is.EqualTo("application/x-www-form-urlencoded"));
             Assert.That(_request.ContentLength, Is.EqualTo(postBytes.Length));
-            _requestStream.AssertWasCalled(x => x.Write(postBytes, 0, postBytes.Length));
+            _requestStream.AssertWasCalled(stream => stream.Write(postBytes, 0, postBytes.Length));
             Assert.That(results, Is.EqualTo(expectedResponse));
         }
     }
