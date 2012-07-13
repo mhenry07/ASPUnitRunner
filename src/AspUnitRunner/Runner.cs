@@ -7,9 +7,9 @@ namespace AspUnitRunner {
         private const string AllTestCases = "All Test Cases";
         private const string RunCommand = "Run Tests";
 
-        private IAspProxy _proxy;
-        private string _baseUri;
-        private ICredentials _credentials;
+        private readonly IAspProxy _proxy;
+        private readonly string _baseUri;
+        private readonly ICredentials _credentials;
 
         public Runner(string baseUri)
             : this(baseUri, new AspProxy()) {

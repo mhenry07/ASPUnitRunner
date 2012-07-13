@@ -4,7 +4,7 @@ using System.Text;
 
 namespace AspUnitRunner {
     internal class AspProxy : IAspProxy {
-        private IWebRequestFactory _webRequestFactory;
+        private readonly IWebRequestFactory _webRequestFactory;
 
         public AspProxy()
             : this(new WebRequestFactory()) {
