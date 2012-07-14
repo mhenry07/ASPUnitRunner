@@ -8,7 +8,7 @@
 Dim runner
 Set runner = New UnitRunner
 Call runner.AddTestContainer(New CalculatorTest)
-Call runner.AddTestContainer(New StringUtilTest)
+Call runner.AddTestContainer(New StringUtilityTest)
 
 Call runner.Display()
 %>
