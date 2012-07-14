@@ -10,7 +10,7 @@ namespace asp.NUnitTests {
         [Test]
         public void TestCase(
             // set ASPUnit test containers here
-            [Values("CalculatorTest", "StringUtilityTest")] string testContainer
+            [Values("CalculatorTest", "StringUtilityTest", "FailureTest")] string testContainer
             ) {
             var runner = new Runner(AspUnitUrl);
             var results = runner.Run(testContainer);
