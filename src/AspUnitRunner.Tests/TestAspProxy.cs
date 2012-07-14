@@ -12,7 +12,6 @@ namespace AspUnitRunner.Tests {
         private WebRequest _request;
         private WebResponse _response;
         private Stream _requestStream;
-        private Stream _responseStream;
 
         [SetUp]
         public void SetUp() {
@@ -20,41 +19,41 @@ namespace AspUnitRunner.Tests {
             _request = MockRepository.GenerateStub<WebRequest>();
             _response = MockRepository.GenerateStub<WebResponse>();
             _requestStream = MockRepository.GenerateMock<Stream>();
-            _responseStream = new MemoryStream();
             _factory.Stub(factory => factory.Create(Arg<string>.Is.Anything))
                 .Return(_request);
             _request.Stub(request => request.GetRequestStream())
                 .Return(_requestStream);
             _request.Stub(request => request.GetResponse())
                 .Return(_response);
-            _response.Stub(response => response.GetResponseStream())
-                .Return(_responseStream);
-        }
-
-        [TearDown]
-        public void TearDown() {
-            _responseStream.Close();
         }
 
         [Test]
-        public void GetTestResults_should_post_request_and_return_response() {
-            var encoding = new ASCIIEncoding();
-            var postData = "postdata";
-            var postBytes = encoding.GetBytes(postData);
-            var expectedResponse = "response";
-            var responseBytes = encoding.GetBytes(expectedResponse);
-            _responseStream.Write(responseBytes, 0, responseBytes.Length);
-            _responseStream.Position = 0;
+        public void GetTestResults_should_post_request_and_return_expected_response() {
+            string results;
 
-            var proxy = new AspProxy(_factory);
-            var results = proxy.GetTestResults("fake://host", postData, null);
+            const string postData = "postdata";
+            var postBytes = Encoding.ASCII.GetBytes(postData);
+            const string expectedResponse = "response";
+            using (var responseStream = SetupResponseStream(expectedResponse)) {
+
+                var proxy = new AspProxy(_factory);
+                results = proxy.GetTestResults("fake://host", postData, null);
+            }
 
             Assert.That(_request.Method, Is.EqualTo(WebRequestMethods.Http.Post));
-            Assert.That(_request.Credentials, Is.Null);
             Assert.That(_request.ContentType, Is.EqualTo("application/x-www-form-urlencoded"));
+            Assert.That(_request.Credentials, Is.Null);
             Assert.That(_request.ContentLength, Is.EqualTo(postBytes.Length));
             _requestStream.AssertWasCalled(stream => stream.Write(postBytes, 0, postBytes.Length));
             Assert.That(results, Is.EqualTo(expectedResponse));
+        }
+
+        private Stream SetupResponseStream(string expectedResponse) {
+            var bytes = Encoding.ASCII.GetBytes(expectedResponse);
+            var stream = new MemoryStream(bytes);
+            _response.Stub(response => response.GetResponseStream())
+                .Return(stream);
+            return stream;
         }
     }
 }
