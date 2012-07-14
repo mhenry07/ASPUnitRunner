@@ -15,13 +15,18 @@ namespace AspUnitRunner {
         }
 
         public string GetTestResults(string url, string postData, ICredentials credentials) {
-            var request = _webRequestFactory.Create(url);
-            request.Method = WebRequestMethods.Http.Post;
+            var request = CreatePostRequest(url);
             request.Credentials = credentials;
-            request.ContentType = "application/x-www-form-urlencoded";
             SetPostData(request, postData);
 
             return GetResponse(request);
+        }
+
+        private WebRequest CreatePostRequest(string url) {
+            var request = _webRequestFactory.Create(url);
+            request.Method = WebRequestMethods.Http.Post;
+            request.ContentType = "application/x-www-form-urlencoded";
+            return request;
         }
 
         private void SetPostData(WebRequest request, string postData) {
