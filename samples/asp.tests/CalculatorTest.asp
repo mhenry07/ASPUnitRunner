@@ -1,4 +1,4 @@
-﻿<!-- #include file="../asp/Calculator.inc.asp" -->
+﻿<!-- #include virtual="/asp/Calculator.inc.asp" -->
 <%
 Class CalculatorTest
 	Private m_calculator

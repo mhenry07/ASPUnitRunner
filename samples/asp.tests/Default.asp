@@ -1,6 +1,6 @@
 ﻿<%@ LANGUAGE="VBScript" %>
 <% Option Explicit %>
-<!-- #include file="../ASPUnit/include/ASPUnitRunner.asp" -->
+<!-- #include virtual="/ASPUnit/include/ASPUnitRunner.asp" -->
 <!-- #include file="CalculatorTest.asp" -->
 <!-- #include file="StringUtilityTest.asp" -->
 <!-- #include file="FailureTest.asp" -->
