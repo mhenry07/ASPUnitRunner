@@ -2,7 +2,7 @@
 *.user
 *.VisualState.xml
 TestResult.xml
-samples/*/bin/*
-samples/*/obj/*
+sample/*/bin/*
+sample/*/obj/*
 src/*/bin/*
 src/*/obj/*

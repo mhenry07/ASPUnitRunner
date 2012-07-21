@@ -1,7 +1,7 @@
 ﻿<%@ LANGUAGE="VBScript" %>
 <% Option Explicit %>
-<!-- #include file="Calculator.inc.asp" -->
-<!-- #include file="StringUtility.inc.asp" -->
+<!-- #include file="includes/Calculator.inc.asp" -->
+<!-- #include file="includes/StringUtility.inc.asp" -->
 <%
 Dim calc, stringUtil
 Set calc = New Calculator
@@ -13,7 +13,7 @@ Set stringUtil = New StringUtility
 </head>
 <body>
 	<h1>AspUnitRunner sample</h1>
-	<p>This page is a sample page showing the tested code in use. Run the ASPUnit tests <a href="../asp.tests">here</a>.</p>
+	<p>This page is a sample page showing the tested code in use. Run the ASPUnit tests <a href="tests">here</a>.</p>
 	<h2>Example usage:</h2>
 	<dl>
 		<dt>Calculator.Add example:</dt>
