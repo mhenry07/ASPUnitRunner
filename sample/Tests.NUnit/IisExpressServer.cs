@@ -47,7 +47,8 @@ namespace AspUnitRunner.Sample.Tests.NUnit {
         public void Stop() {
             if (_iisProcess == null)
                 return;
-            _iisProcess.CloseMainWindow();
+            if (!_iisProcess.HasExited)
+                _iisProcess.CloseMainWindow();
             _iisProcess.Dispose();
             _iisProcess = null;
         }
