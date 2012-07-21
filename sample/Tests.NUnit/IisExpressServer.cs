@@ -7,6 +7,7 @@ namespace AspUnitRunner.Sample.Tests.NUnit {
         private readonly string _siteName;
         private Process _iisProcess;
 
+        // siteName is the name of the configured web site to start in IIS Express
         public IisExpressServer(string siteName) {
             _siteName = siteName;
         }
