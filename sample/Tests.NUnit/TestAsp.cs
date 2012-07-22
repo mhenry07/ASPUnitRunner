@@ -7,8 +7,8 @@ namespace AspUnitRunner.Sample.Tests.NUnit {
     public class TestAsp {
         // set the URL for your ASPUnit tests
         private const string AspTestUrl = "http://localhost:54831/tests/Default.asp";
-        // set the site name as configured in IIS Express (defaults to name of sample web project: Sample.Web)
-        private const string AspSiteName = "Sample.Web";
+        // set the site name as configured in IIS Express (defaults to name of sample web project: AspUnitRunner.Sample.Web)
+        private const string AspSiteName = "AspUnitRunner.Sample.Web";
 
         private IisExpressServer _iisServer;
 
