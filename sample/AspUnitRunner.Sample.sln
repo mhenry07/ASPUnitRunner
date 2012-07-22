@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Web Developer Express 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspUnitRunner.Sample.Tests.NUnit", "Tests.NUnit\AspUnitRunner.Sample.Tests.NUnit.csproj", "{7740874D-D233-479C-AE87-91D8D4B8C5E0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspUnitRunner", "..\src\AspUnitRunner\AspUnitRunner.csproj", "{DC6503A6-459C-4AEE-85CD-8DACE2BF62DE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspUnitRunner.Core", "..\src\Core\AspUnitRunner.Core.csproj", "{DC6503A6-459C-4AEE-85CD-8DACE2BF62DE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspUnitRunner.Sample.Web", "Web\AspUnitRunner.Sample.Web.csproj", "{07AEA0E8-2F84-44D0-963D-61FBB160348D}"
 EndProject

@@ -1,6 +1,6 @@
 ﻿using System.Threading;
 using NUnit.Framework;
-using AspUnitRunner;
+using AspUnitRunner.Core;
 
 namespace AspUnitRunner.Sample.Tests.NUnit {
     [TestFixture]

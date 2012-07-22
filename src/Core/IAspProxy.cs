@@ -1,6 +1,6 @@
 ﻿using System.Net;
 
-namespace AspUnitRunner {
+namespace AspUnitRunner.Core {
     public interface IAspProxy {
         string GetTestResults(string url, string postData, ICredentials credentials);
     }

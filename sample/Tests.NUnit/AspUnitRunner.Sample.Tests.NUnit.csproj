@@ -46,9 +46,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\src\AspUnitRunner\AspUnitRunner.csproj">
+    <ProjectReference Include="..\..\src\Core\AspUnitRunner.Core.csproj">
       <Project>{DC6503A6-459C-4AEE-85CD-8DACE2BF62DE}</Project>
-      <Name>AspUnitRunner</Name>
+      <Name>AspUnitRunner.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
