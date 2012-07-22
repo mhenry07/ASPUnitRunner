@@ -1,6 +1,6 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 10.00
-# Visual C# Express 2008
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual C# Express 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspUnitRunner.Core", "Core\AspUnitRunner.Core.csproj", "{DC6503A6-459C-4AEE-85CD-8DACE2BF62DE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspUnitRunner.Tests", "Tests\AspUnitRunner.Tests.csproj", "{EF5D5FE1-BB40-4283-AF34-3F7E632CE886}"
