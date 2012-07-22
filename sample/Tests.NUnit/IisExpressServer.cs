@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.IO;
 
 namespace AspUnitRunner.Sample.Tests.NUnit {
@@ -13,16 +14,11 @@ namespace AspUnitRunner.Sample.Tests.NUnit {
         }
 
         public void Start() {
-            var startInfo = new ProcessStartInfo {
-                Arguments = string.Format("/site:{0}", _siteName),
-                UseShellExecute = false
-            };
-
-            startInfo.FileName = GetIisExpressExecPath(startInfo);
+            var fileName = GetIisExpressExecPath();
+            var arguments = string.Format("/site:{0}", _siteName);
 
             try {
-                _iisProcess = new Process { StartInfo = startInfo };
-                _iisProcess.Start();
+                _iisProcess = Process.Start(fileName, arguments);
                 _iisProcess.WaitForExit();
             } catch {
                 Stop();
@@ -32,16 +28,15 @@ namespace AspUnitRunner.Sample.Tests.NUnit {
 
         // assumes IIS Express is installed at %programfiles(x86)%\IIS Express\iisexpress.exe or
         // %programfiles%\IIS Express\iisexpress.exe
-        private static string GetIisExpressExecPath(ProcessStartInfo startInfo) {
-            var programFiles = GetProgramFilesDir(startInfo);
-
-            return Path.Combine(programFiles, @"IIS Express\iisexpress.exe");
+        private static string GetIisExpressExecPath() {
+            return Path.Combine(GetProgramFilesDir(), @"IIS Express\iisexpress.exe");
         }
 
-        private static string GetProgramFilesDir(ProcessStartInfo startInfo) {
-            var programFiles = startInfo.EnvironmentVariables["programfiles(x86)"];
+        private static string GetProgramFilesDir() {
+            // note: in .NET 4, Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86) can be used instead
+            var programFiles = Environment.GetEnvironmentVariable("programfiles(x86)");
             if (string.IsNullOrEmpty(programFiles))
-                return startInfo.EnvironmentVariables["programfiles"];
+                return Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
             return programFiles;
         }
 
