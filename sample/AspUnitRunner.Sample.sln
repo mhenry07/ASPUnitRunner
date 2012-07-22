@@ -5,7 +5,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sample.Tests.NUnit", "Tests
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspUnitRunner", "..\src\AspUnitRunner\AspUnitRunner.csproj", "{DC6503A6-459C-4AEE-85CD-8DACE2BF62DE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sample.Web", "web\Sample.Web.csproj", "{07AEA0E8-2F84-44D0-963D-61FBB160348D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sample.Web", "Web\Sample.Web.csproj", "{07AEA0E8-2F84-44D0-963D-61FBB160348D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
