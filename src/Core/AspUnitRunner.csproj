@@ -8,8 +8,8 @@
     <ProjectGuid>{DC6503A6-459C-4AEE-85CD-8DACE2BF62DE}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>AspUnitRunner.Core</RootNamespace>
-    <AssemblyName>AspUnitRunner.Core</AssemblyName>
+    <RootNamespace>AspUnitRunner</RootNamespace>
+    <AssemblyName>AspUnitRunner</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />

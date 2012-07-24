@@ -1,7 +1,7 @@
 ﻿using System.Net;
 using System.Web;
 
-namespace AspUnitRunner.Core {
+namespace AspUnitRunner {
     public class Runner {
         private const string BaseQueryString = "?UnitRunner=results";
         private const string AllTestCases = "All Test Cases";

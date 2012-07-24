@@ -59,9 +59,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Core\AspUnitRunner.Core.csproj">
+    <ProjectReference Include="..\Core\AspUnitRunner.csproj">
       <Project>{DC6503A6-459C-4AEE-85CD-8DACE2BF62DE}</Project>
-      <Name>AspUnitRunner.Core</Name>
+      <Name>AspUnitRunner</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -2,7 +2,7 @@
 using System.Net;
 using System.Text;
 
-namespace AspUnitRunner.Core {
+namespace AspUnitRunner {
     internal class AspProxy : IAspProxy {
         private readonly IWebRequestFactory _webRequestFactory;
 

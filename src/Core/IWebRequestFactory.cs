@@ -1,6 +1,6 @@
 ﻿using System.Net;
 
-namespace AspUnitRunner.Core {
+namespace AspUnitRunner {
     public interface IWebRequestFactory {
         WebRequest Create(string uri);
     }

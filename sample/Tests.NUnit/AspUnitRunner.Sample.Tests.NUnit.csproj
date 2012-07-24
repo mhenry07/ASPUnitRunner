@@ -45,13 +45,13 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Core\AspUnitRunner.Core.csproj">
-      <Project>{DC6503A6-459C-4AEE-85CD-8DACE2BF62DE}</Project>
-      <Name>AspUnitRunner.Core</Name>
-    </ProjectReference>
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <ProjectReference Include="..\..\src\Core\AspUnitRunner.csproj">
+      <Project>{DC6503A6-459C-4AEE-85CD-8DACE2BF62DE}</Project>
+      <Name>AspUnitRunner</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
