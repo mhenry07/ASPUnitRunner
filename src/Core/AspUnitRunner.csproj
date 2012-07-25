@@ -38,16 +38,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ResultParser.cs" />
-    <Compile Include="IAspProxy.cs" />
-    <Compile Include="IWebRequestFactory.cs" />
+    <Compile Include="Core\ResultParser.cs" />
+    <Compile Include="Core\IAspProxy.cs" />
+    <Compile Include="Core\IWebRequestFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="AspProxy.cs">
+    <Compile Include="Infrastructure\AspProxy.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Results.cs" />
     <Compile Include="Runner.cs" />
-    <Compile Include="WebRequestFactory.cs" />
+    <Compile Include="Infrastructure\WebRequestFactory.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

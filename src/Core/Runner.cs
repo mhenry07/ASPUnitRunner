@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Net;
+using AspUnitRunner.Core;
 
 namespace AspUnitRunner {
     public class Runner {
@@ -12,18 +13,18 @@ namespace AspUnitRunner {
         private readonly ICredentials _credentials;
 
         public Runner(string baseUrl)
-            : this(baseUrl, new AspProxy()) {
+            : this(baseUrl, new Infrastructure.AspProxy()) {
         }
 
         public Runner(string baseUrl, ICredentials credentials)
-            : this(baseUrl, credentials, new AspProxy()) {
+            : this(baseUrl, credentials, new Infrastructure.AspProxy()) {
         }
 
-        public Runner(string baseUrl, IAspProxy proxy)
+        internal Runner(string baseUrl, IAspProxy proxy)
             : this(baseUrl, null, proxy) {
         }
 
-        public Runner(string baseUrl, ICredentials credentials, IAspProxy proxy) {
+        internal Runner(string baseUrl, ICredentials credentials, IAspProxy proxy) {
             _baseUrl = baseUrl;
             _credentials = credentials;
             _proxy = proxy;

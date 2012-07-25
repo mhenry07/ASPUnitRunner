@@ -3,6 +3,7 @@ using System.Net;
 using NUnit.Framework;
 using Rhino.Mocks;
 using AspUnitRunner;
+using AspUnitRunner.Core;
 
 namespace AspUnitRunner.Tests {
     [TestFixture]

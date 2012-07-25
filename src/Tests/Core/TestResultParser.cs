@@ -1,8 +1,8 @@
 ﻿using System;
 using NUnit.Framework;
-using AspUnitRunner;
+using AspUnitRunner.Core;
 
-namespace AspUnitRunner.Tests {
+namespace AspUnitRunner.Tests.Core {
     [TestFixture]
     public class TestResultParser {
         [Test]

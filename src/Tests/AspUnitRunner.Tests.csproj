@@ -45,16 +45,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FakeRequestCreator.cs">
+    <Compile Include="Infrastructure\FakeRequestCreator.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="FakeTestFormatter.cs" />
     <Compile Include="TestResults.cs" />
-    <Compile Include="TestWebRequestFactory.cs" />
-    <Compile Include="TestResultParser.cs" />
+    <Compile Include="Infrastructure\TestWebRequestFactory.cs" />
+    <Compile Include="Core\TestResultParser.cs" />
     <Compile Include="TestRunner.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TestAspProxy.cs">
+    <Compile Include="Infrastructure\TestAspProxy.cs">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
@@ -67,6 +67,7 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

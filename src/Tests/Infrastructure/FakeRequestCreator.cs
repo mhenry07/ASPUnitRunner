@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Net;
 
-namespace AspUnitRunner.Tests {
+namespace AspUnitRunner.Tests.Infrastructure {
     // this is a singleton since WebRequest.RegisterPrefix only registers the first instance
     internal sealed class FakeRequestCreator : IWebRequestCreate {
         private static readonly FakeRequestCreator _instance = new FakeRequestCreator();

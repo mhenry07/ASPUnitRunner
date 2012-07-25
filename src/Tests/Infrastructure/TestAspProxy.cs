@@ -4,9 +4,10 @@ using System.Net;
 using System.Text;
 using NUnit.Framework;
 using Rhino.Mocks;
-using AspUnitRunner;
+using AspUnitRunner.Core;
+using AspUnitRunner.Infrastructure;
 
-namespace AspUnitRunner.Tests {
+namespace AspUnitRunner.Tests.Infrastructure {
     [TestFixture]
     public class TestAspProxy {
         private IWebRequestFactory _factory;

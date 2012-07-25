@@ -1,9 +1,9 @@
 ﻿using System.Net;
 using NUnit.Framework;
 using Rhino.Mocks;
-using AspUnitRunner;
+using AspUnitRunner.Infrastructure;
 
-namespace AspUnitRunner.Tests {
+namespace AspUnitRunner.Tests.Infrastructure {
     [TestFixture]
     public class TestWebRequestFactory {
         private FakeRequestCreator _requestCreator;

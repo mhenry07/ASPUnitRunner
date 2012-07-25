@@ -3,8 +3,9 @@ using System.IO;
 using System.Net;
 using System.Text;
 using System.Web;
+using AspUnitRunner.Core;
 
-namespace AspUnitRunner {
+namespace AspUnitRunner.Infrastructure {
     internal class AspProxy : IAspProxy {
         private readonly IWebRequestFactory _webRequestFactory;
 
