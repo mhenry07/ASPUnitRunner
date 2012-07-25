@@ -20,14 +20,14 @@ namespace AspUnitRunner.Tests {
 
         [Test]
         public void Running_tests_should_return_results() {
-            var runner = new Runner("", _proxy);
-            Assert.That(runner.Run(""), Is.TypeOf<Results>());
+            var runner = new Runner(_proxy);
+            Assert.That(runner.Run("", ""), Is.TypeOf<Results>());
         }
 
         [Test]
         public void Running_tests_should_pass_expected_arguments_to_proxy() {
-            var runner = new Runner("http://path/to/test-runner", _proxy);
-            var results = runner.Run("TestContainer");
+            var runner = new Runner(_proxy);
+            var results = runner.Run("http://path/to/test-runner", "TestContainer");
             _proxy.AssertWasCalled(proxy =>
                 proxy.GetTestResults(
                     Arg.Is("http://path/to/test-runner?UnitRunner=results"),
@@ -41,9 +41,10 @@ namespace AspUnitRunner.Tests {
 
         [Test]
         public void Running_tests_with_credentials_should_pass_credentials_to_proxy() {
-            ICredentials credentials = new NetworkCredential("username", "password");
-            var runner = new Runner("", credentials, _proxy);
-            var results = runner.Run("");
+            var credentials = new NetworkCredential("username", "password");
+
+            var runner = new Runner(_proxy);
+            var results = runner.Run("", "", credentials);
             _proxy.AssertWasCalled(proxy =>
                 proxy.GetTestResults(
                     Arg<string>.Is.Anything,
