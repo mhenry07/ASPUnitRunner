@@ -45,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Infrastructure\TestIoc.cs" />
     <Compile Include="Infrastructure\FakeRequestCreator.cs">
       <SubType>Code</SubType>
     </Compile>

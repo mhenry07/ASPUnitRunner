@@ -13,11 +13,11 @@ namespace AspUnitRunner {
         private readonly ICredentials _credentials;
 
         public Runner(string baseUrl)
-            : this(baseUrl, new Infrastructure.AspProxy()) {
+            : this(baseUrl, Infrastructure.Ioc.ResolveAspProxy()) {
         }
 
         public Runner(string baseUrl, ICredentials credentials)
-            : this(baseUrl, credentials, new Infrastructure.AspProxy()) {
+            : this(baseUrl, credentials, Infrastructure.Ioc.ResolveAspProxy()) {
         }
 
         internal Runner(string baseUrl, IAspProxy proxy)

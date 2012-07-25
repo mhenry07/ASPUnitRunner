@@ -9,10 +9,6 @@ namespace AspUnitRunner.Infrastructure {
     internal class AspProxy : IAspProxy {
         private readonly IWebRequestFactory _webRequestFactory;
 
-        public AspProxy()
-            : this(new WebRequestFactory()) {
-        }
-
         public AspProxy(IWebRequestFactory webRequestFactory) {
             _webRequestFactory = webRequestFactory;
         }
