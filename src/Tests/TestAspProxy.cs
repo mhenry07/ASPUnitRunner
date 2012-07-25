@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using System.Net;
 using System.Text;
 using NUnit.Framework;
@@ -31,13 +32,17 @@ namespace AspUnitRunner.Tests {
         public void GetTestResults_should_post_request_and_return_expected_response() {
             string results;
 
-            const string postData = "postdata";
+            var postValues = new KeyValuePair<string, string>[] {
+                new KeyValuePair<string, string>("key1", "value 1"),
+                new KeyValuePair<string, string>("key2", "value 2"),
+            };
+            const string postData = "key1=value+1&key2=value+2";
             var postBytes = Encoding.ASCII.GetBytes(postData);
             const string expectedResponse = "response";
             using (var responseStream = SetupResponseStream(expectedResponse)) {
 
                 var proxy = new AspProxy(_factory);
-                results = proxy.GetTestResults("fake://host", postData, null);
+                results = proxy.GetTestResults("fake://host", postValues, null);
             }
 
             Assert.That(_request.Method, Is.EqualTo(WebRequestMethods.Http.Post));

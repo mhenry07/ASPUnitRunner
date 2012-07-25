@@ -1,5 +1,5 @@
-﻿using System.Net;
-using System.Web;
+﻿using System.Collections.Generic;
+using System.Net;
 
 namespace AspUnitRunner {
     public class Runner {
@@ -38,9 +38,12 @@ namespace AspUnitRunner {
             return _baseUrl + BaseQueryString;
         }
 
-        private string GetPostData(string testContainer) {
-            return string.Format("cboTestContainers={0}&cboTestCases={1}&cmdRun={2}",
-                HttpUtility.UrlEncode(testContainer), HttpUtility.UrlEncode(AllTestCases), HttpUtility.UrlEncode(RunCommand));
+        private IEnumerable<KeyValuePair<string, string>> GetPostData(string testContainer) {
+            return new KeyValuePair<string, string>[] {
+                new KeyValuePair<string, string>("cboTestContainers", testContainer),
+                new KeyValuePair<string, string>("cboTestCases", AllTestCases),
+                new KeyValuePair<string, string>("cmdRun", RunCommand)
+            };
         }
     }
 }

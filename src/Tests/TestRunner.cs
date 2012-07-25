@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System.Collections.Generic;
+using System.Net;
 using NUnit.Framework;
 using Rhino.Mocks;
 using AspUnitRunner;
@@ -11,7 +12,7 @@ namespace AspUnitRunner.Tests {
         [SetUp]
         public void SetUp() {
             _proxy = MockRepository.GenerateStub<IAspProxy>();
-            _proxy.Stub(proxy => proxy.GetTestResults("", "", null))
+            _proxy.Stub(proxy => proxy.GetTestResults("", null, null))
                 .IgnoreArguments()
                 .Return(FakeTestFormatter.FormatSummary(1, 0, 0));
         }
@@ -29,7 +30,11 @@ namespace AspUnitRunner.Tests {
             _proxy.AssertWasCalled(proxy =>
                 proxy.GetTestResults(
                     Arg.Is("http://path/to/test-runner?UnitRunner=results"),
-                    Arg.Is("cboTestContainers=TestContainer&cboTestCases=All+Test+Cases&cmdRun=Run+Tests"),
+                    Arg.Is(new KeyValuePair<string, string>[] {
+                        new KeyValuePair<string, string>("cboTestContainers", "TestContainer"),
+                        new KeyValuePair<string, string>("cboTestCases", "All Test Cases"),
+                        new KeyValuePair<string, string>("cmdRun", "Run Tests")
+                    }),
                     Arg<ICredentials>.Is.Null));
         }
 
@@ -39,7 +44,10 @@ namespace AspUnitRunner.Tests {
             var runner = new Runner("", credentials, _proxy);
             var results = runner.Run("");
             _proxy.AssertWasCalled(proxy =>
-                proxy.GetTestResults(Arg<string>.Is.Anything, Arg<string>.Is.Anything, Arg.Is(credentials)));
+                proxy.GetTestResults(
+                    Arg<string>.Is.Anything,
+                    Arg<IEnumerable<KeyValuePair<string, string>>>.Is.Anything,
+                    Arg.Is(credentials)));
         }
     }
 }
