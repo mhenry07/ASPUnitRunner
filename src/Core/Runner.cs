@@ -10,8 +10,12 @@ namespace AspUnitRunner {
 
         private readonly IAspProxy _proxy;
 
-        public Runner()
-            : this(Infrastructure.Ioc.ResolveAspProxy()) {
+        /// <summary>
+        /// Creates a new Runner instance.
+        /// </summary>
+        /// <returns>A new Runner instance.</returns>
+        public static Runner Create() {
+            return new Runner(Infrastructure.Ioc.ResolveAspProxy());
         }
 
         internal Runner(IAspProxy proxy) {
