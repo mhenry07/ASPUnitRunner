@@ -15,7 +15,7 @@ namespace AspUnitRunner {
         /// </summary>
         /// <returns>A new Runner instance.</returns>
         public static Runner Create() {
-            return new Runner(Infrastructure.Ioc.ResolveAspProxy());
+            return Infrastructure.Ioc.ResolveRunner();
         }
 
         internal Runner(IAspProxy proxy) {

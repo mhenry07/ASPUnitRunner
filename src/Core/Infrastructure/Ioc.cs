@@ -3,8 +3,8 @@
 namespace AspUnitRunner.Infrastructure {
     // a very simple inversion of control container to resolve dependencies
     internal class Ioc {
-        public static IAspProxy ResolveAspProxy() {
-            return new AspProxy(new WebRequestFactory());
+        public static Runner ResolveRunner() {
+            return new Runner(new AspProxy(new WebRequestFactory()));
         }
     }
 }
