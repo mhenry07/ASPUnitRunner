@@ -2,7 +2,7 @@
 using System.Net;
 
 namespace AspUnitRunner.Core {
-    internal interface IAspProxy {
+    internal interface IAspClient {
         string GetTestResults(string url, IEnumerable<KeyValuePair<string, string>> postData, ICredentials credentials);
     }
 }

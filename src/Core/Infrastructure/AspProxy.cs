@@ -6,7 +6,7 @@ using System.Web;
 using AspUnitRunner.Core;
 
 namespace AspUnitRunner.Infrastructure {
-    internal class AspProxy : IAspProxy {
+    internal class AspProxy : IAspClient {
         private readonly IWebRequestFactory _webRequestFactory;
 
         public AspProxy(IWebRequestFactory webRequestFactory) {

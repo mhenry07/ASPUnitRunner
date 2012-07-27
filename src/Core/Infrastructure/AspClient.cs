@@ -5,7 +5,7 @@ using System.Web;
 using AspUnitRunner.Core;
 
 namespace AspUnitRunner.Infrastructure {
-    internal class AspClient : IAspProxy {
+    internal class AspClient : IAspClient {
         private IWebClientFactory _factory;
 
         public AspClient(IWebClientFactory factory) {

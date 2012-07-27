@@ -8,7 +8,7 @@ namespace AspUnitRunner {
         private const string AllTestCases = "All Test Cases";
         private const string RunCommand = "Run Tests";
 
-        private readonly IAspProxy _proxy;
+        private readonly IAspClient _client;
 
         /// <summary>
         /// Creates a new Runner instance.
@@ -18,8 +18,8 @@ namespace AspUnitRunner {
             return Infrastructure.Ioc.ResolveRunner();
         }
 
-        internal Runner(IAspProxy proxy) {
-            _proxy = proxy;
+        internal Runner(IAspClient client) {
+            _client = client;
         }
 
         public Results Run(string baseUrl, string testContainer) {
@@ -27,7 +27,7 @@ namespace AspUnitRunner {
         }
 
         public Results Run(string baseUrl, string testContainer, ICredentials credentials) {
-            var htmlResults = _proxy.GetTestResults(FormatUrl(baseUrl), GetPostData(testContainer), credentials);
+            var htmlResults = _client.GetTestResults(FormatUrl(baseUrl), GetPostData(testContainer), credentials);
             return ResultParser.Parse(htmlResults);
         }
 
