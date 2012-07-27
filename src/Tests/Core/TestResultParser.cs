@@ -1,6 +1,7 @@
 ﻿using System;
 using NUnit.Framework;
 using AspUnitRunner.Core;
+using AspUnitRunner.Tests.Helpers;
 
 namespace AspUnitRunner.Tests.Core {
     [TestFixture]

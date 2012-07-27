@@ -45,11 +45,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Helpers\ReflectionExtensions.cs" />
     <Compile Include="Infrastructure\TestIoc.cs" />
-    <Compile Include="Infrastructure\FakeRequestCreator.cs">
+    <Compile Include="Helpers\FakeRequestCreator.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="FakeTestFormatter.cs" />
+    <Compile Include="Helpers\FakeTestFormatter.cs" />
     <Compile Include="TestResults.cs" />
     <Compile Include="Infrastructure\TestWebRequestFactory.cs" />
     <Compile Include="Core\TestResultParser.cs" />

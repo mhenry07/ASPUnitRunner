@@ -1,6 +1,6 @@
-﻿using System.Reflection;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using AspUnitRunner.Infrastructure;
+using AspUnitRunner.Tests.Helpers;
 
 namespace AspUnitRunner.Tests.Infrastructure {
     [TestFixture]
@@ -12,14 +12,6 @@ namespace AspUnitRunner.Tests.Infrastructure {
 
             Assert.That(proxy.GetField("_webRequestFactory"),
                 Is.InstanceOf<WebRequestFactory>());
-        }
-    }
-
-    public static class ReflectionExtensions {
-        public static object GetField(this object instance, string fieldName) {
-            var fieldInfo = instance.GetType()
-                .GetField(fieldName, BindingFlags.Instance | BindingFlags.NonPublic);
-            return fieldInfo.GetValue(instance);
         }
     }
 }

@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using Rhino.Mocks;
 using AspUnitRunner.Infrastructure;
+using AspUnitRunner.Tests.Helpers;
 
 namespace AspUnitRunner.Tests.Infrastructure {
     [TestFixture]
