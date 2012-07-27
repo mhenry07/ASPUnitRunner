@@ -41,6 +41,7 @@
     <Compile Include="Core\ResultParser.cs" />
     <Compile Include="Core\IAspProxy.cs" />
     <Compile Include="Core\IWebRequestFactory.cs" />
+    <Compile Include="Infrastructure\AspClient.cs" />
     <Compile Include="Infrastructure\Ioc.cs" />
     <Compile Include="Core\IWebClientFactory.cs" />
     <Compile Include="Infrastructure\WebClientFactory.cs" />
