@@ -13,7 +13,7 @@ namespace AspUnitRunner.Tests {
 
         [SetUp]
         public void SetUp() {
-            _client = MockRepository.GenerateStub<IAspClient>();
+            _client = MockRepository.GenerateMock<IAspClient>();
             _client.Stub(c => c.GetTestResults("", null, null))
                 .IgnoreArguments()
                 .Return(FakeTestFormatter.FormatSummary(1, 0, 0));
@@ -22,7 +22,7 @@ namespace AspUnitRunner.Tests {
         [Test]
         public void Running_tests_should_return_results() {
             var runner = new Runner(_client);
-            Assert.That(runner.Run("", ""), Is.TypeOf<Results>());
+            Assert.That(runner.Run("", ""), Is.InstanceOf<Results>());
         }
 
         [Test]
