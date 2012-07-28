@@ -16,10 +16,10 @@ Acceptance stories:
 
 Scenario 1: Title
 Given [context]
-And [some more context]…
+And [some more context]â€¦
 When [event]
 Then [outcome]
-And [another outcome]…
+And [another outcome]â€¦
 
 Scenario 2.1: Tests run
 Given the ASPUnit tests can run

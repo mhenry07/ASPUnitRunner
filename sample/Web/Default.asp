@@ -1,4 +1,4 @@
-﻿<%@ LANGUAGE="VBScript" %>
+<%@ LANGUAGE="VBScript" %>
 <% Option Explicit %>
 <!-- #include file="includes/Calculator.inc.asp" -->
 <!-- #include file="includes/StringUtility.inc.asp" -->

@@ -1,4 +1,4 @@
-﻿<%
+<%
 Class FailureTest
 	Public Function TestCaseNames()
 		TestCaseNames = Array("ExpectFailure", "ExpectError")

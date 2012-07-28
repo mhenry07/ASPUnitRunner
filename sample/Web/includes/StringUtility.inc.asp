@@ -1,4 +1,4 @@
-﻿<%
+<%
 Class StringUtility
 	Public Function ToLower(inputString)
 		ToLower = LCase(inputString)
