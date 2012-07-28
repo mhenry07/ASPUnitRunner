@@ -14,8 +14,11 @@ namespace AspUnitRunner.Tests {
         [SetUp]
         public void SetUp() {
             _client = MockRepository.GenerateMock<IAspClient>();
-            _client.Stub(c => c.GetTestResults("", null, null))
-                .IgnoreArguments()
+            _client.Stub(c =>
+                    c.GetTestResults(
+                        Arg<string>.Is.Anything,
+                        Arg<IEnumerable<KeyValuePair<string, string>>>.Is.Anything,
+                        Arg<ICredentials>.Is.Anything))
                 .Return(FakeTestFormatter.FormatSummary(1, 0, 0));
         }
 
