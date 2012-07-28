@@ -1,5 +1,9 @@
-<%@ LANGUAGE="VBScript" %>
-<% Option Explicit %>
+<%@ LANGUAGE="VBScript" CODEPAGE=65001 %>
+<%
+Option Explicit
+Response.CodePage = 65001
+Response.Charset = "UTF-8"
+%>
 <!-- #include file="includes/Calculator.inc.asp" -->
 <!-- #include file="includes/StringUtility.inc.asp" -->
 <%
@@ -9,7 +13,8 @@ Set stringUtil = New StringUtility
 %>
 <html>
 <head>
-<title>AspUnitRunner sample</title>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+	<title>AspUnitRunner sample</title>
 </head>
 <body>
 	<h1>AspUnitRunner sample</h1>
