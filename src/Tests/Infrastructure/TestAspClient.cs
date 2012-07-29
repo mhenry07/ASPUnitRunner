@@ -1,5 +1,6 @@
 ﻿using System.Collections.Specialized;
 using System.Net;
+using System.Text;
 using NUnit.Framework;
 using Rhino.Mocks;
 using AspUnitRunner.Core;
@@ -16,16 +17,16 @@ namespace AspUnitRunner.Tests.Infrastructure {
                 { "key1", "value 1" },
                 { "key2", "value 2" }
             };
-            const string postData = "key1=value+1&key2=value+2";
             var credentials = MockRepository.GenerateStub<ICredentials>();
             const string expectedResponse = "response";
+            var responseBytes = Encoding.Default.GetBytes(expectedResponse);
 
             var factory = MockRepository.GenerateStub<IWebClientFactory>();
             var webClient = MockRepository.GenerateStub<WebClient>();
             webClient.Headers = new WebHeaderCollection();
             factory.Stub(f => f.Create()).Return(webClient);
-            webClient.Stub(c => c.UploadString(address, postData))
-                .Return(expectedResponse);
+            webClient.Stub(c => c.UploadValues(address, postValues))
+                .Return(responseBytes);
 
             // Act
             var aspClient = new AspClient(factory);
