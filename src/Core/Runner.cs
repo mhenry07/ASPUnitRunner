@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections.Specialized;
 using System.Net;
 using AspUnitRunner.Core;
 
@@ -35,11 +35,11 @@ namespace AspUnitRunner {
             return baseUrl + BaseQueryString;
         }
 
-        private IEnumerable<KeyValuePair<string, string>> GetPostData(string testContainer) {
-            return new KeyValuePair<string, string>[] {
-                new KeyValuePair<string, string>("cboTestContainers", testContainer),
-                new KeyValuePair<string, string>("cboTestCases", AllTestCases),
-                new KeyValuePair<string, string>("cmdRun", RunCommand)
+        private NameValueCollection GetPostData(string testContainer) {
+            return new NameValueCollection() {
+                { "cboTestContainers", testContainer },
+                { "cboTestCases", AllTestCases },
+                { "cmdRun", RunCommand }
             };
         }
     }

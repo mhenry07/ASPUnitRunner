@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections.Specialized;
 using System.Net;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -17,7 +17,7 @@ namespace AspUnitRunner.Tests {
             _client.Stub(c =>
                     c.GetTestResults(
                         Arg<string>.Is.Anything,
-                        Arg<IEnumerable<KeyValuePair<string, string>>>.Is.Anything,
+                        Arg<NameValueCollection>.Is.Anything,
                         Arg<ICredentials>.Is.Anything))
                 .Return(FakeTestFormatter.FormatSummary(1, 0, 0));
         }
@@ -30,16 +30,19 @@ namespace AspUnitRunner.Tests {
 
         [Test]
         public void Running_tests_should_pass_expected_arguments_to_client() {
+            var expectedData = new NameValueCollection() {
+                { "cboTestContainers", "TestContainer" },
+                { "cboTestCases", "All Test Cases" },
+                { "cmdRun", "Run Tests"}
+            };
+
             var runner = new Runner(_client);
             var results = runner.Run("http://path/to/test-runner", "TestContainer");
+
             _client.AssertWasCalled(c =>
                 c.GetTestResults(
                     Arg.Is("http://path/to/test-runner?UnitRunner=results"),
-                    Arg.Is(new KeyValuePair<string, string>[] {
-                        new KeyValuePair<string, string>("cboTestContainers", "TestContainer"),
-                        new KeyValuePair<string, string>("cboTestCases", "All Test Cases"),
-                        new KeyValuePair<string, string>("cmdRun", "Run Tests")
-                    }),
+                    Arg<NameValueCollection>.Matches(arg => arg.SequenceEqual(expectedData)),
                     Arg<ICredentials>.Is.Null));
         }
 
@@ -52,7 +55,7 @@ namespace AspUnitRunner.Tests {
             _client.AssertWasCalled(c =>
                 c.GetTestResults(
                     Arg<string>.Is.Anything,
-                    Arg<IEnumerable<KeyValuePair<string, string>>>.Is.Anything,
+                    Arg<NameValueCollection>.Is.Anything,
                     Arg.Is(credentials)));
         }
     }
