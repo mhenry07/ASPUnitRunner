@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections.Specialized;
 using System.Net;
 using AspUnitRunner.Core;
 
@@ -8,7 +8,7 @@ namespace AspUnitRunner {
         private const string AllTestCases = "All Test Cases";
         private const string RunCommand = "Run Tests";
 
-        private readonly IAspProxy _proxy;
+        private readonly IAspClient _client;
 
         /// <summary>
         /// Creates a new Runner instance.
@@ -18,8 +18,8 @@ namespace AspUnitRunner {
             return Infrastructure.Ioc.ResolveRunner();
         }
 
-        internal Runner(IAspProxy proxy) {
-            _proxy = proxy;
+        internal Runner(IAspClient client) {
+            _client = client;
         }
 
         public Results Run(string baseUrl, string testContainer) {
@@ -27,7 +27,7 @@ namespace AspUnitRunner {
         }
 
         public Results Run(string baseUrl, string testContainer, ICredentials credentials) {
-            var htmlResults = _proxy.GetTestResults(FormatUrl(baseUrl), GetPostData(testContainer), credentials);
+            var htmlResults = _client.GetTestResults(FormatUrl(baseUrl), GetPostData(testContainer), credentials);
             return ResultParser.Parse(htmlResults);
         }
 
@@ -35,11 +35,11 @@ namespace AspUnitRunner {
             return baseUrl + BaseQueryString;
         }
 
-        private IEnumerable<KeyValuePair<string, string>> GetPostData(string testContainer) {
-            return new KeyValuePair<string, string>[] {
-                new KeyValuePair<string, string>("cboTestContainers", testContainer),
-                new KeyValuePair<string, string>("cboTestCases", AllTestCases),
-                new KeyValuePair<string, string>("cmdRun", RunCommand)
+        private NameValueCollection GetPostData(string testContainer) {
+            return new NameValueCollection() {
+                { "cboTestContainers", testContainer },
+                { "cboTestCases", AllTestCases },
+                { "cmdRun", RunCommand }
             };
         }
     }

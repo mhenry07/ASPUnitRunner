@@ -10,11 +10,11 @@ namespace AspUnitRunner.Tests.Infrastructure {
             var runner = Ioc.ResolveRunner();
             Assert.That(runner, Is.InstanceOf<Runner>());
 
-            var proxy = runner.GetField("_proxy");
-            Assert.That(proxy, Is.InstanceOf<AspProxy>());
+            var client = runner.GetField("_client");
+            Assert.That(client, Is.InstanceOf<AspClient>());
 
-            Assert.That(proxy.GetField("_webRequestFactory"),
-                Is.InstanceOf<WebRequestFactory>());
+            Assert.That(client.GetField("_factory"),
+                Is.InstanceOf<WebClientFactory>());
         }
     }
 }

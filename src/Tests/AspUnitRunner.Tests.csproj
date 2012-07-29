@@ -45,20 +45,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Helpers\CollectionsExtensions.cs" />
     <Compile Include="Helpers\ReflectionExtensions.cs" />
+    <Compile Include="Helpers\Tests\TestCollectionsExtensions.cs" />
+    <Compile Include="Infrastructure\TestAspClient.cs" />
+    <Compile Include="Infrastructure\TestWebClientFactory.cs" />
     <Compile Include="Infrastructure\TestIoc.cs" />
-    <Compile Include="Helpers\FakeRequestCreator.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Helpers\FakeTestFormatter.cs" />
     <Compile Include="TestResults.cs" />
-    <Compile Include="Infrastructure\TestWebRequestFactory.cs" />
     <Compile Include="Core\TestResultParser.cs" />
     <Compile Include="TestRunner.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Infrastructure\TestAspProxy.cs">
-      <SubType>Code</SubType>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Core\AspUnitRunner.csproj">
