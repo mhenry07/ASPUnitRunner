@@ -10,7 +10,7 @@ namespace AspUnitRunner.Tests.Infrastructure {
     [TestFixture]
     public class TestAspClient {
         [Test]
-        public void GetTestResults_should_upload_values_and_return_expected_response() {
+        public void PostRequest_should_upload_values_and_return_expected_response() {
             // Arrange
             const string address = "http://path/to/test-runner?key=value";
             var postValues = new NameValueCollection() {
@@ -30,7 +30,7 @@ namespace AspUnitRunner.Tests.Infrastructure {
 
             // Act
             var aspClient = new AspClient(factory);
-            var response = aspClient.GetTestResults(address, postValues, credentials);
+            var response = aspClient.PostRequest(address, postValues, credentials);
 
             // Assert
             Assert.That(webClient.Credentials, Is.EqualTo(credentials));

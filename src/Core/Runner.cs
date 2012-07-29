@@ -27,7 +27,7 @@ namespace AspUnitRunner {
         }
 
         public Results Run(string baseUrl, string testContainer, ICredentials credentials) {
-            var htmlResults = _client.GetTestResults(FormatUrl(baseUrl), GetPostData(testContainer), credentials);
+            var htmlResults = _client.PostRequest(FormatUrl(baseUrl), GetPostData(testContainer), credentials);
             return ResultParser.Parse(htmlResults);
         }
 

@@ -11,7 +11,7 @@ namespace AspUnitRunner.Infrastructure {
             _factory = factory;
         }
 
-        public string GetTestResults(string url, NameValueCollection postValues, ICredentials credentials) {
+        public string PostRequest(string url, NameValueCollection postValues, ICredentials credentials) {
             using (var webClient = _factory.Create()) {
                 webClient.Credentials = credentials;
                 webClient.Headers.Add(HttpRequestHeader.ContentType, "application/x-www-form-urlencoded");

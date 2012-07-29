@@ -15,7 +15,7 @@ namespace AspUnitRunner.Tests {
         public void SetUp() {
             _client = MockRepository.GenerateMock<IAspClient>();
             _client.Stub(c =>
-                    c.GetTestResults(
+                    c.PostRequest(
                         Arg<string>.Is.Anything,
                         Arg<NameValueCollection>.Is.Anything,
                         Arg<ICredentials>.Is.Anything))
@@ -40,7 +40,7 @@ namespace AspUnitRunner.Tests {
             var results = runner.Run("http://path/to/test-runner", "TestContainer");
 
             _client.AssertWasCalled(c =>
-                c.GetTestResults(
+                c.PostRequest(
                     Arg.Is("http://path/to/test-runner?UnitRunner=results"),
                     Arg<NameValueCollection>.Matches(arg => arg.SequenceEqual(expectedData)),
                     Arg<ICredentials>.Is.Null));
@@ -53,7 +53,7 @@ namespace AspUnitRunner.Tests {
             var runner = new Runner(_client);
             var results = runner.Run("", "", credentials);
             _client.AssertWasCalled(c =>
-                c.GetTestResults(
+                c.PostRequest(
                     Arg<string>.Is.Anything,
                     Arg<NameValueCollection>.Is.Anything,
                     Arg.Is(credentials)));
