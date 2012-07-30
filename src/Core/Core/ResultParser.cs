@@ -2,7 +2,7 @@
 using System.Text.RegularExpressions;
 
 namespace AspUnitRunner.Core {
-    public class ResultParser {
+    internal class ResultParser {
         private const string TestResultRegex =
             @"Tests\:\s*(?<tests>\d+),\s*Errors\:\s*(?<errors>\d+),\s*Failures\:\s*(?<failures>\d+)";
 
