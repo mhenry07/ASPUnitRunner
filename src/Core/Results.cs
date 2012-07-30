@@ -1,4 +1,7 @@
 ﻿namespace AspUnitRunner {
+    /// <summary>
+    /// Contains ASPUnit test results.
+    /// </summary>
     public class Results {
         private readonly int _tests;
         private readonly int _errors;
