@@ -17,8 +17,7 @@ namespace AspUnitRunner.Tests {
             _client.Stub(c =>
                     c.PostRequest(
                         Arg<string>.Is.Anything,
-                        Arg<NameValueCollection>.Is.Anything,
-                        Arg<ICredentials>.Is.Anything))
+                        Arg<NameValueCollection>.Is.Anything))
                 .Return(FakeTestFormatter.FormatSummary(1, 0, 0));
         }
 
@@ -42,8 +41,7 @@ namespace AspUnitRunner.Tests {
             _client.AssertWasCalled(c =>
                 c.PostRequest(
                     Arg.Is("http://path/to/test-runner?UnitRunner=results"),
-                    Arg<NameValueCollection>.Matches(arg => arg.SequenceEqual(expectedData)),
-                    Arg<ICredentials>.Is.Null));
+                    Arg<NameValueCollection>.Matches(arg => arg.SequenceEqual(expectedData))));
         }
 
         [Test]
@@ -54,11 +52,7 @@ namespace AspUnitRunner.Tests {
             runner.Credentials = credentials;
             var results = runner.Run("", "");
 
-            _client.AssertWasCalled(c =>
-                c.PostRequest(
-                    Arg<string>.Is.Anything,
-                    Arg<NameValueCollection>.Is.Anything,
-                    Arg.Is(credentials)));
+            _client.AssertWasCalled(c => c.Credentials = credentials);
         }
     }
 }

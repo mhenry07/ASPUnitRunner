@@ -37,7 +37,8 @@ namespace AspUnitRunner {
         /// <param name="testContainer">The name of the test container from which to run tests.</param>
         /// <returns>An AspUnitRunner.Results containing the test results.</returns>
         public Results Run(string address, string testContainer) {
-            var htmlResults = _client.PostRequest(FormatUrl(address), GetPostData(testContainer), Credentials);
+            _client.Credentials = Credentials;
+            var htmlResults = _client.PostRequest(FormatUrl(address), GetPostData(testContainer));
             return ResultParser.Parse(htmlResults);
         }
 
