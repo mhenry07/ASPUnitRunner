@@ -14,6 +14,11 @@ namespace AspUnitRunner {
         private readonly IAspClient _client;
 
         /// <summary>
+        /// Sets the network credentials used to authenticate the request. (Optional)
+        /// </summary>
+        public ICredentials Credentials { private get; set; }
+
+        /// <summary>
         /// Creates a new AspUnitRunner.Runner instance.
         /// </summary>
         /// <returns>A new AspUnitRunner.Runner instance.</returns>
@@ -32,18 +37,7 @@ namespace AspUnitRunner {
         /// <param name="testContainer">The name of the test container from which to run tests.</param>
         /// <returns>An AspUnitRunner.Results containing the test results.</returns>
         public Results Run(string address, string testContainer) {
-            return Run(address, testContainer, null);
-        }
-
-        /// <summary>
-        /// Runs ASPUnit tests and returns results.
-        /// </summary>
-        /// <param name="address">The URL for the ASPUnit tests.</param>
-        /// <param name="testContainer">The name of the test container from which to run tests.</param>
-        /// <param name="credentials">The network credentials used to authenticate the request.</param>
-        /// <returns>An AspUnitRunner.Results containing the test results.</returns>
-        public Results Run(string address, string testContainer, ICredentials credentials) {
-            var htmlResults = _client.PostRequest(FormatUrl(address), GetPostData(testContainer), credentials);
+            var htmlResults = _client.PostRequest(FormatUrl(address), GetPostData(testContainer), Credentials);
             return ResultParser.Parse(htmlResults);
         }
 

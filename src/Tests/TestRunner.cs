@@ -51,7 +51,9 @@ namespace AspUnitRunner.Tests {
             var credentials = new NetworkCredential("username", "password");
 
             var runner = new Runner(_client);
-            var results = runner.Run("", "", credentials);
+            runner.Credentials = credentials;
+            var results = runner.Run("", "");
+
             _client.AssertWasCalled(c =>
                 c.PostRequest(
                     Arg<string>.Is.Anything,
