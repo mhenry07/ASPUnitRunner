@@ -18,7 +18,8 @@ namespace AspUnitRunner.Sample.Tests.NUnit {
             [Values("CalculatorTest", "StringUtilityTest", "FailureTest")] string testContainer
             ) {
             var runner = Runner.Create();
-            var results = runner.Run(AspTestUrl, testContainer);
+            runner.TestContainer = testContainer;
+            var results = runner.Run(AspTestUrl);
 
             // Note: results.Details can generate a long HTML string which NUnit doesn't format very well
             Assert.That(results.Errors, Is.EqualTo(0), results.Details);
