@@ -6,11 +6,17 @@ namespace AspUnitRunner.Sample.Tests.NUnit {
     // based on http://www.reimers.dk/jacob-reimers-blog/testing-your-web-application-with-iis-express-and-unit-tests
     public class IisExpressServer {
         private readonly string _siteName;
+        private string _execPath;
         private Process _iisProcess;
 
         // siteName is the name of the configured web site to start in IIS Express
         public IisExpressServer(string siteName) {
             _siteName = siteName;
+        }
+
+        // set path to IIS Express .exe
+        public void SetExecPath(string path) {
+            _execPath = path;
         }
 
         public void Start() {
@@ -28,8 +34,10 @@ namespace AspUnitRunner.Sample.Tests.NUnit {
 
         // assumes IIS Express is installed at %programfiles(x86)%\IIS Express\iisexpress.exe or
         // %programfiles%\IIS Express\iisexpress.exe
-        private static string GetIisExpressExecPath() {
-            return Path.Combine(GetProgramFilesDir(), @"IIS Express\iisexpress.exe");
+        private string GetIisExpressExecPath() {
+            if (string.IsNullOrEmpty(_execPath))
+                return Path.Combine(GetProgramFilesDir(), @"IIS Express\iisexpress.exe");
+            return _execPath;
         }
 
         private static string GetProgramFilesDir() {
