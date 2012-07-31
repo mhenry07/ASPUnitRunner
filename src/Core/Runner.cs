@@ -14,8 +14,8 @@ namespace AspUnitRunner {
         private const string RunCommand = "Run Tests";
 
         private readonly IAspClient _client;
-        private string _testContainer;
-        private string _testCase;
+        private string _testContainer = AllTestContainers;
+        private string _testCase = AllTestCases;
 
         /// <summary>
         /// Sets the network credentials used to authenticate the request. (Optional)
@@ -23,28 +23,17 @@ namespace AspUnitRunner {
         public ICredentials Credentials { private get; set; }
 
         /// <summary>
-        /// Gets or sets the name of the test container from which to run tests. (Optional)
+        /// Sets the name of the test container from which to run tests. (Optional)
         /// </summary>
         public string TestContainer {
-            get {
-                if (string.IsNullOrEmpty(_testContainer))
-                    return AllTestContainers;
-                return _testContainer;
+            set {
+                _testContainer = value;
+                _testCase = AllTestCases;
             }
-            set { _testContainer = value; }
         }
 
-        /// <summary>
-        /// Gets or sets the name of the test case to execute. (Optional)
-        /// Must be used with a specific test container.
-        /// </summary>
-        public string TestCase {
-            get {
-                if (string.IsNullOrEmpty(_testCase))
-                    return AllTestCases;
-                return _testCase;
-            }
-            set { _testCase = value; }
+        internal Runner(IAspClient client) {
+            _client = client;
         }
 
         /// <summary>
@@ -55,8 +44,18 @@ namespace AspUnitRunner {
             return Infrastructure.Ioc.ResolveRunner();
         }
 
-        internal Runner(IAspClient client) {
-            _client = client;
+        /// <summary>
+        /// Sets the name of the test case to execute and its parent test container.
+        /// </summary>
+        /// <param name="testContainer">The name of the parent test container of the test case.</param>
+        /// <param name="testCase">The name of the test case.</param>
+        /// <exception cref="System.ArgumentOutOfRangeException">The test container is not specified.</exception>
+        public void SetTestCase(string testContainer, string testCase) {
+            if (IsSpecified(testCase, AllTestCases) && !IsSpecified(testContainer, AllTestContainers))
+                throw new ArgumentOutOfRangeException("A test container must be specified for the test case.", "testContainer");
+
+            _testContainer = testContainer;
+            _testCase = testCase;
         }
 
         /// <summary>
@@ -75,14 +74,17 @@ namespace AspUnitRunner {
         }
 
         private NameValueCollection GetPostData() {
-            if (TestCase != AllTestCases && TestContainer == AllTestContainers)
-                throw new InvalidOperationException("The test container must be specified when running a specific test case.");
-
             return new NameValueCollection() {
-                { "cboTestContainers", TestContainer },
-                { "cboTestCases", TestCase },
+                { "cboTestContainers", _testContainer },
+                { "cboTestCases", _testCase },
                 { "cmdRun", RunCommand }
             };
+        }
+
+        private static bool IsSpecified(string value, string defaultValue) {
+            if (string.IsNullOrEmpty(value))
+                return false;
+            return value != defaultValue;
         }
     }
 }

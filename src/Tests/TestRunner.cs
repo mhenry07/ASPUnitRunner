@@ -65,7 +65,7 @@ namespace AspUnitRunner.Tests {
         }
 
         [Test]
-        public void Running_test_case_should_post_request_with_test_case() {
+        public void Running_test_case_should_post_request_with_test_container_and_test_case() {
             const string testContainer = "TestContainer";
             const string testCase = "TestCase";
             var expectedData = new NameValueCollection() {
@@ -75,24 +75,13 @@ namespace AspUnitRunner.Tests {
             };
 
             var runner = new Runner(_client);
-            runner.TestContainer = testContainer;
-            runner.TestCase = testCase;
+            runner.SetTestCase(testContainer, testCase);
             var results = runner.Run("http://path/to/test-runner");
 
             _client.AssertWasCalled(c =>
                 c.PostRequest(
                     Arg<string>.Is.Anything,
                     Arg<NameValueCollection>.Matches(arg => arg.SequenceEqual(expectedData))));
-        }
-
-        [Test]
-        public void Running_test_case_without_test_container_should_throw_exception() {
-            var runner = new Runner(_client);
-            runner.TestCase = "OrphanTestCase";
-
-            Assert.That(
-                delegate { runner.Run("http://path/to/test-runner"); },
-                Throws.InvalidOperationException);
         }
 
         [Test]
@@ -107,33 +96,12 @@ namespace AspUnitRunner.Tests {
         }
 
         [Test]
-        public void TestContainer_get_default_should_return_All_Test_Containers() {
+        public void SetTestCase_with_all_containers_should_throw_exception() {
             var runner = new Runner(_client);
-            Assert.That(runner.TestContainer, Is.EqualTo("All Test Containers"));
-        }
 
-        [Test]
-        public void TestContainer_get_assigned_should_return_assigned_value() {
-            const string testContainer = "Test Container";
-
-            var runner = new Runner(_client);
-            runner.TestContainer = testContainer;
-            Assert.That(runner.TestContainer, Is.EqualTo(testContainer));
-        }
-
-        [Test]
-        public void TestCase_get_default_should_return_All_Test_Cases() {
-            var runner = new Runner(_client);
-            Assert.That(runner.TestCase, Is.EqualTo("All Test Cases"));
-        }
-
-        [Test]
-        public void TestCase_get_assigned_should_return_assigned_value() {
-            const string testCase = "TestCase";
-
-            var runner = new Runner(_client);
-            runner.TestCase = testCase;
-            Assert.That(runner.TestCase, Is.EqualTo(testCase));
+            Assert.That(
+                delegate { runner.SetTestCase("All Test Containers", "TestCase"); },
+                Throws.InstanceOf<System.ArgumentOutOfRangeException>());
         }
     }
 }
