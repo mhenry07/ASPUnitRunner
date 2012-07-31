@@ -65,6 +65,37 @@ namespace AspUnitRunner.Tests {
         }
 
         [Test]
+        public void Running_test_case_should_post_request_with_test_case() {
+            const string testContainer = "TestContainer";
+            const string testCase = "TestCase";
+            var expectedData = new NameValueCollection() {
+                { "cboTestContainers", testContainer },
+                { "cboTestCases", testCase },
+                { "cmdRun", "Run Tests"}
+            };
+
+            var runner = new Runner(_client);
+            runner.TestContainer = testContainer;
+            runner.TestCase = testCase;
+            var results = runner.Run("http://path/to/test-runner");
+
+            _client.AssertWasCalled(c =>
+                c.PostRequest(
+                    Arg<string>.Is.Anything,
+                    Arg<NameValueCollection>.Matches(arg => arg.SequenceEqual(expectedData))));
+        }
+
+        [Test]
+        public void Running_test_case_without_test_container_should_throw_exception() {
+            var runner = new Runner(_client);
+            runner.TestCase = "OrphanTestCase";
+
+            Assert.That(
+                delegate { runner.Run("http://path/to/test-runner"); },
+                Throws.InvalidOperationException);
+        }
+
+        [Test]
         public void Running_tests_with_credentials_should_set_client_credentials() {
             var credentials = new NetworkCredential("username", "password");
 
@@ -88,6 +119,21 @@ namespace AspUnitRunner.Tests {
             var runner = new Runner(_client);
             runner.TestContainer = testContainer;
             Assert.That(runner.TestContainer, Is.EqualTo(testContainer));
+        }
+
+        [Test]
+        public void TestCase_get_default_should_return_All_Test_Cases() {
+            var runner = new Runner(_client);
+            Assert.That(runner.TestCase, Is.EqualTo("All Test Cases"));
+        }
+
+        [Test]
+        public void TestCase_get_assigned_should_return_assigned_value() {
+            const string testCase = "TestCase";
+
+            var runner = new Runner(_client);
+            runner.TestCase = testCase;
+            Assert.That(runner.TestCase, Is.EqualTo(testCase));
         }
     }
 }

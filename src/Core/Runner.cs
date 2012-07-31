@@ -1,4 +1,5 @@
-﻿using System.Collections.Specialized;
+﻿using System;
+using System.Collections.Specialized;
 using System.Net;
 using AspUnitRunner.Core;
 
@@ -14,6 +15,7 @@ namespace AspUnitRunner {
 
         private readonly IAspClient _client;
         private string _testContainer;
+        private string _testCase;
 
         /// <summary>
         /// Sets the network credentials used to authenticate the request. (Optional)
@@ -30,6 +32,19 @@ namespace AspUnitRunner {
                 return _testContainer;
             }
             set { _testContainer = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the name of the test case to execute. (Optional)
+        /// Must be used with a specific test container.
+        /// </summary>
+        public string TestCase {
+            get {
+                if (string.IsNullOrEmpty(_testCase))
+                    return AllTestCases;
+                return _testCase;
+            }
+            set { _testCase = value; }
         }
 
         /// <summary>
@@ -60,9 +75,12 @@ namespace AspUnitRunner {
         }
 
         private NameValueCollection GetPostData() {
+            if (TestCase != AllTestCases && TestContainer == AllTestContainers)
+                throw new InvalidOperationException("The test container must be specified when running a specific test case.");
+
             return new NameValueCollection() {
                 { "cboTestContainers", TestContainer },
-                { "cboTestCases", AllTestCases },
+                { "cboTestCases", TestCase },
                 { "cmdRun", RunCommand }
             };
         }
