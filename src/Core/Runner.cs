@@ -32,6 +32,13 @@ namespace AspUnitRunner {
             }
         }
 
+        /// <summary>
+        /// Gets the name of the test case to execute.
+        /// </summary>
+        public string TestCase {
+            get { return _testCase; }
+        }
+
         internal Runner(IAspClient client) {
             _client = client;
         }
