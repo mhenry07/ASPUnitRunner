@@ -7,7 +7,7 @@ namespace AspUnitRunner.Infrastructure {
     internal class AspClient : IAspClient {
         private IWebClientFactory _factory;
 
-        public ICredentials Credentials { private get; set; }
+        public ICredentials Credentials { get; set; }
 
         public AspClient(IWebClientFactory factory) {
             _factory = factory;

@@ -18,9 +18,9 @@ namespace AspUnitRunner {
         private string _testCase = AllTestCases;
 
         /// <summary>
-        /// Sets the network credentials used to authenticate the request. (Optional)
+        /// Gets or sets the network credentials used to authenticate the request.
         /// </summary>
-        public ICredentials Credentials { private get; set; }
+        public ICredentials Credentials { get; set; }
 
         /// <summary>
         /// Gets or sets the name of the test container from which to run tests.
