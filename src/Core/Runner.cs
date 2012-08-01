@@ -23,9 +23,10 @@ namespace AspUnitRunner {
         public ICredentials Credentials { private get; set; }
 
         /// <summary>
-        /// Sets the name of the test container from which to run tests. (Optional)
+        /// Gets or sets the name of the test container from which to run tests.
         /// </summary>
         public string TestContainer {
+            get { return _testContainer; }
             set {
                 _testContainer = value;
                 _testCase = AllTestCases;
