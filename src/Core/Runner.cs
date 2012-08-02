@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Specialized;
-using System.Net;
 using AspUnitRunner.Core;
 
 namespace AspUnitRunner {
@@ -17,29 +16,6 @@ namespace AspUnitRunner {
         private string _testContainer = AllTestContainers;
         private string _testCase = AllTestCases;
 
-        /// <summary>
-        /// Gets or sets the network credentials used to authenticate the request.
-        /// </summary>
-        public ICredentials Credentials { get; set; }
-
-        /// <summary>
-        /// Gets or sets the name of the test container from which to run tests.
-        /// </summary>
-        public string TestContainer {
-            get { return _testContainer; }
-            set {
-                _testContainer = value;
-                _testCase = AllTestCases;
-            }
-        }
-
-        /// <summary>
-        /// Gets the name of the test case to execute.
-        /// </summary>
-        public string TestCase {
-            get { return _testCase; }
-        }
-
         internal Runner(IAspClient client) {
             _client = client;
         }
@@ -53,17 +29,18 @@ namespace AspUnitRunner {
         }
 
         /// <summary>
-        /// Sets the name of the test case to execute and its parent test container.
+        /// Sets the configuration and returns the current Runner object.
         /// </summary>
-        /// <param name="testContainer">The name of the parent test container of the test case.</param>
-        /// <param name="testCase">The name of the test case.</param>
-        /// <exception cref="System.ArgumentOutOfRangeException">The test container is not specified.</exception>
-        public void SetTestCase(string testContainer, string testCase) {
-            if (IsSpecified(testCase, AllTestCases) && !IsSpecified(testContainer, AllTestContainers))
-                throw new ArgumentOutOfRangeException("A test container must be specified for the test case.", "testContainer");
-
-            _testContainer = testContainer;
-            _testCase = testCase;
+        /// <param name="configuration">The configuration object.</param>
+        /// <returns>Returns the current Runner object.</returns>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// A test container must be specified if a test case is specified.
+        /// </exception>
+        public Runner WithConfiguration(Configuration configuration) {
+            _client.Credentials = configuration.Credentials;
+            SetTests(configuration.TestContainer ?? _testContainer,
+                configuration.TestCase ?? _testCase);
+            return this;
         }
 
         /// <summary>
@@ -72,7 +49,6 @@ namespace AspUnitRunner {
         /// <param name="address">The URL for the ASPUnit tests.</param>
         /// <returns>An AspUnitRunner.Results containing the test results.</returns>
         public Results Run(string address) {
-            _client.Credentials = Credentials;
             var htmlResults = _client.PostRequest(FormatUrl(address), GetPostData());
             return ResultParser.Parse(htmlResults);
         }
@@ -87,6 +63,14 @@ namespace AspUnitRunner {
                 { "cboTestCases", _testCase },
                 { "cmdRun", RunCommand }
             };
+        }
+
+        private void SetTests(string testContainer, string testCase) {
+            if (IsSpecified(testCase, AllTestCases) && !IsSpecified(testContainer, AllTestContainers))
+                throw new ArgumentOutOfRangeException("A test container must be specified if a test case is specified.", "TestContainer");
+
+            _testContainer = testContainer;
+            _testCase = testCase;
         }
 
         private static bool IsSpecified(string value, string defaultValue) {
