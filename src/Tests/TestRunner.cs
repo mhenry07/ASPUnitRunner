@@ -11,6 +11,7 @@ namespace AspUnitRunner.Tests {
     public class TestRunner {
         private const string TestContainerField = "_testContainer";
         private const string TestCaseField = "_testCase";
+
         private IAspClient _client;
 
         [SetUp]
@@ -21,6 +22,17 @@ namespace AspUnitRunner.Tests {
                         Arg<string>.Is.Anything,
                         Arg<NameValueCollection>.Is.Anything))
                 .Return(FakeTestFormatter.FormatSummary(1, 0, 0));
+        }
+
+        [Test]
+        public void New_Runner_should_have_default_configuration() {
+            var runner = new Runner(_client);
+
+            Assert.That(runner.GetField(TestContainerField),
+                Is.EqualTo(Runner.AllTestContainers));
+            Assert.That(runner.GetField(TestCaseField),
+                Is.EqualTo(Runner.AllTestCases));
+            _client.AssertWasNotCalled(c => c.Credentials = Arg<ICredentials>.Is.NotNull);
         }
 
         [Test]
