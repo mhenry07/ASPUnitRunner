@@ -33,8 +33,8 @@ namespace AspUnitRunner.Tests {
         [Test]
         public void Running_tests_should_post_request_to_expected_address_with_all_test_containers() {
             var expectedData = new NameValueCollection() {
-                { "cboTestContainers", "All Test Containers" },
-                { "cboTestCases", "All Test Cases" },
+                { "cboTestContainers", Runner.AllTestContainers },
+                { "cboTestCases", Runner.AllTestCases },
                 { "cmdRun", "Run Tests"}
             };
 
@@ -52,7 +52,7 @@ namespace AspUnitRunner.Tests {
             const string testContainer = "TestContainer";
             var expectedData = new NameValueCollection() {
                 { "cboTestContainers", testContainer },
-                { "cboTestCases", "All Test Cases" },
+                { "cboTestCases", Runner.AllTestCases },
                 { "cmdRun", "Run Tests"}
             };
 
@@ -105,7 +105,7 @@ namespace AspUnitRunner.Tests {
             var runner = new Runner(_client);
 
             Assert.That(
-                () => runner.WithConfiguration(new Configuration { TestContainer = "All Test Containers", TestCase = "TestCase" }),
+                () => runner.WithConfiguration(new Configuration { TestContainer = Runner.AllTestContainers, TestCase = "TestCase" }),
                 Throws.InstanceOf<System.ArgumentOutOfRangeException>());
         }
 
