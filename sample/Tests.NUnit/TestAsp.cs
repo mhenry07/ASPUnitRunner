@@ -24,6 +24,8 @@ namespace AspUnitRunner.Sample.Tests.NUnit {
             // Note: results.Details can generate a long HTML string which NUnit doesn't format very well
             Assert.That(results.Errors, Is.EqualTo(0), results.Details);
             Assert.That(results.Failures, Is.EqualTo(0), results.Details);
+            if (results.Tests == 0)
+                Assert.Inconclusive("0 tests were run");
         }
 
         [TestFixtureSetUp]
