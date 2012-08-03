@@ -11,6 +11,7 @@ namespace AspUnitRunner.Tests {
     public class TestRunner {
         private const string TestContainerField = "_testContainer";
         private const string TestCaseField = "_testCase";
+
         private IAspClient _client;
 
         [SetUp]
@@ -21,6 +22,17 @@ namespace AspUnitRunner.Tests {
                         Arg<string>.Is.Anything,
                         Arg<NameValueCollection>.Is.Anything))
                 .Return(FakeTestFormatter.FormatSummary(1, 0, 0));
+        }
+
+        [Test]
+        public void New_Runner_should_have_default_configuration() {
+            var runner = new Runner(_client);
+
+            Assert.That(runner.GetField(TestContainerField),
+                Is.EqualTo(Runner.AllTestContainers));
+            Assert.That(runner.GetField(TestCaseField),
+                Is.EqualTo(Runner.AllTestCases));
+            _client.AssertWasNotCalled(c => c.Credentials = Arg<ICredentials>.Is.NotNull);
         }
 
         [Test]
@@ -57,7 +69,7 @@ namespace AspUnitRunner.Tests {
             };
 
             var runner = new Runner(_client)
-                .WithConfiguration(new Configuration { TestContainer = testContainer });
+                .WithTestContainer(testContainer);
             var results = runner.Run("http://path/to/test-runner");
 
             _client.AssertWasCalled(c =>
@@ -77,10 +89,7 @@ namespace AspUnitRunner.Tests {
             };
 
             var runner = new Runner(_client)
-                .WithConfiguration(new Configuration {
-                    TestContainer = testContainer,
-                    TestCase = testCase
-                });
+                .WithTestContainerAndCase(testContainer, testCase);
             var results = runner.Run("http://path/to/test-runner");
 
             _client.AssertWasCalled(c =>
@@ -90,56 +99,78 @@ namespace AspUnitRunner.Tests {
         }
 
         [Test]
-        public void Running_tests_with_credentials_should_set_client_credentials() {
+        public void WithCredentials_should_set_client_credentials() {
             var credentials = new NetworkCredential("username", "password");
 
             var runner = new Runner(_client)
-                .WithConfiguration(new Configuration { Credentials = credentials });
-            var results = runner.Run("https://path/to/test-runner");
+                .WithCredentials(credentials);
 
             _client.AssertWasCalled(c => c.Credentials = credentials);
         }
 
         [Test]
-        public void WithConfiguration_with_test_case_for_all_containers_should_throw_exception() {
+        public void WithTestContainerAndCase_with_test_case_for_all_containers_should_throw_exception() {
             var runner = new Runner(_client);
 
             Assert.That(
-                () => runner.WithConfiguration(new Configuration { TestContainer = Runner.AllTestContainers, TestCase = "TestCase" }),
-                Throws.InstanceOf<System.ArgumentOutOfRangeException>());
+                () => runner.WithTestContainerAndCase(Runner.AllTestContainers, "TestCase"),
+                Throws.InstanceOf<System.ArgumentException>());
         }
 
         [Test]
-        public void WithConfiguration_with_null_container_should_use_all_containers() {
+        public void WithTestContainer_should_set_test_container() {
+            const string testContainer = "TestContainer";
             var runner = new Runner(_client)
-                .WithConfiguration(new Configuration { TestContainer = null });
+                .WithTestContainer(testContainer);
+
+            Assert.That(runner.GetField(TestContainerField),
+                Is.EqualTo(testContainer));
+        }
+
+        [Test]
+        public void WithTestContainer_null_should_use_all_containers() {
+            var runner = new Runner(_client)
+                .WithTestContainer(null);
 
             Assert.That(runner.GetField(TestContainerField),
                 Is.EqualTo(Runner.AllTestContainers));
         }
 
         [Test]
-        public void WithConfiguration_with_empty_container_should_use_all_containers() {
+        public void WithTestContainer_empty_should_use_all_containers() {
             var runner = new Runner(_client)
-                .WithConfiguration(new Configuration { TestContainer = "" });
+                .WithTestContainer("");
 
             Assert.That(runner.GetField(TestContainerField),
                 Is.EqualTo(Runner.AllTestContainers));
         }
 
         [Test]
-        public void WithConfiguration_with_null_test_case_should_use_all_test_cases() {
+        public void WithTestContainerAndCase_should_set_test_container_and_test_case() {
+            const string testContainer = "TestContainer";
+            const string testCase = "TestCase";
             var runner = new Runner(_client)
-                .WithConfiguration(new Configuration { TestCase = null });
+                .WithTestContainerAndCase(testContainer, testCase);
+
+            Assert.That(runner.GetField(TestContainerField),
+                Is.EqualTo(testContainer));
+            Assert.That(runner.GetField(TestCaseField),
+                Is.EqualTo(testCase));
+        }
+
+        [Test]
+        public void WithTestContainerAndCase_with_null_test_case_should_use_all_test_cases() {
+            var runner = new Runner(_client)
+                .WithTestContainerAndCase("TestContainer", null);
 
             Assert.That(runner.GetField(TestCaseField),
                 Is.EqualTo(Runner.AllTestCases));
         }
 
         [Test]
-        public void WithConfiguration_with_empty_test_case_should_use_all_test_cases() {
+        public void WithTestContainerAndCase_with_empty_test_case_should_use_all_test_cases() {
             var runner = new Runner(_client)
-                .WithConfiguration(new Configuration { TestCase = "" });
+                .WithTestContainerAndCase("TestContainer", "");
 
             Assert.That(runner.GetField(TestCaseField),
                 Is.EqualTo(Runner.AllTestCases));

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Collections.Specialized;
 using AspUnitRunner.Core;
 
@@ -29,16 +30,40 @@ namespace AspUnitRunner {
         }
 
         /// <summary>
-        /// Sets the configuration and returns the current Runner object.
+        /// Sets the network credentials used to authenticate the request
+        /// and returns the current Runner object.
         /// </summary>
-        /// <param name="configuration">The configuration object.</param>
-        /// <returns>Returns the current Runner object.</returns>
-        /// <exception cref="ArgumentOutOfRangeException">
-        /// A test container must be specified if a test case is specified.
-        /// </exception>
-        public Runner WithConfiguration(Configuration configuration) {
-            _client.Credentials = configuration.Credentials;
-            SetTests(configuration.TestContainer, configuration.TestCase);
+        /// <param name="credentials">The network credentials.</param>
+        /// <returns>The current Runner object.</returns>
+        public Runner WithCredentials(ICredentials credentials) {
+            _client.Credentials = credentials;
+            return this;
+        }
+
+        /// <summary>
+        /// Sets the name of the test container from which to run tests
+        /// and returns the current Runner object.
+        /// </summary>
+        /// <param name="testContainer">The test container.</param>
+        /// <returns>The current Runner object.</returns>
+        public Runner WithTestContainer(string testContainer) {
+            return WithTestContainerAndCase(testContainer, AllTestCases);
+        }
+
+        /// <summary>
+        /// Sets the name of the test container and test case to execute
+        /// and returns the current Runner object.
+        /// </summary>
+        /// <param name="testContainer">The test container containing the test case.</param>
+        /// <param name="testCase">The test case to execute.</param>
+        /// <returns>The current Runner object.</returns>
+        public Runner WithTestContainerAndCase(string testContainer, string testCase) {
+            if (IsSpecified(testCase, AllTestCases) && !IsSpecified(testContainer, AllTestContainers))
+                throw new ArgumentException("A test container must be specified if a test case is specified.", "testContainer");
+
+            _testContainer = Normalize(testContainer, AllTestContainers);
+            _testCase = Normalize(testCase, AllTestCases);
+
             return this;
         }
 
@@ -62,14 +87,6 @@ namespace AspUnitRunner {
                 { "cboTestCases", _testCase },
                 { "cmdRun", RunCommand }
             };
-        }
-
-        private void SetTests(string testContainer, string testCase) {
-            if (IsSpecified(testCase, AllTestCases) && !IsSpecified(testContainer, AllTestContainers))
-                throw new ArgumentOutOfRangeException("A test container must be specified if a test case is specified.", "TestContainer");
-
-            _testContainer = Normalize(testContainer, AllTestContainers);
-            _testCase = Normalize(testCase, AllTestCases);
         }
 
         private static bool IsSpecified(string value, string defaultValue) {
