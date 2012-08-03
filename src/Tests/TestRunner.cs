@@ -99,16 +99,6 @@ namespace AspUnitRunner.Tests {
         }
 
         [Test]
-        public void WithConfiguration_with_credentials_should_set_client_credentials() {
-            var credentials = new NetworkCredential("username", "password");
-
-            var runner = new Runner(_client)
-                .WithConfiguration(new Configuration { Credentials = credentials });
-
-            _client.AssertWasCalled(c => c.Credentials = credentials);
-        }
-
-        [Test]
         public void WithCredentials_should_set_client_credentials() {
             var credentials = new NetworkCredential("username", "password");
 
@@ -116,15 +106,6 @@ namespace AspUnitRunner.Tests {
                 .WithCredentials(credentials);
 
             _client.AssertWasCalled(c => c.Credentials = credentials);
-        }
-
-        [Test]
-        public void WithConfiguration_with_test_case_for_all_containers_should_throw_exception() {
-            var runner = new Runner(_client);
-
-            Assert.That(
-                () => runner.WithConfiguration(new Configuration { TestContainer = Runner.AllTestContainers, TestCase = "TestCase" }),
-                Throws.InstanceOf<System.ArgumentException>());
         }
 
         [Test]
@@ -137,10 +118,10 @@ namespace AspUnitRunner.Tests {
         }
 
         [Test]
-        public void WithConfiguration_with_container_should_set_test_container() {
+        public void WithTestContainer_should_set_test_container() {
             const string testContainer = "TestContainer";
             var runner = new Runner(_client)
-                .WithConfiguration(new Configuration { TestContainer = testContainer });
+                .WithTestContainer(testContainer);
 
             Assert.That(runner.GetField(TestContainerField),
                 Is.EqualTo(testContainer));
@@ -165,14 +146,11 @@ namespace AspUnitRunner.Tests {
         }
 
         [Test]
-        public void WithConfiguration_with_container_and_test_case_should_set_test_container_and_case() {
+        public void WithTestContainerAndCase_should_set_test_container_and_test_case() {
             const string testContainer = "TestContainer";
             const string testCase = "TestCase";
             var runner = new Runner(_client)
-                .WithConfiguration(new Configuration {
-                    TestContainer = testContainer,
-                    TestCase = testCase
-                });
+                .WithTestContainerAndCase(testContainer, testCase);
 
             Assert.That(runner.GetField(TestContainerField),
                 Is.EqualTo(testContainer));
@@ -196,29 +174,6 @@ namespace AspUnitRunner.Tests {
 
             Assert.That(runner.GetField(TestCaseField),
                 Is.EqualTo(Runner.AllTestCases));
-        }
-
-        [Test]
-        public void WithTestContainer_should_set_test_container() {
-            const string testContainer = "TestContainer";
-            var runner = new Runner(_client)
-                .WithTestContainer(testContainer);
-
-            Assert.That(runner.GetField(TestContainerField),
-                Is.EqualTo(testContainer));
-        }
-
-        [Test]
-        public void WithTestContainerAndCase_should_set_test_container_and_test_case() {
-            const string testContainer = "TestContainer";
-            const string testCase = "TestCase";
-            var runner = new Runner(_client)
-                .WithTestContainerAndCase(testContainer, testCase);
-
-            Assert.That(runner.GetField(TestContainerField),
-                Is.EqualTo(testContainer));
-            Assert.That(runner.GetField(TestCaseField),
-                Is.EqualTo(testCase));
         }
     }
 }

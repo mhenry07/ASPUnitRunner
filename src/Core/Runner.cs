@@ -30,19 +30,6 @@ namespace AspUnitRunner {
         }
 
         /// <summary>
-        /// Sets the configuration and returns the current Runner object.
-        /// </summary>
-        /// <param name="configuration">The configuration object.</param>
-        /// <returns>Returns the current Runner object.</returns>
-        /// <exception cref="ArgumentOutOfRangeException">
-        /// A test container must be specified if a test case is specified.
-        /// </exception>
-        public Runner WithConfiguration(Configuration configuration) {
-            return WithCredentials(configuration.Credentials)
-                .WithTestContainerAndCase(configuration.TestContainer, configuration.TestCase);
-        }
-
-        /// <summary>
         /// Sets the network credentials used to authenticate the request
         /// and returns the current Runner object.
         /// </summary>
