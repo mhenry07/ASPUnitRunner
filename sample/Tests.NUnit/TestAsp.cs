@@ -17,8 +17,10 @@ namespace AspUnitRunner.Sample.Tests.NUnit {
             // set ASPUnit test containers here
             [Values("CalculatorTest", "StringUtilityTest", "FailureTest")] string testContainer
             ) {
-            var runner = Runner.Create();
-            runner.TestContainer = testContainer;
+            var runner = Runner.Create()
+                .WithConfiguration(new Configuration {
+                    TestContainer = testContainer
+                });
             var results = runner.Run(AspTestUrl);
 
             // Note: results.Details can generate a long HTML string which NUnit doesn't format very well
