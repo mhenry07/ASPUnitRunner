@@ -40,8 +40,6 @@ namespace AspUnitRunner.Tests.Infrastructure {
 
             // Assert
             Assert.That(_webClient.Credentials, Is.Null);
-            Assert.That(_webClient.Headers[HttpRequestHeader.ContentType],
-                Is.EqualTo("application/x-www-form-urlencoded"));
             Assert.That(response, Is.EqualTo(expectedResponse));
         }
 
