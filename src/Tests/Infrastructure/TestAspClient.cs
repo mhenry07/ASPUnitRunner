@@ -9,6 +9,17 @@ using AspUnitRunner.Infrastructure;
 namespace AspUnitRunner.Tests.Infrastructure {
     [TestFixture]
     public class TestAspClient {
+        private IWebClientFactory _factory;
+        private WebClient _webClient;
+
+        [SetUp]
+        public void SetUp() {
+            _factory = MockRepository.GenerateStub<IWebClientFactory>();
+            _webClient = MockRepository.GenerateStub<WebClient>();
+            _factory.Stub(f => f.Create()).Return(_webClient);
+            _webClient.Headers = new WebHeaderCollection();
+        }
+
         [Test]
         public void PostRequest_should_upload_values_and_return_expected_response() {
             // Arrange
@@ -17,26 +28,38 @@ namespace AspUnitRunner.Tests.Infrastructure {
                 { "key1", "value 1" },
                 { "key2", "value 2" }
             };
-            var credentials = MockRepository.GenerateStub<ICredentials>();
             const string expectedResponse = "response";
             var responseBytes = Encoding.Default.GetBytes(expectedResponse);
 
-            var factory = MockRepository.GenerateStub<IWebClientFactory>();
-            var webClient = MockRepository.GenerateStub<WebClient>();
-            webClient.Headers = new WebHeaderCollection();
-            factory.Stub(f => f.Create()).Return(webClient);
-            webClient.Stub(c => c.UploadValues(address, postValues))
+            _webClient.Stub(c => c.UploadValues(address, postValues))
                 .Return(responseBytes);
 
             // Act
-            var aspClient = new AspClient(factory);
-            var response = aspClient.PostRequest(address, postValues, credentials);
+            var aspClient = new AspClient(_factory);
+            var response = aspClient.PostRequest(address, postValues);
 
             // Assert
-            Assert.That(webClient.Credentials, Is.EqualTo(credentials));
-            Assert.That(webClient.Headers[HttpRequestHeader.ContentType],
+            Assert.That(_webClient.Credentials, Is.Null);
+            Assert.That(_webClient.Headers[HttpRequestHeader.ContentType],
                 Is.EqualTo("application/x-www-form-urlencoded"));
             Assert.That(response, Is.EqualTo(expectedResponse));
+        }
+
+        [Test]
+        public void PostRequest_with_credentials_should_set_credentials() {
+            // Arrange
+            var credentials = new NetworkCredential("username", "password");
+
+            _webClient.Stub(c => c.UploadValues(Arg<string>.Is.Anything, Arg<NameValueCollection>.Is.Anything))
+                .Return(new byte[] { });
+
+            // Act
+            var aspClient = new AspClient(_factory);
+            aspClient.Credentials = credentials;
+            var response = aspClient.PostRequest("", new NameValueCollection());
+
+            // Assert
+            Assert.That(_webClient.Credentials, Is.EqualTo(credentials));
         }
     }
 }

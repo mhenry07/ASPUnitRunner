@@ -3,6 +3,7 @@ using System.Net;
 
 namespace AspUnitRunner.Core {
     internal interface IAspClient {
-        string PostRequest(string address, NameValueCollection postValues, ICredentials credentials);
+        ICredentials Credentials { get; set; }
+        string PostRequest(string address, NameValueCollection postValues);
     }
 }
