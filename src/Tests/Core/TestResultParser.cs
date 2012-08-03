@@ -41,7 +41,7 @@ namespace AspUnitRunner.Tests.Core {
         [Test]
         public void Parse_invalid_results_should_throw_format_exception() {
             Assert.That(
-                delegate { ResultParser.Parse(""); },
+                () => ResultParser.Parse(""),
                 Throws.InstanceOf<FormatException>());
         }
 
