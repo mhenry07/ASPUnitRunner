@@ -119,6 +119,16 @@ namespace AspUnitRunner.Tests {
         }
 
         [Test]
+        public void WithConfiguration_with_container_should_set_test_container() {
+            const string testContainer = "TestContainer";
+            var runner = new Runner(_client)
+                .WithConfiguration(new Configuration { TestContainer = testContainer });
+
+            Assert.That(runner.GetField(TestContainerField),
+                Is.EqualTo(testContainer));
+        }
+
+        [Test]
         public void WithConfiguration_with_null_container_should_use_all_containers() {
             var runner = new Runner(_client)
                 .WithConfiguration(new Configuration { TestContainer = null });
@@ -134,6 +144,22 @@ namespace AspUnitRunner.Tests {
 
             Assert.That(runner.GetField(TestContainerField),
                 Is.EqualTo(Runner.AllTestContainers));
+        }
+
+        [Test]
+        public void WithConfiguration_with_container_and_test_case_should_set_test_container_and_case() {
+            const string testContainer = "TestContainer";
+            const string testCase = "TestCase";
+            var runner = new Runner(_client)
+                .WithConfiguration(new Configuration {
+                    TestContainer = testContainer,
+                    TestCase = testCase
+                });
+
+            Assert.That(runner.GetField(TestContainerField),
+                Is.EqualTo(testContainer));
+            Assert.That(runner.GetField(TestCaseField),
+                Is.EqualTo(testCase));
         }
 
         [Test]
