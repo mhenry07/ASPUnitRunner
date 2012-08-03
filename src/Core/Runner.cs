@@ -7,10 +7,10 @@ namespace AspUnitRunner {
     /// Runs ASPUnit tests from the given URL and returns test results.
     /// </summary>
     public class Runner {
-        private const string ResultsQueryString = "?UnitRunner=results";
-        private const string AllTestContainers = "All Test Containers";
-        private const string AllTestCases = "All Test Cases";
+        public const string AllTestContainers = "All Test Containers";
+        public const string AllTestCases = "All Test Cases";
         private const string RunCommand = "Run Tests";
+        private const string ResultsQueryString = "?UnitRunner=results";
 
         private readonly IAspClient _client;
         private string _testContainer = AllTestContainers;
@@ -38,8 +38,7 @@ namespace AspUnitRunner {
         /// </exception>
         public Runner WithConfiguration(Configuration configuration) {
             _client.Credentials = configuration.Credentials;
-            SetTests(configuration.TestContainer ?? _testContainer,
-                configuration.TestCase ?? _testCase);
+            SetTests(configuration.TestContainer, configuration.TestCase);
             return this;
         }
 
@@ -69,14 +68,20 @@ namespace AspUnitRunner {
             if (IsSpecified(testCase, AllTestCases) && !IsSpecified(testContainer, AllTestContainers))
                 throw new ArgumentOutOfRangeException("A test container must be specified if a test case is specified.", "TestContainer");
 
-            _testContainer = testContainer;
-            _testCase = testCase;
+            _testContainer = Normalize(testContainer, AllTestContainers);
+            _testCase = Normalize(testCase, AllTestCases);
         }
 
         private static bool IsSpecified(string value, string defaultValue) {
             if (string.IsNullOrEmpty(value))
                 return false;
             return value != defaultValue;
+        }
+
+        private static string Normalize(string value, string defaultValue) {
+            if (string.IsNullOrEmpty(value))
+                return defaultValue;
+            return value;
         }
     }
 }

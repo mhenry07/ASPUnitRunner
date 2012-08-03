@@ -9,6 +9,8 @@ using AspUnitRunner.Tests.Helpers;
 namespace AspUnitRunner.Tests {
     [TestFixture]
     public class TestRunner {
+        private const string TestContainerField = "_testContainer";
+        private const string TestCaseField = "_testCase";
         private IAspClient _client;
 
         [SetUp]
@@ -105,6 +107,42 @@ namespace AspUnitRunner.Tests {
             Assert.That(
                 () => runner.WithConfiguration(new Configuration { TestContainer = "All Test Containers", TestCase = "TestCase" }),
                 Throws.InstanceOf<System.ArgumentOutOfRangeException>());
+        }
+
+        [Test]
+        public void WithConfiguration_with_null_container_should_use_all_containers() {
+            var runner = new Runner(_client)
+                .WithConfiguration(new Configuration { TestContainer = null });
+
+            Assert.That(runner.GetField(TestContainerField),
+                Is.EqualTo(Runner.AllTestContainers));
+        }
+
+        [Test]
+        public void WithConfiguration_with_empty_container_should_use_all_containers() {
+            var runner = new Runner(_client)
+                .WithConfiguration(new Configuration { TestContainer = "" });
+
+            Assert.That(runner.GetField(TestContainerField),
+                Is.EqualTo(Runner.AllTestContainers));
+        }
+
+        [Test]
+        public void WithConfiguration_with_null_test_case_should_use_all_test_cases() {
+            var runner = new Runner(_client)
+                .WithConfiguration(new Configuration { TestCase = null });
+
+            Assert.That(runner.GetField(TestCaseField),
+                Is.EqualTo(Runner.AllTestCases));
+        }
+
+        [Test]
+        public void WithConfiguration_with_empty_test_case_should_use_all_test_cases() {
+            var runner = new Runner(_client)
+                .WithConfiguration(new Configuration { TestCase = "" });
+
+            Assert.That(runner.GetField(TestCaseField),
+                Is.EqualTo(Runner.AllTestCases));
         }
     }
 }
