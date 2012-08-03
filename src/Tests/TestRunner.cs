@@ -112,7 +112,16 @@ namespace AspUnitRunner.Tests {
 
             Assert.That(
                 () => runner.WithConfiguration(new Configuration { TestContainer = Runner.AllTestContainers, TestCase = "TestCase" }),
-                Throws.InstanceOf<System.ArgumentOutOfRangeException>());
+                Throws.InstanceOf<System.ArgumentException>());
+        }
+
+        [Test]
+        public void WithTestContainerAndCase_with_test_case_for_all_containers_should_throw_exception() {
+            var runner = new Runner(_client);
+
+            Assert.That(
+                () => runner.WithTestContainerAndCase(Runner.AllTestContainers, "TestCase"),
+                Throws.InstanceOf<System.ArgumentException>());
         }
 
         [Test]
