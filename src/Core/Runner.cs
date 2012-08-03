@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Collections.Specialized;
 using AspUnitRunner.Core;
 
@@ -43,6 +44,17 @@ namespace AspUnitRunner {
         }
 
         /// <summary>
+        /// Sets the network credentials used to authenticate the request
+        /// and returns the current Runner object.
+        /// </summary>
+        /// <param name="credentials">The network credentials.</param>
+        /// <returns>The current Runner object.</returns>
+        public Runner WithCredentials(ICredentials credentials) {
+            _client.Credentials = credentials;
+            return this;
+        }
+
+        /// <summary>
         /// Runs ASPUnit tests and returns results.
         /// </summary>
         /// <param name="address">The URL for the ASPUnit tests.</param>
@@ -83,5 +95,6 @@ namespace AspUnitRunner {
                 return defaultValue;
             return value;
         }
+
     }
 }

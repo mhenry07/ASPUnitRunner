@@ -90,12 +90,21 @@ namespace AspUnitRunner.Tests {
         }
 
         [Test]
-        public void Running_tests_with_credentials_should_set_client_credentials() {
+        public void WithConfiguration_with_credentials_should_set_client_credentials() {
             var credentials = new NetworkCredential("username", "password");
 
             var runner = new Runner(_client)
                 .WithConfiguration(new Configuration { Credentials = credentials });
-            var results = runner.Run("https://path/to/test-runner");
+
+            _client.AssertWasCalled(c => c.Credentials = credentials);
+        }
+
+        [Test]
+        public void WithCredentials_should_set_client_credentials() {
+            var credentials = new NetworkCredential("username", "password");
+
+            var runner = new Runner(_client)
+                .WithCredentials(credentials);
 
             _client.AssertWasCalled(c => c.Credentials = credentials);
         }
