@@ -55,6 +55,17 @@ namespace AspUnitRunner {
         }
 
         /// <summary>
+        /// Sets the name of the test container from which to run tests
+        /// and returns the current Runner object.
+        /// </summary>
+        /// <param name="testContainer">The test container.</param>
+        /// <returns>The current Runner object.</returns>
+        public Runner WithTestContainer(string testContainer) {
+            SetTests(testContainer, AllTestCases);
+            return this;
+        }
+
+        /// <summary>
         /// Runs ASPUnit tests and returns results.
         /// </summary>
         /// <param name="address">The URL for the ASPUnit tests.</param>
@@ -95,6 +106,5 @@ namespace AspUnitRunner {
                 return defaultValue;
             return value;
         }
-
     }
 }
