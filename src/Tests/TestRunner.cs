@@ -77,10 +77,7 @@ namespace AspUnitRunner.Tests {
             };
 
             var runner = new Runner(_client)
-                .WithConfiguration(new Configuration {
-                    TestContainer = testContainer,
-                    TestCase = testCase
-                });
+                .WithTestContainerAndCase(testContainer, testCase);
             var results = runner.Run("http://path/to/test-runner");
 
             _client.AssertWasCalled(c =>
@@ -188,6 +185,19 @@ namespace AspUnitRunner.Tests {
 
             Assert.That(runner.GetField(TestContainerField),
                 Is.EqualTo(testContainer));
+        }
+
+        [Test]
+        public void WithTestContainerAndCase_should_set_test_container_and_test_case() {
+            const string testContainer = "TestContainer";
+            const string testCase = "TestCase";
+            var runner = new Runner(_client)
+                .WithTestContainerAndCase(testContainer, testCase);
+
+            Assert.That(runner.GetField(TestContainerField),
+                Is.EqualTo(testContainer));
+            Assert.That(runner.GetField(TestCaseField),
+                Is.EqualTo(testCase));
         }
     }
 }

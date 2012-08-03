@@ -61,7 +61,18 @@ namespace AspUnitRunner {
         /// <param name="testContainer">The test container.</param>
         /// <returns>The current Runner object.</returns>
         public Runner WithTestContainer(string testContainer) {
-            SetTests(testContainer, AllTestCases);
+            return WithTestContainerAndCase(testContainer, AllTestCases);
+        }
+
+        /// <summary>
+        /// Sets the name of the test container and test case to execute
+        /// and returns the current Runner object.
+        /// </summary>
+        /// <param name="testContainer">The test container containing the test case.</param>
+        /// <param name="testCase">The test case to execute.</param>
+        /// <returns>The current Runner object.</returns>
+        public Runner WithTestContainerAndCase(string testContainer, string testCase) {
+            SetTests(testContainer, testCase);
             return this;
         }
 
