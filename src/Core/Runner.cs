@@ -38,9 +38,8 @@ namespace AspUnitRunner {
         /// A test container must be specified if a test case is specified.
         /// </exception>
         public Runner WithConfiguration(Configuration configuration) {
-            _client.Credentials = configuration.Credentials;
-            SetTests(configuration.TestContainer, configuration.TestCase);
-            return this;
+            return WithCredentials(configuration.Credentials)
+                .WithTestContainerAndCase(configuration.TestContainer, configuration.TestCase);
         }
 
         /// <summary>
