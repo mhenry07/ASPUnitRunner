@@ -15,6 +15,8 @@ namespace AspUnitRunner.Tests.Infrastructure {
 
             Assert.That(client.GetField("_factory"),
                 Is.InstanceOf<WebClientFactory>());
+            Assert.That(client.GetField("_responseDecoder"),
+                Is.InstanceOf<ResponseDecoder>());
         }
     }
 }

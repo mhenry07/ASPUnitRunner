@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System.Text;
+using System.Threading;
 using NUnit.Framework;
 using AspUnitRunner;
 
@@ -18,6 +19,7 @@ namespace AspUnitRunner.Sample.Tests.NUnit {
             [Values("CalculatorTest", "StringUtilityTest", "FailureTest")] string testContainer
             ) {
             var runner = Runner.Create()
+                .WithEncoding(Encoding.UTF8)
                 .WithTestContainer(testContainer);
             var results = runner.Run(AspTestUrl);
 

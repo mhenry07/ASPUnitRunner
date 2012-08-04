@@ -1,5 +1,6 @@
 ﻿using System.Collections.Specialized;
 using System.Net;
+using System.Text;
 using NUnit.Framework;
 using Rhino.Mocks;
 using AspUnitRunner;
@@ -106,6 +107,16 @@ namespace AspUnitRunner.Tests {
                 .WithCredentials(credentials);
 
             _client.AssertWasCalled(c => c.Credentials = credentials);
+        }
+
+        [Test]
+        public void WithEncoding_should_set_client_encoding() {
+            var encoding = Encoding.UTF8;
+
+            var runner = new Runner(_client)
+                .WithEncoding(encoding);
+
+            _client.AssertWasCalled(c => c.Encoding = encoding);
         }
 
         [Test]

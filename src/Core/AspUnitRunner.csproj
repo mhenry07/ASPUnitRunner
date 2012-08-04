@@ -38,11 +38,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Core\IResponseDecoder.cs" />
     <Compile Include="Core\ResultParser.cs" />
     <Compile Include="Core\IAspClient.cs" />
     <Compile Include="Infrastructure\AspClient.cs" />
     <Compile Include="Infrastructure\Ioc.cs" />
     <Compile Include="Core\IWebClientFactory.cs" />
+    <Compile Include="Infrastructure\ResponseDecoder.cs" />
     <Compile Include="Infrastructure\WebClientFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Results.cs" />

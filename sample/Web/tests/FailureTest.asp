@@ -1,4 +1,4 @@
-﻿<%
+<%
 Class FailureTest
 	Public Function TestCaseNames()
 		TestCaseNames = Array("ExpectFailure", "ExpectError")
@@ -11,7 +11,7 @@ Class FailureTest
 	End Sub
 
 	Public Sub ExpectFailure(testResult)
-		Call testResult.AddFailure("Expected failure")
+		Call testResult.AddFailure("Expected failure ¦ “€×¶ëç†êÐ ƒαí£µ®ε” — «ǝɹnןıɐɟ pǝʇɔǝdxǝ» ∞") ' note the non-ascii characters
 	End Sub
 
 	Public Sub ExpectError(testResult)

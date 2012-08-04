@@ -10,11 +10,13 @@ namespace AspUnitRunner.Tests.Infrastructure {
     [TestFixture]
     public class TestAspClient {
         private IWebClientFactory _factory;
+        private IResponseDecoder _responseDecoder;
         private WebClient _webClient;
 
         [SetUp]
         public void SetUp() {
             _factory = MockRepository.GenerateStub<IWebClientFactory>();
+            _responseDecoder = MockRepository.GenerateStub<IResponseDecoder>();
             _webClient = MockRepository.GenerateStub<WebClient>();
             _factory.Stub(f => f.Create()).Return(_webClient);
             _webClient.Headers = new WebHeaderCollection();
@@ -33,9 +35,11 @@ namespace AspUnitRunner.Tests.Infrastructure {
 
             _webClient.Stub(c => c.UploadValues(address, postValues))
                 .Return(responseBytes);
+            _responseDecoder.Stub(d => d.DecodeResponse(_webClient, responseBytes))
+                .Return(expectedResponse);
 
             // Act
-            var aspClient = new AspClient(_factory);
+            var aspClient = new AspClient(_factory, _responseDecoder);
             var response = aspClient.PostRequest(address, postValues);
 
             // Assert
@@ -52,12 +56,35 @@ namespace AspUnitRunner.Tests.Infrastructure {
                 .Return(new byte[] { });
 
             // Act
-            var aspClient = new AspClient(_factory);
+            var aspClient = new AspClient(_factory, _responseDecoder);
             aspClient.Credentials = credentials;
             var response = aspClient.PostRequest("", new NameValueCollection());
 
             // Assert
             Assert.That(_webClient.Credentials, Is.EqualTo(credentials));
+        }
+
+        [Test]
+        public void PostRequest_with_encoding_should_set_web_client_encoding() {
+            var encoding = Encoding.UTF8;
+
+            var aspClient = new AspClient(_factory, _responseDecoder);
+            aspClient.Encoding = encoding;
+            var response = aspClient.PostRequest("", null);
+
+            Assert.That(_webClient.Encoding, Is.EqualTo(encoding));
+        }
+
+        [Test]
+        public void PostRequest_with_null_encoding_should_keep_web_client_encoding() {
+            var defaultEncoding = Encoding.GetEncoding("windows-1252");
+            _webClient.Encoding = defaultEncoding;
+
+            var aspClient = new AspClient(_factory, _responseDecoder);
+            aspClient.Encoding = null;
+            var response = aspClient.PostRequest("", null);
+
+            Assert.That(_webClient.Encoding, Is.EqualTo(defaultEncoding));
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿ASPUnitRunner
+ASPUnitRunner
 
 ASPUnitRunner is a library to allow running ASPUnit tests for classic ASP from NUnit.
 

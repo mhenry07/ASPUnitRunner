@@ -1,4 +1,4 @@
-﻿<!-- #include virtual="/includes/StringUtility.inc.asp" -->
+<!-- #include virtual="/includes/StringUtility.inc.asp" -->
 <%
 Class StringUtilityTest
 	Private m_stringUtility
