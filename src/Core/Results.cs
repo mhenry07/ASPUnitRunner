@@ -1,4 +1,7 @@
-﻿namespace AspUnitRunner {
+﻿using System.Collections.Generic;
+using AspUnitRunner.Core;
+
+namespace AspUnitRunner {
     /// <summary>
     /// Contains ASPUnit test results.
     /// </summary>
@@ -6,6 +9,7 @@
         private readonly int _tests;
         private readonly int _errors;
         private readonly int _failures;
+        private readonly IEnumerable<ResultDetail> _details;
         private readonly string _html;
 
         /// <summary>
@@ -30,16 +34,24 @@
         }
 
         /// <summary>
+        /// Gets the collection of test details.
+        /// </summary>
+        public IEnumerable<ResultDetail> Details {
+            get { return _details; }
+        }
+
+        /// <summary>
         /// Gets the raw HTML test results.
         /// </summary>
         public string Html {
             get { return _html; }
         }
 
-        internal Results(int tests, int errors, int failures, string html) {
+        internal Results(int tests, int errors, int failures, IEnumerable<ResultDetail> details, string html) {
             _tests = tests;
             _errors = errors;
             _failures = failures;
+            _details = details;
             _html = html;
         }
     }

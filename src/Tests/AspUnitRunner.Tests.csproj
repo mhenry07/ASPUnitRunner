@@ -45,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Core\TestResultDetail.cs" />
     <Compile Include="Helpers\CollectionsExtensions.cs" />
     <Compile Include="Helpers\ReflectionExtensions.cs" />
     <Compile Include="Helpers\Tests\TestCollectionsExtensions.cs" />

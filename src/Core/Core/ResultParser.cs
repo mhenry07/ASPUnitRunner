@@ -20,7 +20,7 @@ namespace AspUnitRunner.Core {
             var errors = ParseMatchedInt(match, "errors");
             var failures = ParseMatchedInt(match, "failures");
 
-            return new Results(tests, errors, failures, htmlResults);
+            return new Results(tests, errors, failures, null, htmlResults);
         }
 
         private static int ParseMatchedInt(Match match, string matchGroupName) {
