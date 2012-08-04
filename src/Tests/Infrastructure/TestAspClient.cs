@@ -63,5 +63,28 @@ namespace AspUnitRunner.Tests.Infrastructure {
             // Assert
             Assert.That(_webClient.Credentials, Is.EqualTo(credentials));
         }
+
+        [Test]
+        public void PostRequest_with_encoding_should_set_web_client_encoding() {
+            var encoding = Encoding.UTF8;
+
+            var aspClient = new AspClient(_factory, _responseDecoder);
+            aspClient.Encoding = encoding;
+            var response = aspClient.PostRequest("", null);
+
+            Assert.That(_webClient.Encoding, Is.EqualTo(encoding));
+        }
+
+        [Test]
+        public void PostRequest_with_null_encoding_should_keep_web_client_encoding() {
+            var defaultEncoding = Encoding.GetEncoding("windows-1252");
+            _webClient.Encoding = defaultEncoding;
+
+            var aspClient = new AspClient(_factory, _responseDecoder);
+            aspClient.Encoding = null;
+            var response = aspClient.PostRequest("", null);
+
+            Assert.That(_webClient.Encoding, Is.EqualTo(defaultEncoding));
+        }
     }
 }

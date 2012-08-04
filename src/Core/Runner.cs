@@ -1,6 +1,7 @@
 ﻿using System;
-using System.Net;
 using System.Collections.Specialized;
+using System.Net;
+using System.Text;
 using AspUnitRunner.Core;
 
 namespace AspUnitRunner {
@@ -37,6 +38,18 @@ namespace AspUnitRunner {
         /// <returns>The current Runner object.</returns>
         public Runner WithCredentials(ICredentials credentials) {
             _client.Credentials = credentials;
+            return this;
+        }
+
+        /// <summary>
+        /// Sets the default encoding used to encode the request and decode the
+        /// response and returns the current Runner object.
+        /// </summary>
+        /// <param name="encoding">The encoding.</param>
+        /// <returns>The current Runner object.</returns>
+        /// <remarks>A charset in the response headers will take precedence.</remarks>
+        public Runner WithEncoding(Encoding encoding) {
+            _client.Encoding = encoding;
             return this;
         }
 
