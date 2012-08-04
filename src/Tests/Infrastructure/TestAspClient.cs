@@ -48,19 +48,13 @@ namespace AspUnitRunner.Tests.Infrastructure {
         }
 
         [Test]
-        public void PostRequest_with_credentials_should_set_credentials() {
-            // Arrange
+        public void PostRequest_with_credentials_should_set_web_client_credentials() {
             var credentials = new NetworkCredential("username", "password");
 
-            _webClient.Stub(c => c.UploadValues(Arg<string>.Is.Anything, Arg<NameValueCollection>.Is.Anything))
-                .Return(new byte[] { });
-
-            // Act
             var aspClient = new AspClient(_factory, _responseDecoder);
             aspClient.Credentials = credentials;
-            var response = aspClient.PostRequest("", new NameValueCollection());
+            var response = aspClient.PostRequest("", null);
 
-            // Assert
             Assert.That(_webClient.Credentials, Is.EqualTo(credentials));
         }
 
