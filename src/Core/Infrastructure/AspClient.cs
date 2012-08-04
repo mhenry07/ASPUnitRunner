@@ -1,23 +1,25 @@
 ﻿using System.Collections.Specialized;
 using System.Net;
-using System.Text;
 using AspUnitRunner.Core;
 
 namespace AspUnitRunner.Infrastructure {
     internal class AspClient : IAspClient {
-        private IWebClientFactory _factory;
+        private readonly IWebClientFactory _factory;
+        private readonly IResponseDecoder _responseDecoder;
 
         public ICredentials Credentials { get; set; }
 
-        public AspClient(IWebClientFactory factory) {
-            _factory = factory;
+        public AspClient(IWebClientFactory webClientFactory, IResponseDecoder responseDecoder) {
+            _factory = webClientFactory;
+            _responseDecoder = responseDecoder;
         }
 
         public string PostRequest(string address, NameValueCollection postValues) {
             using (var webClient = _factory.Create()) {
                 webClient.Credentials = Credentials;
                 var responseBytes = webClient.UploadValues(address, postValues);
-                return Encoding.Default.GetString(responseBytes);
+
+                return _responseDecoder.DecodeResponse(webClient, responseBytes);
             }
         }
     }
