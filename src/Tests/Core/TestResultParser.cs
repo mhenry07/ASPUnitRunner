@@ -32,10 +32,10 @@ namespace AspUnitRunner.Tests.Core {
         }
 
         [Test]
-        public void Parse_should_return_expected_details() {
+        public void Parse_should_return_expected_html() {
             var htmlTestResults = FormatTestSummary(1, 0, 0);
             var results = ResultParser.Parse(htmlTestResults);
-            Assert.That(results.Details, Is.EqualTo(htmlTestResults));
+            Assert.That(results.Html, Is.EqualTo(htmlTestResults));
         }
 
         [Test]

@@ -6,7 +6,7 @@
         private readonly int _tests;
         private readonly int _errors;
         private readonly int _failures;
-        private readonly string _details;
+        private readonly string _html;
 
         /// <summary>
         /// Gets the number of tests run.
@@ -32,15 +32,15 @@
         /// <summary>
         /// Gets the raw HTML test results.
         /// </summary>
-        public string Details {
-            get { return _details; }
+        public string Html {
+            get { return _html; }
         }
 
-        internal Results(int tests, int errors, int failures, string details) {
+        internal Results(int tests, int errors, int failures, string html) {
             _tests = tests;
             _errors = errors;
             _failures = failures;
-            _details = details;
+            _html = html;
         }
     }
 }
