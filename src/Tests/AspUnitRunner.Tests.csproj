@@ -54,7 +54,6 @@
     <Compile Include="Infrastructure\TestWebClientFactory.cs" />
     <Compile Include="Infrastructure\TestIoc.cs" />
     <Compile Include="Helpers\FakeTestFormatter.cs" />
-    <Compile Include="TestResults.cs" />
     <Compile Include="Core\TestResultParser.cs" />
     <Compile Include="TestRunner.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

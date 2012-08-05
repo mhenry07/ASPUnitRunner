@@ -3,24 +3,42 @@ using System.Text.RegularExpressions;
 
 namespace AspUnitRunner.Core {
     internal class ResultParser {
-        private const string TestResultRegex =
+        private const string TestSummaryRegex =
             @"Tests\:\s*(?<tests>\d+),\s*Errors\:\s*(?<errors>\d+),\s*Failures\:\s*(?<failures>\d+)";
 
+        private readonly Results _results;
+
+        private Results Results {
+            get { return _results; }
+        }
+
         public static Results Parse(string htmlResults) {
-            var regex = new Regex(TestResultRegex);
-            foreach (Match match in regex.Matches(htmlResults)) {
-                return ParseValues(htmlResults, match);
+            var parser = new ResultParser(htmlResults);
+            parser.ParseSummary();
+            return parser.Results;
+        }
+
+        private ResultParser(string htmlResults) {
+            _results = new Results {
+                Html = htmlResults,
+                Details = new ResultDetail[] { }
+            };
+        }
+
+        private void ParseSummary() {
+            var regex = new Regex(TestSummaryRegex);
+            foreach (Match match in regex.Matches(_results.Html)) {
+                ParseValues(match);
+                return;
             }
 
             throw new FormatException("Unable to parse test results.");
         }
 
-        private static Results ParseValues(string htmlResults, Match match) {
-            var tests = ParseMatchedInt(match, "tests");
-            var errors = ParseMatchedInt(match, "errors");
-            var failures = ParseMatchedInt(match, "failures");
-
-            return new Results(tests, errors, failures, null, htmlResults);
+        private void ParseValues(Match match) {
+            _results.Tests = ParseMatchedInt(match, "tests");
+            _results.Errors = ParseMatchedInt(match, "errors");
+            _results.Failures = ParseMatchedInt(match, "failures");
         }
 
         private static int ParseMatchedInt(Match match, string matchGroupName) {

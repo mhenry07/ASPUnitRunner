@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using NUnit.Framework;
 using AspUnitRunner.Core;
 using AspUnitRunner.Tests.Helpers;
@@ -36,6 +37,16 @@ namespace AspUnitRunner.Tests.Core {
             var htmlTestResults = FormatTestSummary(1, 0, 0);
             var results = ResultParser.Parse(htmlTestResults);
             Assert.That(results.Html, Is.EqualTo(htmlTestResults));
+        }
+
+        [Test]
+        public void Parse_passing_test_should_return_empty_details() {
+            var details = new ResultDetail[] { };
+            var htmlTestResults = FakeTestFormatter.FormatResults(1, 0, 0, details);
+
+            var results = ResultParser.Parse(htmlTestResults);
+            Assert.That(results.Details,
+                Is.InstanceOf<IEnumerable<ResultDetail>>().And.Empty);
         }
 
         [Test]
