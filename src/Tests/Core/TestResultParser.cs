@@ -50,6 +50,18 @@ namespace AspUnitRunner.Tests.Core {
         }
 
         [Test]
+        public void Parse_erroneous_test_should_return_expected_detail() {
+            var details = new List<ResultDetail> {
+                new ResultDetail(ResultType.Error, "TestContainer.TestCase", "Error description")
+            };
+            var htmlTestResults = FakeTestFormatter.FormatResults(1, 1, 0, details);
+
+            var results = ResultParser.Parse(htmlTestResults);
+            Assert.That(results.Details,
+                Is.EqualTo(details).Using(new ResultDetailEqualityComparer()));
+        }
+
+        [Test]
         public void Parse_invalid_results_should_throw_format_exception() {
             Assert.That(
                 () => ResultParser.Parse(""),
@@ -58,6 +70,16 @@ namespace AspUnitRunner.Tests.Core {
 
         private string FormatTestSummary(int tests, int errors, int failures) {
             return FakeTestFormatter.FormatSummary(tests, errors, failures);
+        }
+
+        private class ResultDetailEqualityComparer : IEqualityComparer<ResultDetail> {
+            public bool Equals(ResultDetail x, ResultDetail y) {
+                return x.Type.Equals(y.Type) && x.Name.Equals(y.Name) && x.Description.Equals(y.Description);
+            }
+
+            public int GetHashCode(ResultDetail obj) {
+                return obj.GetHashCode();
+            }
         }
     }
 }
