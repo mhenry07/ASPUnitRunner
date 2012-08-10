@@ -38,6 +38,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Core\Html\HtmlDoc.cs" />
+    <Compile Include="Core\Html\HtmlElement.cs" />
+    <Compile Include="Core\Html\HtmlElementCollection.cs" />
     <Compile Include="Core\IResponseDecoder.cs" />
     <Compile Include="Core\ResultDetail.cs" />
     <Compile Include="Core\ResultParser.cs" />

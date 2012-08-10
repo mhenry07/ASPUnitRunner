@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using AspUnitRunner.Core.Html;
 
 namespace AspUnitRunner.Core {
     internal class ResultParser {
-        private const string HtmlElementRegex = @"<{0}\b(?<attribs>[^>]*)>(?<innerHtml>(?:.(?!<{0}\b))*)</{0}>";
         private const string DetailRowClassRegex = @"\sCLASS=""(?:error|warning|success)""";
         private const string SummaryCellAttributesRegex = @"\sCOLSPAN=3";
         private const string SummaryValuesRegex =
@@ -32,58 +32,57 @@ namespace AspUnitRunner.Core {
         }
 
         private Results Parse() {
-            var tableMatches = GetElementMatches(_results.Html, "TABLE");
+            var doc = new HtmlDoc(_results.Html);
+            var tables = doc.GetDescendants("TABLE");
 
-            foreach (Match tableMatch in tableMatches) {
-                ParseTable(tableMatch);
+            foreach (var table in tables) {
+                ParseTable(table);
                 return _results;
             }
 
             throw new FormatException("Unable to parse test results.");
         }
 
-        private void ParseTable(Match tableMatch) {
-            var rowMatches = GetElementMatches(GetInnerHtml(tableMatch), "TR");
-
-            foreach (Match rowMatch in rowMatches)
-                ParseRow(rowMatch);
+        private void ParseTable(HtmlElement table) {
+            foreach (var row in table.GetDescendants("TR"))
+                ParseRow(row);
         }
 
-        private void ParseRow(Match rowMatch) {
-            var cellMatches = GetElementMatches(GetInnerHtml(rowMatch), "TD");
+        private void ParseRow(HtmlElement row) {
+            var cells = row.GetDescendants("TD");
 
-            if (IsDetailRow(rowMatch, cellMatches)) {
+            if (IsDetailRow(row, cells)) {
                 var details = (IList<ResultDetail>)_results.Details;
-                details.Add(ParseDetail(cellMatches));
+                details.Add(ParseDetail(cells));
                 return;
             }
 
-            if (IsSummaryRow(rowMatch, cellMatches))
-                ParseSummary(GetInnerHtml(GetFirst(cellMatches)));
+            if (IsSummaryRow(row, cells))
+                ParseSummary(cells.First.Text);
         }
 
-        private static bool IsDetailRow(Match rowMatch, MatchCollection cellMatches) {
+        private static bool IsDetailRow(HtmlElement row, HtmlElementCollection cells) {
             var rowClassRegex = new Regex(DetailRowClassRegex, RegexOptions.IgnoreCase);
 
-            return rowClassRegex.IsMatch(GetAttributes(rowMatch))
-                && cellMatches.Count == NumDetailCells
-                && IsNullOrWhitespace(GetFirstElementAttributes(cellMatches));
+            return rowClassRegex.IsMatch(row.Attributes)
+                && cells.Count == NumDetailCells
+                && IsNullOrWhitespace(cells.First.Attributes);
         }
 
-        private static bool IsSummaryRow(Match rowMatch, MatchCollection cellMatches) {
+        private static bool IsSummaryRow(HtmlElement row, HtmlElementCollection cells) {
             var cellAttribsRegex = new Regex(SummaryCellAttributesRegex, RegexOptions.IgnoreCase);
 
-            return IsNullOrWhitespace(GetAttributes(rowMatch))
-                && cellMatches.Count == NumSummaryCells
-                && cellAttribsRegex.IsMatch(GetFirstElementAttributes(cellMatches));
+            return IsNullOrWhitespace(row.Attributes)
+                && cells.Count == NumSummaryCells
+                && cellAttribsRegex.IsMatch(cells.First.Attributes);
         }
 
-        private static ResultDetail ParseDetail(MatchCollection cellMatches) {
-            var type = ParseResultType(GetText(cellMatches, DetailTypeIndex));
+        private static ResultDetail ParseDetail(HtmlElementCollection cells) {
+            var type = ParseResultType(cells[DetailTypeIndex].Text);
 
             return new ResultDetail(type,
-                GetText(cellMatches, DetailNameIndex),
-                GetText(cellMatches, DetailDescriptionIndex));
+                cells[DetailNameIndex].Text,
+                cells[DetailDescriptionIndex].Text);
         }
 
         private static ResultType ParseResultType(string text) {
@@ -108,38 +107,6 @@ namespace AspUnitRunner.Core {
 
         private static int ParseMatchedInt(Match match, string matchGroupName) {
             return int.Parse(match.Groups[matchGroupName].Value);
-        }
-
-        private static MatchCollection GetElementMatches(string html, string tagName) {
-            var elementRegex = GetElementRegex(tagName);
-            return elementRegex.Matches(html);
-        }
-
-        private static Regex GetElementRegex(string tagName) {
-            var elementPattern = string.Format(HtmlElementRegex, tagName);
-            return new Regex(elementPattern, RegexOptions.Singleline | RegexOptions.IgnoreCase);
-        }
-
-        private static Match GetFirst(MatchCollection elementMatches) {
-            if (elementMatches.Count == 0)
-                return Match.Empty;
-            return elementMatches[0];
-        }
-
-        private static string GetFirstElementAttributes(MatchCollection elementMatches) {
-            return GetAttributes(GetFirst(elementMatches));
-        }
-
-        private static string GetAttributes(Match elementMatch) {
-            return elementMatch.Groups["attribs"].Value;
-        }
-
-        private static string GetInnerHtml(Match elementMatch) {
-            return elementMatch.Groups["innerHtml"].Value;
-        }
-
-        private static string GetText(MatchCollection elementMatches, int index) {
-            return GetInnerHtml(elementMatches[index]).Trim();
         }
 
         private static bool IsNullOrWhitespace(string str) {
