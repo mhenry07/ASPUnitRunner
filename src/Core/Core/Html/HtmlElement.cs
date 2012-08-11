@@ -1,7 +1,7 @@
 ﻿using System.Text.RegularExpressions;
 
 namespace AspUnitRunner.Core.Html {
-    internal class HtmlElement {
+    internal class HtmlElement : IHtmlElement {
         protected readonly Match _match;
 
         public HtmlElement(Match match) {
@@ -20,7 +20,7 @@ namespace AspUnitRunner.Core.Html {
             get { return InnerHtml.Trim(); }
         }
 
-        public HtmlElementCollection GetDescendants(string tagName) {
+        public IHtmlElementCollection GetDescendants(string tagName) {
             return HtmlElementCollection.GetElements(InnerHtml, tagName);
         }
     }

@@ -1,41 +1,64 @@
 ﻿using System;
 using System.Collections.Generic;
 using NUnit.Framework;
+using Rhino.Mocks;
 using AspUnitRunner.Core;
+using AspUnitRunner.Core.Html;
 using AspUnitRunner.Tests.Helpers;
 
 namespace AspUnitRunner.Tests.Core {
     [TestFixture]
     public class TestResultParser {
+        private IHtmlDocFactory _htmlDocFactory;
+
+        [SetUp]
+        public void SetUp() {
+            _htmlDocFactory = MockRepository.GenerateStub<IHtmlDocFactory>();
+        }
+
         [Test]
         public void Parse_passing_tests_should_return_no_errors_or_failures() {
-            var results = ResultParser.Parse(FormatTestSummary(1, 0, 0));
+            var htmlTestResults = FormatTestSummary(1, 0, 0);
+            var parser = CreateResultParser(htmlTestResults);
+
+            var results = parser.Parse(htmlTestResults);
             Assert.That(results.Errors, Is.EqualTo(0));
             Assert.That(results.Failures, Is.EqualTo(0));
         }
 
         [Test]
         public void Parse_failing_test_should_return_a_failure() {
-            var results = ResultParser.Parse(FormatTestSummary(1, 0, 1));
+            var htmlTestResults = FormatTestSummary(1, 0, 1);
+            var parser = CreateResultParser(htmlTestResults);
+
+            var results = parser.Parse(htmlTestResults);
             Assert.That(results.Failures, Is.EqualTo(1));
         }
 
         [Test]
         public void Parse_test_error_should_return_an_error() {
-            var results = ResultParser.Parse(FormatTestSummary(1, 1, 0));
+            var htmlTestResults = FormatTestSummary(1, 1, 0);
+            var parser = CreateResultParser(htmlTestResults);
+
+            var results = parser.Parse(htmlTestResults);
             Assert.That(results.Errors, Is.EqualTo(1));
         }
 
         [Test]
         public void Parse_single_test_should_return_expected_one_test() {
-            var results = ResultParser.Parse(FormatTestSummary(1, 0, 0));
+            var htmlTestResults = FormatTestSummary(1, 0, 0);
+            var parser = CreateResultParser(htmlTestResults);
+
+            var results = parser.Parse(htmlTestResults);
             Assert.That(results.Tests, Is.EqualTo(1));
         }
 
         [Test]
         public void Parse_should_return_expected_html() {
             var htmlTestResults = FormatTestSummary(1, 0, 0);
-            var results = ResultParser.Parse(htmlTestResults);
+            var parser = CreateResultParser(htmlTestResults);
+
+            var results = parser.Parse(htmlTestResults);
             Assert.That(results.Html, Is.EqualTo(htmlTestResults));
         }
 
@@ -43,8 +66,9 @@ namespace AspUnitRunner.Tests.Core {
         public void Parse_passing_test_should_return_empty_details() {
             var details = new ResultDetail[] { };
             var htmlTestResults = FakeTestFormatter.FormatResults(1, 0, 0, details);
+            var parser = CreateResultParser(htmlTestResults);
 
-            var results = ResultParser.Parse(htmlTestResults);
+            var results = parser.Parse(htmlTestResults);
             Assert.That(results.Details,
                 Is.InstanceOf<IEnumerable<ResultDetail>>().And.Empty);
         }
@@ -55,21 +79,30 @@ namespace AspUnitRunner.Tests.Core {
                 new ResultDetail(ResultType.Error, "TestContainer.TestCase", "Error description")
             };
             var htmlTestResults = FakeTestFormatter.FormatResults(1, 1, 0, details);
+            var parser = CreateResultParser(htmlTestResults);
 
-            var results = ResultParser.Parse(htmlTestResults);
+            var results = parser.Parse(htmlTestResults);
             Assert.That(results.Details,
                 Is.EqualTo(details).Using(new ResultDetailEqualityComparer()));
         }
 
         [Test]
         public void Parse_invalid_results_should_throw_format_exception() {
+            var parser = CreateResultParser("");
+
             Assert.That(
-                () => ResultParser.Parse(""),
+                () => parser.Parse(""),
                 Throws.InstanceOf<FormatException>());
         }
 
         private string FormatTestSummary(int tests, int errors, int failures) {
             return FakeTestFormatter.FormatSummary(tests, errors, failures);
+        }
+
+        private ResultParser CreateResultParser(string htmlTestResults) {
+            _htmlDocFactory.Stub(f => f.Create(htmlTestResults))
+                .Return(new HtmlDoc(htmlTestResults));
+            return new ResultParser(_htmlDocFactory);
         }
 
         private class ResultDetailEqualityComparer : IEqualityComparer<ResultDetail> {

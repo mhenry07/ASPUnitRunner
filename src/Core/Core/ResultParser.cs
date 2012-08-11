@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 using AspUnitRunner.Core.Html;
 
 namespace AspUnitRunner.Core {
-    internal class ResultParser {
+    internal class ResultParser : IResultParser {
         private const string DetailRowClassRegex = @"\sCLASS=""(?:error|warning|success)""";
         private const string SummaryCellAttributesRegex = @"\sCOLSPAN=3";
         private const string SummaryValuesRegex =
@@ -17,22 +17,20 @@ namespace AspUnitRunner.Core {
         private const int DetailNameIndex = 1;
         private const int DetailDescriptionIndex = 2;
 
-        private readonly Results _results;
+        private readonly IHtmlDocFactory _htmlDocFactory;
+        private Results _results;
 
-        public static Results Parse(string htmlResults) {
-            var parser = new ResultParser(htmlResults);
-            return parser.Parse();
+        public ResultParser(IHtmlDocFactory htmlDocFactory) {
+            _htmlDocFactory = htmlDocFactory;
         }
 
-        private ResultParser(string htmlResults) {
+        public Results Parse(string htmlResults) {
             _results = new Results {
                 Html = htmlResults,
                 Details = new List<ResultDetail>()
             };
-        }
 
-        private Results Parse() {
-            var doc = new HtmlDoc(_results.Html);
+            var doc = _htmlDocFactory.Create(_results.Html);
             var tables = doc.GetDescendants("TABLE");
 
             foreach (var table in tables) {
@@ -43,12 +41,12 @@ namespace AspUnitRunner.Core {
             throw new FormatException("Unable to parse test results.");
         }
 
-        private void ParseTable(HtmlElement table) {
+        private void ParseTable(IHtmlElement table) {
             foreach (var row in table.GetDescendants("TR"))
                 ParseRow(row);
         }
 
-        private void ParseRow(HtmlElement row) {
+        private void ParseRow(IHtmlElement row) {
             var cells = row.GetDescendants("TD");
 
             if (IsDetailRow(row, cells)) {
@@ -61,7 +59,7 @@ namespace AspUnitRunner.Core {
                 ParseSummary(cells.First.Text);
         }
 
-        private static bool IsDetailRow(HtmlElement row, HtmlElementCollection cells) {
+        private static bool IsDetailRow(IHtmlElement row, IHtmlElementCollection cells) {
             var rowClassRegex = new Regex(DetailRowClassRegex, RegexOptions.IgnoreCase);
 
             return rowClassRegex.IsMatch(row.Attributes)
@@ -69,7 +67,7 @@ namespace AspUnitRunner.Core {
                 && IsNullOrWhitespace(cells.First.Attributes);
         }
 
-        private static bool IsSummaryRow(HtmlElement row, HtmlElementCollection cells) {
+        private static bool IsSummaryRow(IHtmlElement row, IHtmlElementCollection cells) {
             var cellAttribsRegex = new Regex(SummaryCellAttributesRegex, RegexOptions.IgnoreCase);
 
             return IsNullOrWhitespace(row.Attributes)
@@ -77,7 +75,7 @@ namespace AspUnitRunner.Core {
                 && cellAttribsRegex.IsMatch(cells.First.Attributes);
         }
 
-        private static ResultDetail ParseDetail(HtmlElementCollection cells) {
+        private static ResultDetail ParseDetail(IHtmlElementCollection cells) {
             var type = ParseResultType(cells[DetailTypeIndex].Text);
 
             return new ResultDetail(type,

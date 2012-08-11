@@ -4,16 +4,16 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
 namespace AspUnitRunner.Core.Html {
-    internal class HtmlElementCollection : IEnumerable<HtmlElement> {
+    internal class HtmlElementCollection : IHtmlElementCollection {
         private const string HtmlElementRegex = @"<{0}\b(?<attribs>[^>]*)>(?<innerHtml>(?:.(?!<{0}\b))*)</{0}>";
 
-        private readonly IList<HtmlElement> _elements;
+        private readonly IList<IHtmlElement> _elements;
 
         public int Count {
             get { return _elements.Count; }
         }
 
-        public HtmlElement First {
+        public IHtmlElement First {
             get {
                 if (_elements.Count == 0)
                     return new HtmlElement(Match.Empty);
@@ -21,7 +21,11 @@ namespace AspUnitRunner.Core.Html {
             }
         }
 
-        public static HtmlElementCollection GetElements(string html, string tagName) {
+        public IHtmlElement this[int index] {
+            get { return _elements[index]; }
+        }
+
+        public static IHtmlElementCollection GetElements(string html, string tagName) {
             var elementMatches = GetElementMatches(html, tagName);
             return new HtmlElementCollection(elementMatches);
         }
@@ -37,21 +41,17 @@ namespace AspUnitRunner.Core.Html {
         }
 
         private HtmlElementCollection(MatchCollection matches) {
-            _elements = new List<HtmlElement>();
+            _elements = new List<IHtmlElement>();
             foreach (Match match in matches)
                 _elements.Add(new HtmlElement(match));
         }
 
-        public IEnumerator<HtmlElement> GetEnumerator() {
+        public IEnumerator<IHtmlElement> GetEnumerator() {
             return _elements.GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator() {
             return GetEnumerator();
-        }
-
-        public HtmlElement this[int index] {
-            get { return _elements[index]; }
         }
     }
 }

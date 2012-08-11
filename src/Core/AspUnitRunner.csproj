@@ -39,9 +39,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Core\Html\HtmlDoc.cs" />
+    <Compile Include="Core\Html\HtmlDocFactory.cs" />
     <Compile Include="Core\Html\HtmlElement.cs" />
     <Compile Include="Core\Html\HtmlElementCollection.cs" />
+    <Compile Include="Core\Html\IHtmlDoc.cs" />
+    <Compile Include="Core\Html\IHtmlDocFactory.cs" />
+    <Compile Include="Core\Html\IHtmlElement.cs" />
+    <Compile Include="Core\Html\IHtmlElementCollection.cs" />
     <Compile Include="Core\IResponseDecoder.cs" />
+    <Compile Include="Core\IResultParser.cs" />
     <Compile Include="Core\ResultDetail.cs" />
     <Compile Include="Core\ResultParser.cs" />
     <Compile Include="Core\ResultType.cs" />
