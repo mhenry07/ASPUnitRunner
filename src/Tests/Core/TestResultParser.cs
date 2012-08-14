@@ -9,11 +9,11 @@ using AspUnitRunner.Tests.Helpers;
 namespace AspUnitRunner.Tests.Core {
     [TestFixture]
     public class TestResultParser {
-        private IHtmlDocFactory _htmlDocFactory;
+        private IHtmlDocumentFactory _htmlDocumentFactory;
 
         [SetUp]
         public void SetUp() {
-            _htmlDocFactory = MockRepository.GenerateStub<IHtmlDocFactory>();
+            _htmlDocumentFactory = MockRepository.GenerateStub<IHtmlDocumentFactory>();
         }
 
         [Test]
@@ -100,9 +100,9 @@ namespace AspUnitRunner.Tests.Core {
         }
 
         private ResultParser CreateResultParser(string htmlTestResults) {
-            _htmlDocFactory.Stub(f => f.Create(htmlTestResults))
-                .Return(new HtmlDoc(htmlTestResults));
-            return new ResultParser(_htmlDocFactory);
+            _htmlDocumentFactory.Stub(f => f.Create(htmlTestResults))
+                .Return(new HtmlDocument(htmlTestResults));
+            return new ResultParser(_htmlDocumentFactory);
         }
 
         private class ResultDetailEqualityComparer : IEqualityComparer<ResultDetail> {

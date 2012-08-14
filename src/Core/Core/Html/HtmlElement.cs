@@ -1,27 +1,24 @@
-﻿using System.Text.RegularExpressions;
-
-namespace AspUnitRunner.Core.Html {
+﻿namespace AspUnitRunner.Core.Html {
     internal class HtmlElement : IHtmlElement {
-        protected readonly Match _match;
-
-        public HtmlElement(Match match) {
-            _match = match;
+        public HtmlElement() {
+            TagName = "";
+            Attributes = "";
+            InnerHtml = "";
         }
 
-        public string Attributes {
-            get { return _match.Groups["attribs"].Value; }
-        }
+        public string TagName { get; set; }
 
-        public string InnerHtml {
-            get { return _match.Groups["innerHtml"].Value; }
-         }
+        public string Attributes { get; set; }
 
+        public string InnerHtml { get; set; }
+
+        // note that this does not strip html tags - it's intended for leaf elements
         public string Text {
             get { return InnerHtml.Trim(); }
         }
 
-        public IHtmlElementCollection GetDescendants(string tagName) {
-            return HtmlElementCollection.GetElements(InnerHtml, tagName);
+        public IHtmlCollection GetElementsByTagName(string tagName) {
+            return HtmlElementParser.GetElementsByTagName(InnerHtml, tagName);
         }
     }
 }

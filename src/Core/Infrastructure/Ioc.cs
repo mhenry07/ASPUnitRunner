@@ -10,7 +10,7 @@ namespace AspUnitRunner.Infrastructure {
                     new WebClientFactory(),
                     new ResponseDecoder()),
                 new ResultParser(
-                    new HtmlDocFactory()));
+                    new HtmlDocumentFactory()));
         }
     }
 }

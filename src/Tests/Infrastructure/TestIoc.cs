@@ -22,8 +22,8 @@ namespace AspUnitRunner.Tests.Infrastructure {
             Assert.That(client.GetField("_responseDecoder"),
                 Is.InstanceOf<ResponseDecoder>());
 
-            Assert.That(resultParser.GetField("_htmlDocFactory"),
-                Is.InstanceOf<HtmlDocFactory>());
+            Assert.That(resultParser.GetField("_htmlDocumentFactory"),
+                Is.InstanceOf<HtmlDocumentFactory>());
         }
     }
 }

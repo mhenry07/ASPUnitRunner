@@ -17,11 +17,11 @@ namespace AspUnitRunner.Core {
         private const int DetailNameIndex = 1;
         private const int DetailDescriptionIndex = 2;
 
-        private readonly IHtmlDocFactory _htmlDocFactory;
+        private readonly IHtmlDocumentFactory _htmlDocumentFactory;
         private Results _results;
 
-        public ResultParser(IHtmlDocFactory htmlDocFactory) {
-            _htmlDocFactory = htmlDocFactory;
+        public ResultParser(IHtmlDocumentFactory htmlDocumentFactory) {
+            _htmlDocumentFactory = htmlDocumentFactory;
         }
 
         public Results Parse(string htmlResults) {
@@ -30,8 +30,8 @@ namespace AspUnitRunner.Core {
                 Details = new List<ResultDetail>()
             };
 
-            var doc = _htmlDocFactory.Create(_results.Html);
-            var tables = doc.GetDescendants("TABLE");
+            var doc = _htmlDocumentFactory.Create(_results.Html);
+            var tables = doc.GetElementsByTagName("TABLE");
 
             foreach (var table in tables) {
                 ParseTable(table);
@@ -42,12 +42,12 @@ namespace AspUnitRunner.Core {
         }
 
         private void ParseTable(IHtmlElement table) {
-            foreach (var row in table.GetDescendants("TR"))
+            foreach (var row in table.GetElementsByTagName("TR"))
                 ParseRow(row);
         }
 
         private void ParseRow(IHtmlElement row) {
-            var cells = row.GetDescendants("TD");
+            var cells = row.GetElementsByTagName("TD");
 
             if (IsDetailRow(row, cells)) {
                 var details = (IList<ResultDetail>)_results.Details;
@@ -59,23 +59,23 @@ namespace AspUnitRunner.Core {
                 ParseSummary(cells.First.Text);
         }
 
-        private static bool IsDetailRow(IHtmlElement row, IHtmlElementCollection cells) {
+        private static bool IsDetailRow(IHtmlElement row, IHtmlCollection cells) {
             var rowClassRegex = new Regex(DetailRowClassRegex, RegexOptions.IgnoreCase);
 
             return rowClassRegex.IsMatch(row.Attributes)
-                && cells.Count == NumDetailCells
+                && cells.Length == NumDetailCells
                 && IsNullOrWhitespace(cells.First.Attributes);
         }
 
-        private static bool IsSummaryRow(IHtmlElement row, IHtmlElementCollection cells) {
+        private static bool IsSummaryRow(IHtmlElement row, IHtmlCollection cells) {
             var cellAttribsRegex = new Regex(SummaryCellAttributesRegex, RegexOptions.IgnoreCase);
 
             return IsNullOrWhitespace(row.Attributes)
-                && cells.Count == NumSummaryCells
+                && cells.Length == NumSummaryCells
                 && cellAttribsRegex.IsMatch(cells.First.Attributes);
         }
 
-        private static ResultDetail ParseDetail(IHtmlElementCollection cells) {
+        private static ResultDetail ParseDetail(IHtmlCollection cells) {
             var type = ParseResultType(cells[DetailTypeIndex].Text);
 
             return new ResultDetail(type,

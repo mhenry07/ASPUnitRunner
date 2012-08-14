@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 
 namespace AspUnitRunner.Core.Html {
-    internal interface IHtmlElementCollection : IEnumerable<IHtmlElement> {
-        int Count { get; }
+    internal interface IHtmlCollection : IEnumerable<IHtmlElement> {
+        int Length { get; }
         IHtmlElement First { get; }
         IHtmlElement this[int index] { get; }
     }
