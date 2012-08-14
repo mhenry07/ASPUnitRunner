@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
 using AspUnitRunner.Core;
 
 namespace AspUnitRunner {
@@ -6,6 +8,9 @@ namespace AspUnitRunner {
     /// Contains ASPUnit test results.
     /// </summary>
     public class Results {
+        internal Results() {
+        }
+
         /// <summary>
         /// Gets the number of tests run.
         /// </summary>
@@ -29,9 +34,36 @@ namespace AspUnitRunner {
         /// <summary>
         /// Gets the raw HTML test results.
         /// </summary>
+        /// <remarks>
+        /// May contain a long HTML string which NUnit doesn't format very well.
+        /// </remarks>
         public string Html { get; internal set; }
 
-        internal Results() {
+        /// <summary>
+        /// Returns a string containing formatted test results.
+        /// </summary>
+        /// <returns>A string containing formatted test results.</returns>
+        public string Format() {
+            return string.Format("{0}{2}{2}{1}{2}",
+                FormatDetails(), FormatSummary(), Environment.NewLine);
+        }
+
+        internal string FormatDetails() {
+            var newline = "";
+            var stringBuilder = new StringBuilder();
+            foreach (var detail in Details) {
+                stringBuilder.Append(newline);
+                stringBuilder.AppendFormat("{0}: {1}: {2}",
+                    detail.Type, detail.Name, detail.Description);
+                newline = Environment.NewLine;
+            }
+
+            return stringBuilder.ToString();
+        }
+
+        internal string FormatSummary() {
+            return string.Format("Tests: {0}, Errors: {1}, Failures: {2}",
+                Tests, Errors, Failures);
         }
     }
 }
