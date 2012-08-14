@@ -23,9 +23,9 @@ namespace AspUnitRunner.Sample.Tests.NUnit {
                 .WithTestContainer(testContainer);
             var results = runner.Run(AspTestUrl);
 
-            // Note: results.Html can generate a long HTML string which NUnit doesn't format very well
-            Assert.That(results.Errors, Is.EqualTo(0), results.Html);
-            Assert.That(results.Failures, Is.EqualTo(0), results.Html);
+            if (results.Errors != 0 || results.Failures != 0)
+                Assert.Fail(results.Format());
+
             if (results.Tests == 0)
                 Assert.Inconclusive("0 tests were run");
         }
