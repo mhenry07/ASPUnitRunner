@@ -10,7 +10,6 @@ namespace AspUnitRunner.Tests.Core.Html {
         public void Default_element_should_have_empty_properties() {
             var expectedElement = new HtmlElement {
                 TagName = "",
-                Attributes = new Dictionary<string, string>(),
                 InnerHtml = ""
             };
 
@@ -19,24 +18,22 @@ namespace AspUnitRunner.Tests.Core.Html {
         }
 
         [Test]
-        public void ClassName_without_class_should_get_empty_string() {
+        public void ClassName_without_class_should_be_null() {
             var element = new HtmlElement();
-            Assert.That(element.ClassName, Is.Empty);
+            Assert.That(element.ClassName, Is.Null);
         }
 
         [Test]
         public void ClassName_with_class_should_get_expected_value() {
-            var element = new HtmlElement {
-                Attributes = new Dictionary<string, string> { { "class", "a" } }
-            };
+            var element = new HtmlElement();
+            element.SetAttribute("class", "a");
             Assert.That(element.ClassName, Is.EqualTo("a"));
         }
 
         [Test]
-        public void ClassName_with_upper_case_class_should_get_expected_value() {
-            var element = new HtmlElement {
-                Attributes = new Dictionary<string, string> { { "CLASS", "a" } }
-            };
+        public void ClassName_with_uppercase_class_should_get_expected_value() {
+            var element = new HtmlElement();
+            element.SetAttribute("CLASS", "a");
             Assert.That(element.ClassName, Is.EqualTo("a"));
         }
 
@@ -49,11 +46,69 @@ namespace AspUnitRunner.Tests.Core.Html {
         }
 
         [Test]
-        public void Text_for_element_with_text_should_be_trimmed_text() {
+        public void Text_for_element_with_text_should_get_trimmed_text() {
             var element = new HtmlElement {
                 InnerHtml = " text "
             };
             Assert.That(element.Text, Is.EqualTo("text"));
+        }
+
+        [Test]
+        public void GetAttribute_not_found_should_return_null() {
+            var element = new HtmlElement();
+            Assert.That(element.GetAttribute("class"), Is.Null);
+        }
+
+        [Test]
+        public void GetAttribute_should_return_expected_value() {
+            var element = new HtmlElement();
+            element.SetAttribute("class", "a");
+            Assert.That(element.GetAttribute("class"), Is.EqualTo("a"));
+        }
+
+        [Test]
+        public void GetAttribute_uppercase_should_return_expected_value() {
+            var element = new HtmlElement();
+            element.SetAttribute("class", "a");
+            Assert.That(element.GetAttribute("CLASS"), Is.EqualTo("a"));
+        }
+
+        [Test]
+        public void SetAttribute_should_add_attribute() {
+            var expectedAttributes = new Dictionary<string, string> { { "name", "value" } };
+
+            var element = new HtmlElement();
+            element.SetAttribute("name", "value");
+            Assert.That(element.Attributes, Is.EqualTo(expectedAttributes));
+        }
+
+        [Test]
+        public void SetAttribute_should_add_attribute_with_lowercase_name() {
+            var expectedAttributes = new Dictionary<string, string> { { "name", "value" } };
+
+            var element = new HtmlElement();
+            element.SetAttribute("NAME", "value");
+            Assert.That(element.Attributes, Is.EqualTo(expectedAttributes));
+        }
+
+        [Test]
+        public void SetAttribute_should_update_existing_attribute() {
+            var expectedAttributes = new Dictionary<string, string> { { "name", "second" } };
+
+            var element = new HtmlElement();
+            element.SetAttribute("name", "first");
+            element.SetAttribute("name", "second");
+            Assert.That(element.Attributes, Is.EqualTo(expectedAttributes));
+        }
+
+        [Test]
+        public void SetAttribute_should_update_existing_attribute_with_lowercase_name() {
+            var expectedAttributes = new Dictionary<string, string> { { "name", "second" } };
+
+            var element = new HtmlElement();
+            element.SetAttribute("name", "first");
+            element.SetAttribute("NAME", "second");
+            Assert.That(element.Attributes, Is.EqualTo(expectedAttributes));
         }
 
         [Test]
@@ -67,10 +122,10 @@ namespace AspUnitRunner.Tests.Core.Html {
 
         [Test]
         public void GetElementsByTagName_for_paragraph_with_inner_span_should_return_expected_collection() {
-            var attributes = new Dictionary<string, string> { { "class", "class" } };
             var expectedElements = new[] {
-                new HtmlElement { TagName = "span", Attributes = attributes, InnerHtml = "text" }
+                new HtmlElement { TagName = "span", InnerHtml = "text" }
             };
+            expectedElements[0].SetAttribute("class", "class");
             var element = new HtmlElement {
                 TagName = "p",
                 InnerHtml = "<span class=\"class\">text</span>"

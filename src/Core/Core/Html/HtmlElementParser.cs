@@ -35,24 +35,23 @@ namespace AspUnitRunner.Core.Html {
         }
 
         private static IHtmlElement CreateElement(Match match) {
-            return new HtmlElement {
+            var element = new HtmlElement {
                 TagName = match.Groups["tagName"].Value,
-                Attributes = ParseAttributes(match),
                 InnerHtml = match.Groups["innerHtml"].Value
             };
+            var attributeMatches = GetAttributeMatches(match);
+            SetAttributes(element, attributeMatches);
+            return element;
         }
 
-        private static IDictionary<string, string> ParseAttributes(Match elementMatch) {
+        private static MatchCollection GetAttributeMatches(Match elementMatch) {
             var regex = new Regex(HtmlAttributeRegex);
-            var matches = regex.Matches(elementMatch.Groups["attributes"].Value);
-            return CreateAttributes(matches);
+            return regex.Matches(elementMatch.Groups["attributes"].Value);
         }
 
-        private static IDictionary<string, string> CreateAttributes(MatchCollection matches) {
-            var attributes = new Dictionary<string, string>();
+        private static void SetAttributes(HtmlElement element, MatchCollection matches) {
             foreach (Match match in matches)
-                attributes.Add(match.Groups["name"].Value, match.Groups["value"].Value.Trim());
-            return attributes;
+                element.SetAttribute(match.Groups["name"].Value, match.Groups["value"].Value);
         }
     }
 }

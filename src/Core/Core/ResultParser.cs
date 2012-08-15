@@ -76,8 +76,7 @@ namespace AspUnitRunner.Core {
         }
 
         private static bool HasSummaryCellAttributes(IHtmlElement cell) {
-            var attributes = cell.Attributes;
-            return attributes.ContainsKey("COLSPAN") && attributes["COLSPAN"] == "3";
+            return cell.GetAttribute("COLSPAN") == "3";
         }
 
         private static ResultDetail ParseDetail(IHtmlCollection cells) {

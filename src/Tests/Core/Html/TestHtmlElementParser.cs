@@ -49,10 +49,10 @@ namespace AspUnitRunner.Tests.Core.Html {
 
         [Test]
         public void GetElementsByTagName_for_p_with_attributes_and_text_should_return_expected_element() {
-            var attributes = new Dictionary<string, string> { { "class", "class" } };
             var expectedElements = new[] {
-                new HtmlElement { TagName = "p", Attributes = attributes, InnerHtml = "text" }
+                new HtmlElement { TagName = "p", InnerHtml = "text" }
             };
+            expectedElements[0].SetAttribute("class", "class");
             var elements = HtmlElementParser.GetElementsByTagName("<p class=\"class\">text</p>", "p");
 
             Assert.That(elements, Is.EqualTo(expectedElements)
@@ -84,13 +84,11 @@ namespace AspUnitRunner.Tests.Core.Html {
 </BODY>
 </HTML>";
             var html = string.Format(htmlFormat, innerHtml);
-            var attributes = new Dictionary<string, string> {
-                { "BORDER", "1" },
-                { "WIDTH", "80%" }
-            };
             var expectedElements = new[] {
-                new HtmlElement { TagName = "TABLE", Attributes = attributes, InnerHtml = innerHtml }
+                new HtmlElement { TagName = "TABLE", InnerHtml = innerHtml }
             };
+            expectedElements[0].SetAttribute("BORDER", "1");
+            expectedElements[0].SetAttribute("WIDTH", "80%");
 
             var elements = HtmlElementParser.GetElementsByTagName(html, "TABLE");
             Assert.That(elements, Is.EqualTo(expectedElements)
@@ -106,10 +104,10 @@ namespace AspUnitRunner.Tests.Core.Html {
 		<TR CLASS=""warning"">{0}</TR>
 	</TABLE>";
             var html = string.Format(htmlFormat, innerHtml);
-            var attributes = new Dictionary<string, string> { { "CLASS", "warning" } };
             var expectedElements = new[] {
-                new HtmlElement { TagName = "TR", Attributes = attributes, InnerHtml = innerHtml }
+                new HtmlElement { TagName = "TR", InnerHtml = innerHtml }
             };
+            expectedElements[0].SetAttribute("CLASS", "warning");
 
             var elements = HtmlElementParser.GetElementsByTagName(html, "TR");
             Assert.That(elements, Is.EqualTo(expectedElements)
@@ -118,15 +116,13 @@ namespace AspUnitRunner.Tests.Core.Html {
 
         [Test]
         public void GetElementsByTagName_for_row_should_return_expected_cells() {
-            var innerHtml = new[] { "Failure", "Container.TestCase", "Description" };
+            const string html =
+                @"<TR CLASS=""warning""><TD>Failure</TD><TD>Container.TestCase</TD><TD>Description</TD></TR>";
             var expectedElements = new[] {
-                new HtmlElement { TagName = "TD", InnerHtml = innerHtml[0] },
-                new HtmlElement { TagName = "TD", InnerHtml = innerHtml[1] },
-                new HtmlElement { TagName = "TD", InnerHtml = innerHtml[2] }
+                new HtmlElement { TagName = "TD", InnerHtml = "Failure" },
+                new HtmlElement { TagName = "TD", InnerHtml = "Container.TestCase" },
+                new HtmlElement { TagName = "TD", InnerHtml = "Description" }
             };
-            const string htmlFormat =
-                @"<TR CLASS=""warning""><TD>{0}</TD><TD>{1}</TD><TD>{2}</TD></TR>";
-            var html = string.Format(htmlFormat, innerHtml[0], innerHtml[1], innerHtml[2]);
 
             var elements = HtmlElementParser.GetElementsByTagName(html, "TD");
             Assert.That(elements, Is.EqualTo(expectedElements)
