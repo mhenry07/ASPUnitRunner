@@ -38,7 +38,11 @@ namespace AspUnitRunner.Tests.Core.Html {
 
         [Test]
         public void First_for_empty_collection_should_get_empty_element() {
-            var expectedElement = new HtmlElement { TagName = "", Attributes = "", InnerHtml = "" };
+            var expectedElement = new HtmlElement {
+                TagName = "",
+                Attributes = new Dictionary<string, string>(),
+                InnerHtml = ""
+            };
             var elements = new IHtmlElement[] { };
             var collection = new HtmlCollection(elements);
 

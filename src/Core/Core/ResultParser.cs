@@ -5,8 +5,6 @@ using AspUnitRunner.Core.Html;
 
 namespace AspUnitRunner.Core {
     internal class ResultParser : IResultParser {
-        private const string DetailRowClassRegex = @"\sCLASS=""(?:error|warning|success)""";
-        private const string SummaryCellAttributesRegex = @"\sCOLSPAN=3";
         private const string SummaryValuesRegex =
             @"Tests\:\s*(?<tests>\d+),\s*Errors\:\s*(?<errors>\d+),\s*Failures\:\s*(?<failures>\d+)";
 
@@ -60,19 +58,26 @@ namespace AspUnitRunner.Core {
         }
 
         private static bool IsDetailRow(IHtmlElement row, IHtmlCollection cells) {
-            var rowClassRegex = new Regex(DetailRowClassRegex, RegexOptions.IgnoreCase);
-
-            return rowClassRegex.IsMatch(row.Attributes)
+            return HasDetailRowClass(row)
                 && cells.Length == NumDetailCells
-                && IsNullOrWhitespace(cells.First.Attributes);
+                && cells.First.Attributes.Count == 0;
+        }
+
+        private static bool HasDetailRowClass(IHtmlElement row) {
+            var classNames = new List<string> { "error", "warning", "success" };
+            return !string.IsNullOrEmpty(row.ClassName)
+                && classNames.Contains(row.ClassName);
         }
 
         private static bool IsSummaryRow(IHtmlElement row, IHtmlCollection cells) {
-            var cellAttribsRegex = new Regex(SummaryCellAttributesRegex, RegexOptions.IgnoreCase);
-
-            return IsNullOrWhitespace(row.Attributes)
+            return row.Attributes.Count == 0
                 && cells.Length == NumSummaryCells
-                && cellAttribsRegex.IsMatch(cells.First.Attributes);
+                && HasSummaryCellAttributes(cells.First);
+        }
+
+        private static bool HasSummaryCellAttributes(IHtmlElement cell) {
+            var attributes = cell.Attributes;
+            return attributes.ContainsKey("COLSPAN") && attributes["COLSPAN"] == "3";
         }
 
         private static ResultDetail ParseDetail(IHtmlCollection cells) {
@@ -105,12 +110,6 @@ namespace AspUnitRunner.Core {
 
         private static int ParseMatchedInt(Match match, string matchGroupName) {
             return int.Parse(match.Groups[matchGroupName].Value);
-        }
-
-        private static bool IsNullOrWhitespace(string str) {
-            if (str == null)
-                return true;
-            return string.IsNullOrEmpty(str.Trim());
         }
     }
 }

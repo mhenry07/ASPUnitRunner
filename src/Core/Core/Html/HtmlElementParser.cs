@@ -9,6 +9,8 @@ namespace AspUnitRunner.Core.Html {
         // note that this only matches elements with the pattern: <tag>...</tag>
         private const string HtmlElementRegex =
             @"<(?<tagName>{0}\b)(?<attributes>[^>]*)>(?<innerHtml>(?:.(?!<{0}\b))*)</{0}>";
+        private const string HtmlAttributeRegex =
+            @"\s+(?<name>[A-Za-z][-\w:.]*)(?:=(?:""(?<value>[^""]*)""|'(?<value>[^']*)'|(?<value>[-\w:.]*)(?=$|[\s/>])))?";
 
         public static IHtmlCollection GetElementsByTagName(string html, string tagName) {
             var elementMatches = GetElementMatches(html, tagName);
@@ -35,9 +37,22 @@ namespace AspUnitRunner.Core.Html {
         private static IHtmlElement CreateElement(Match match) {
             return new HtmlElement {
                 TagName = match.Groups["tagName"].Value,
-                Attributes = match.Groups["attributes"].Value,
+                Attributes = ParseAttributes(match),
                 InnerHtml = match.Groups["innerHtml"].Value
             };
+        }
+
+        private static IDictionary<string, string> ParseAttributes(Match elementMatch) {
+            var regex = new Regex(HtmlAttributeRegex);
+            var matches = regex.Matches(elementMatch.Groups["attributes"].Value);
+            return CreateAttributes(matches);
+        }
+
+        private static IDictionary<string, string> CreateAttributes(MatchCollection matches) {
+            var attributes = new Dictionary<string, string>();
+            foreach (Match match in matches)
+                attributes.Add(match.Groups["name"].Value, match.Groups["value"].Value.Trim());
+            return attributes;
         }
     }
 }

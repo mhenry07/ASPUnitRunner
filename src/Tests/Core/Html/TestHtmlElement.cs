@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System.Collections.Generic;
+using NUnit.Framework;
 using AspUnitRunner.Core.Html;
 using AspUnitRunner.Tests.Helpers;
 
@@ -9,12 +10,34 @@ namespace AspUnitRunner.Tests.Core.Html {
         public void Default_element_should_have_empty_properties() {
             var expectedElement = new HtmlElement {
                 TagName = "",
-                Attributes = "",
+                Attributes = new Dictionary<string, string>(),
                 InnerHtml = ""
             };
 
             Assert.That(new HtmlElement(), Is.EqualTo(expectedElement)
                 .Using(new HtmlElementEqualityComparer()));
+        }
+
+        [Test]
+        public void ClassName_without_class_should_get_empty_string() {
+            var element = new HtmlElement();
+            Assert.That(element.ClassName, Is.Empty);
+        }
+
+        [Test]
+        public void ClassName_with_class_should_get_expected_value() {
+            var element = new HtmlElement {
+                Attributes = new Dictionary<string, string> { { "class", "a" } }
+            };
+            Assert.That(element.ClassName, Is.EqualTo("a"));
+        }
+
+        [Test]
+        public void ClassName_with_upper_case_class_should_get_expected_value() {
+            var element = new HtmlElement {
+                Attributes = new Dictionary<string, string> { { "CLASS", "a" } }
+            };
+            Assert.That(element.ClassName, Is.EqualTo("a"));
         }
 
         [Test]
@@ -44,8 +67,9 @@ namespace AspUnitRunner.Tests.Core.Html {
 
         [Test]
         public void GetElementsByTagName_for_paragraph_with_inner_span_should_return_expected_collection() {
+            var attributes = new Dictionary<string, string> { { "class", "class" } };
             var expectedElements = new[] {
-                new HtmlElement { TagName = "span", Attributes = " class=\"class\"", InnerHtml = "text" }
+                new HtmlElement { TagName = "span", Attributes = attributes, InnerHtml = "text" }
             };
             var element = new HtmlElement {
                 TagName = "p",
