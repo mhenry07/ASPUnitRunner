@@ -2,7 +2,7 @@
 
 namespace AspUnitRunner.Core.Html {
     internal interface IHtmlCollection : IEnumerable<IHtmlElement> {
-        int Length { get; }
+        int Count { get; }
         IHtmlElement First { get; }
         IHtmlElement this[int index] { get; }
     }

@@ -59,7 +59,7 @@ namespace AspUnitRunner.Core {
 
         private static bool IsDetailRow(IHtmlElement row, IHtmlCollection cells) {
             return HasDetailRowClass(row)
-                && cells.Length == NumDetailCells
+                && cells.Count == NumDetailCells
                 && cells.First.Attributes.Count == 0;
         }
 
@@ -71,7 +71,7 @@ namespace AspUnitRunner.Core {
 
         private static bool IsSummaryRow(IHtmlElement row, IHtmlCollection cells) {
             return row.Attributes.Count == 0
-                && cells.Length == NumSummaryCells
+                && cells.Count == NumSummaryCells
                 && HasSummaryCellAttributes(cells.First);
         }
 

@@ -7,21 +7,21 @@ namespace AspUnitRunner.Tests.Core.Html {
     [TestFixture]
     public class TestHtmlCollection {
         [Test]
-        public void Length_of_empty_collection_should_be_0() {
+        public void Count_of_empty_collection_should_be_0() {
             var elements = new IHtmlElement[] { };
             var collection = new HtmlCollection(elements);
 
-            Assert.That(collection.Length, Is.EqualTo(0));
+            Assert.That(collection.Count, Is.EqualTo(0));
         }
 
         [Test]
-        public void Length_of_collection_with_one_element_should_be_1() {
+        public void Count_of_collection_with_one_element_should_be_1() {
             var elements = new IHtmlElement[] {
                 new HtmlElement()
             };
             var collection = new HtmlCollection(elements);
 
-            Assert.That(collection.Length, Is.EqualTo(1));
+            Assert.That(collection.Count, Is.EqualTo(1));
         }
 
         [Test]

@@ -9,13 +9,13 @@ namespace AspUnitRunner.Core.Html {
             _elements = elements;
         }
 
-        public int Length {
+        public int Count {
             get { return _elements.Count; }
         }
 
         public IHtmlElement First {
             get {
-                if (Length == 0)
+                if (Count == 0)
                     return new HtmlElement();
                 return this[0];
             }
