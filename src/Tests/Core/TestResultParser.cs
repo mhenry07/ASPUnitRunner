@@ -82,8 +82,8 @@ namespace AspUnitRunner.Tests.Core {
             var parser = CreateResultParser(htmlTestResults);
 
             var results = parser.Parse(htmlTestResults);
-            Assert.That(results.Details,
-                Is.EqualTo(details).Using(new ResultDetailEqualityComparer()));
+            Assert.That(results.Details, Is.EqualTo(details)
+                .Using(new ResultDetailEqualityComparer()));
         }
 
         [Test]
@@ -107,11 +107,13 @@ namespace AspUnitRunner.Tests.Core {
 
         private class ResultDetailEqualityComparer : IEqualityComparer<ResultDetail> {
             public bool Equals(ResultDetail x, ResultDetail y) {
-                return x.Type.Equals(y.Type) && x.Name.Equals(y.Name) && x.Description.Equals(y.Description);
+                return x.Type.Equals(y.Type)
+                    && x.Name.Equals(y.Name)
+                    && x.Description.Equals(y.Description);
             }
 
             public int GetHashCode(ResultDetail obj) {
-                return obj.GetHashCode();
+                throw new NotImplementedException();
             }
         }
     }
