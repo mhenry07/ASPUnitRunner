@@ -75,7 +75,7 @@ namespace AspUnitRunner.Tests.Core.Html {
 
         [Test]
         public void SetAttribute_should_add_attribute() {
-            var expectedAttributes = new Dictionary<string, string> { { "name", "value" } };
+            var expectedAttributes = new AttributeTestList { { "name", "value" } };
 
             var element = new HtmlElement();
             element.SetAttribute("name", "value");
@@ -84,7 +84,7 @@ namespace AspUnitRunner.Tests.Core.Html {
 
         [Test]
         public void SetAttribute_should_add_attribute_with_lowercase_name() {
-            var expectedAttributes = new Dictionary<string, string> { { "name", "value" } };
+            var expectedAttributes = new AttributeTestList { { "name", "value" } };
 
             var element = new HtmlElement();
             element.SetAttribute("NAME", "value");
@@ -93,7 +93,7 @@ namespace AspUnitRunner.Tests.Core.Html {
 
         [Test]
         public void SetAttribute_should_update_existing_attribute() {
-            var expectedAttributes = new Dictionary<string, string> { { "name", "second" } };
+            var expectedAttributes = new AttributeTestList { { "name", "second" } };
 
             var element = new HtmlElement();
             element.SetAttribute("name", "first");
@@ -103,7 +103,7 @@ namespace AspUnitRunner.Tests.Core.Html {
 
         [Test]
         public void SetAttribute_should_update_existing_attribute_with_lowercase_name() {
-            var expectedAttributes = new Dictionary<string, string> { { "name", "second" } };
+            var expectedAttributes = new AttributeTestList { { "name", "second" } };
 
             var element = new HtmlElement();
             element.SetAttribute("name", "first");
@@ -135,6 +135,12 @@ namespace AspUnitRunner.Tests.Core.Html {
 
             Assert.That(elements, Is.EqualTo(expectedElements)
                 .Using(new HtmlElementEqualityComparer()));
+        }
+
+        private class AttributeTestList : List<KeyValuePair<string, string>> {
+            public void Add(string key, string value) {
+                Add(new KeyValuePair<string, string>(key, value));
+            }
         }
     }
 }
