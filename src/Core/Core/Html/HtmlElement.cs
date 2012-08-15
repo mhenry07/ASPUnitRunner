@@ -1,13 +1,13 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.Generic;
 
 namespace AspUnitRunner.Core.Html {
     internal class HtmlElement : IHtmlElement {
         // Using a list rather than a dictionary to make it easier to provide 
         // a read-only Attributes getter. Attribute lists should be small so 
         // performance impact should be negligible.
-        private readonly IList<KeyValuePair<string, string>> _attributes =
-            new List<KeyValuePair<string, string>>();
+        private readonly NameValueList _attributes =
+            new NameValueList(StringComparer.InvariantCultureIgnoreCase);
 
         public HtmlElement() {
             TagName = "";
@@ -21,9 +21,7 @@ namespace AspUnitRunner.Core.Html {
         }
 
         public IList<KeyValuePair<string, string>> Attributes {
-            get {
-                return new ReadOnlyCollection<KeyValuePair<string, string>>(_attributes);
-            }
+            get { return _attributes.AsReadOnly(); }
         }
 
         public string InnerHtml { get; set; }
@@ -34,22 +32,12 @@ namespace AspUnitRunner.Core.Html {
         }
 
         public string GetAttribute(string name) {
-            var key = name.ToLowerInvariant();
-            foreach (var attribute in _attributes)
-                if (attribute.Key == key)
-                    return attribute.Value;
-            return null;
+            return _attributes[name];
         }
 
         public void SetAttribute(string name, string value) {
-            var key = name.ToLowerInvariant();
-            var newAttribute = new KeyValuePair<string, string>(key, value);
-            for (var i = 0; i < _attributes.Count; i++)
-                if (_attributes[i].Key == key) {
-                    _attributes[i] = newAttribute;
-                    return;
-                }
-            _attributes.Add(newAttribute);
+            var lowerCaseName = name.ToLowerInvariant();
+            _attributes[lowerCaseName] = value;
         }
 
         public IHtmlCollection GetElementsByTagName(string tagName) {

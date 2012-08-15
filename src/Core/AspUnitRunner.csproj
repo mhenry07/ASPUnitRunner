@@ -49,6 +49,7 @@
     <Compile Include="Core\Html\IHtmlCollection.cs" />
     <Compile Include="Core\IResponseDecoder.cs" />
     <Compile Include="Core\IResultParser.cs" />
+    <Compile Include="Core\NameValueList.cs" />
     <Compile Include="Core\ResultDetail.cs" />
     <Compile Include="Core\ResultParser.cs" />
     <Compile Include="Core\ResultType.cs" />
