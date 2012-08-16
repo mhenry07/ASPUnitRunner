@@ -7,6 +7,12 @@ using AspUnitRunner.Core.Html;
 using AspUnitRunner.Tests.Helpers;
 
 namespace AspUnitRunner.Tests.Core {
+    // These tests for ResultParser are more integration tests than unit
+    // tests.
+    // For the most part, we're using the actual collaborators for these
+    // tests since the test doubles for all HtmlDocument, HtmlElement and
+    // HtmlCollection objects used by ResultParser would be almost more
+    // complex than the actual implementations (which do have unit tests).
     [TestFixture]
     public class TestResultParser {
         private IHtmlDocumentFactory _htmlDocumentFactory;
