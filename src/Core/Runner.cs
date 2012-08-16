@@ -15,11 +15,14 @@ namespace AspUnitRunner {
         private const string ResultsQueryString = "?UnitRunner=results";
 
         private readonly IAspClient _client;
+        private readonly IResultParser _resultParser;
+
         private string _testContainer = AllTestContainers;
         private string _testCase = AllTestCases;
 
-        internal Runner(IAspClient client) {
+        internal Runner(IAspClient client, IResultParser resultParser) {
             _client = client;
+            _resultParser = resultParser;
         }
 
         /// <summary>
@@ -87,7 +90,7 @@ namespace AspUnitRunner {
         /// <returns>An AspUnitRunner.Results containing the test results.</returns>
         public Results Run(string address) {
             var htmlResults = _client.PostRequest(FormatUrl(address), GetPostData());
-            return ResultParser.Parse(htmlResults);
+            return _resultParser.Parse(htmlResults);
         }
 
         private string FormatUrl(string address) {

@@ -1,17 +1,73 @@
-﻿using NUnit.Framework;
-using AspUnitRunner;
+﻿using System;
+using NUnit.Framework;
+using AspUnitRunner.Core;
 
 namespace AspUnitRunner.Tests {
     [TestFixture]
     public class TestResults {
         [Test]
-        public void Constructor_should_set_properties_to_expected_values() {
-            var results = new Results(1, 2, 3, "details");
+        public void FormatDetails_with_empty_detail_should_return_empty_string() {
+            var results = new Results {
+                Details = new ResultDetail[] { }
+            };
 
-            Assert.That(results.Tests, Is.EqualTo(1));
-            Assert.That(results.Errors, Is.EqualTo(2));
-            Assert.That(results.Failures, Is.EqualTo(3));
-            Assert.That(results.Details, Is.EqualTo("details"));
+            Assert.That(results.FormatDetails(), Is.Empty);
+        }
+
+        [Test]
+        public void FormatDetails_with_one_detail_should_return_expected_string() {
+            var results = new Results {
+                Details = new[] {
+                    new ResultDetail(ResultType.Failure, "Container.TestCase", "Description")
+                }
+            };
+
+            Assert.That(results.FormatDetails(),
+                Is.EqualTo("Failure: Container.TestCase: Description"));
+        }
+
+        [Test]
+        public void FormatDetails_with_two_details_should_return_expected_string() {
+            var expectedFormat = "Failure: Container.Test1: First" + Environment.NewLine
+                + "Error: Container.Test2: Second";
+            var results = new Results {
+                Details = new[] {
+                    new ResultDetail(ResultType.Failure, "Container.Test1", "First"),
+                    new ResultDetail(ResultType.Error, "Container.Test2", "Second")
+                }
+            };
+
+            Assert.That(results.FormatDetails(), Is.EqualTo(expectedFormat));
+        }
+
+        [Test]
+        public void FormatSummary_should_return_expected_string() {
+            var results = new Results {
+                Tests = 5,
+                Errors = 1,
+                Failures = 2
+            };
+
+            Assert.That(results.FormatSummary(),
+                Is.EqualTo("Tests: 5, Errors: 1, Failures: 2"));
+        }
+
+        [Test]
+        public void Format_should_return_expected_string() {
+            var expectedFormat = "Failure: Container.Test1: First" + Environment.NewLine
+                + "Error: Container.Test2: Second" + Environment.NewLine + Environment.NewLine
+                + "Tests: 5, Errors: 1, Failures: 1" + Environment.NewLine;
+            var results = new Results {
+                Tests = 5,
+                Errors = 1,
+                Failures = 1,
+                Details = new[] {
+                    new ResultDetail(ResultType.Failure, "Container.Test1", "First"),
+                    new ResultDetail(ResultType.Error, "Container.Test2", "Second")
+                }
+            };
+
+            Assert.That(results.Format(), Is.EqualTo(expectedFormat));
         }
     }
 }

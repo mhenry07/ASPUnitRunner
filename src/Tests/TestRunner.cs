@@ -14,6 +14,7 @@ namespace AspUnitRunner.Tests {
         private const string TestCaseField = "_testCase";
 
         private IAspClient _client;
+        private IResultParser _resultParser;
 
         [SetUp]
         public void SetUp() {
@@ -23,11 +24,12 @@ namespace AspUnitRunner.Tests {
                         Arg<string>.Is.Anything,
                         Arg<NameValueCollection>.Is.Anything))
                 .Return(FakeTestFormatter.FormatSummary(1, 0, 0));
+            _resultParser = MockRepository.GenerateStub<IResultParser>();
         }
 
         [Test]
         public void New_Runner_should_have_default_configuration() {
-            var runner = new Runner(_client);
+            var runner = CreateRunner();
 
             Assert.That(runner.GetField(TestContainerField),
                 Is.EqualTo(Runner.AllTestContainers));
@@ -37,10 +39,14 @@ namespace AspUnitRunner.Tests {
         }
 
         [Test]
-        public void Running_tests_should_return_results() {
-            var runner = new Runner(_client);
+        public void Running_tests_should_return_expected_results() {
+            var expectedResults = new Results();
+            _resultParser.Stub(p => p.Parse(Arg<string>.Is.Anything))
+                .Return(expectedResults);
+            var runner = CreateRunner();
+
             var results = runner.Run("http://path/to/test-runner");
-            Assert.That(results, Is.InstanceOf<Results>());
+            Assert.That(results, Is.EqualTo(expectedResults));
         }
 
         [Test]
@@ -51,7 +57,7 @@ namespace AspUnitRunner.Tests {
                 { "cmdRun", "Run Tests"}
             };
 
-            var runner = new Runner(_client);
+            var runner = CreateRunner();
             var results = runner.Run("http://path/to/test-runner");
 
             _client.AssertWasCalled(c =>
@@ -69,7 +75,7 @@ namespace AspUnitRunner.Tests {
                 { "cmdRun", "Run Tests"}
             };
 
-            var runner = new Runner(_client)
+            var runner = CreateRunner()
                 .WithTestContainer(testContainer);
             var results = runner.Run("http://path/to/test-runner");
 
@@ -89,7 +95,7 @@ namespace AspUnitRunner.Tests {
                 { "cmdRun", "Run Tests"}
             };
 
-            var runner = new Runner(_client)
+            var runner = CreateRunner()
                 .WithTestContainerAndCase(testContainer, testCase);
             var results = runner.Run("http://path/to/test-runner");
 
@@ -103,7 +109,7 @@ namespace AspUnitRunner.Tests {
         public void WithCredentials_should_set_client_credentials() {
             var credentials = new NetworkCredential("username", "password");
 
-            var runner = new Runner(_client)
+            var runner = CreateRunner()
                 .WithCredentials(credentials);
 
             _client.AssertWasCalled(c => c.Credentials = credentials);
@@ -113,7 +119,7 @@ namespace AspUnitRunner.Tests {
         public void WithEncoding_should_set_client_encoding() {
             var encoding = Encoding.UTF8;
 
-            var runner = new Runner(_client)
+            var runner = CreateRunner()
                 .WithEncoding(encoding);
 
             _client.AssertWasCalled(c => c.Encoding = encoding);
@@ -121,7 +127,7 @@ namespace AspUnitRunner.Tests {
 
         [Test]
         public void WithTestContainerAndCase_with_test_case_for_all_containers_should_throw_exception() {
-            var runner = new Runner(_client);
+            var runner = CreateRunner();
 
             Assert.That(
                 () => runner.WithTestContainerAndCase(Runner.AllTestContainers, "TestCase"),
@@ -131,7 +137,7 @@ namespace AspUnitRunner.Tests {
         [Test]
         public void WithTestContainer_should_set_test_container() {
             const string testContainer = "TestContainer";
-            var runner = new Runner(_client)
+            var runner = CreateRunner()
                 .WithTestContainer(testContainer);
 
             Assert.That(runner.GetField(TestContainerField),
@@ -140,7 +146,7 @@ namespace AspUnitRunner.Tests {
 
         [Test]
         public void WithTestContainer_null_should_use_all_containers() {
-            var runner = new Runner(_client)
+            var runner = CreateRunner()
                 .WithTestContainer(null);
 
             Assert.That(runner.GetField(TestContainerField),
@@ -149,7 +155,7 @@ namespace AspUnitRunner.Tests {
 
         [Test]
         public void WithTestContainer_empty_should_use_all_containers() {
-            var runner = new Runner(_client)
+            var runner = CreateRunner()
                 .WithTestContainer("");
 
             Assert.That(runner.GetField(TestContainerField),
@@ -160,7 +166,7 @@ namespace AspUnitRunner.Tests {
         public void WithTestContainerAndCase_should_set_test_container_and_test_case() {
             const string testContainer = "TestContainer";
             const string testCase = "TestCase";
-            var runner = new Runner(_client)
+            var runner = CreateRunner()
                 .WithTestContainerAndCase(testContainer, testCase);
 
             Assert.That(runner.GetField(TestContainerField),
@@ -171,7 +177,7 @@ namespace AspUnitRunner.Tests {
 
         [Test]
         public void WithTestContainerAndCase_with_null_test_case_should_use_all_test_cases() {
-            var runner = new Runner(_client)
+            var runner = CreateRunner()
                 .WithTestContainerAndCase("TestContainer", null);
 
             Assert.That(runner.GetField(TestCaseField),
@@ -180,11 +186,15 @@ namespace AspUnitRunner.Tests {
 
         [Test]
         public void WithTestContainerAndCase_with_empty_test_case_should_use_all_test_cases() {
-            var runner = new Runner(_client)
+            var runner = CreateRunner()
                 .WithTestContainerAndCase("TestContainer", "");
 
             Assert.That(runner.GetField(TestCaseField),
                 Is.EqualTo(Runner.AllTestCases));
+        }
+
+        private Runner CreateRunner() {
+            return new Runner(_client, _resultParser);
         }
     }
 }
