@@ -2,12 +2,10 @@
 using System.Collections.Generic;
 
 namespace AspUnitRunner.Core {
+    // note that name (key) comparisons are case-insensitive
     internal class NameValueList : List<KeyValuePair<string, string>> {
-        private readonly StringComparer _comparer;
-
-        public NameValueList(StringComparer comparer) {
-            _comparer = comparer;
-        }
+        private readonly StringComparer _comparer =
+            StringComparer.InvariantCultureIgnoreCase;
 
         // get returns null if not found
         public string this[string name] {

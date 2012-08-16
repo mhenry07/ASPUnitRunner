@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace AspUnitRunner.Core.Html {
     internal class HtmlElement : IHtmlElement {
         // Using a list rather than a dictionary to make it easier to provide 
         // a read-only Attributes getter. Attribute lists should be small so 
         // performance impact should be negligible.
-        private readonly NameValueList _attributes =
-            new NameValueList(StringComparer.InvariantCultureIgnoreCase);
+        private readonly NameValueList _attributes = new NameValueList();
 
         public HtmlElement() {
             TagName = "";
