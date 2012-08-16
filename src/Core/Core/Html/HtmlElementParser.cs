@@ -24,7 +24,8 @@ namespace AspUnitRunner.Core.Html {
 
         private static Regex GetElementRegex(string tagName) {
             var elementPattern = string.Format(HtmlElementRegex, tagName);
-            return new Regex(elementPattern, RegexOptions.Singleline | RegexOptions.IgnoreCase);
+            return new Regex(elementPattern,
+                RegexOptions.Singleline | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
         }
 
         private static IHtmlCollection CreateCollection(MatchCollection matches) {

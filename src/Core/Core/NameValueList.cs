@@ -5,7 +5,7 @@ namespace AspUnitRunner.Core {
     // note that name (key) comparisons are case-insensitive
     internal class NameValueList : List<KeyValuePair<string, string>> {
         private readonly StringComparer _comparer =
-            StringComparer.InvariantCultureIgnoreCase;
+            StringComparer.OrdinalIgnoreCase;
 
         // get returns null if not found
         public string this[string name] {
