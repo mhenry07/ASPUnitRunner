@@ -45,8 +45,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Core\Html\TestHtmlCollection.cs" />
+    <Compile Include="Core\Html\TestHtmlDocument.cs" />
+    <Compile Include="Core\Html\TestHtmlDocumentFactory.cs" />
+    <Compile Include="Core\Html\TestHtmlElement.cs" />
+    <Compile Include="Core\Html\TestHtmlElementParser.cs" />
+    <Compile Include="Core\TestNameValueList.cs" />
     <Compile Include="Core\TestResultDetail.cs" />
     <Compile Include="Helpers\CollectionsExtensions.cs" />
+    <Compile Include="Helpers\HtmlElementEqualityComparer.cs" />
     <Compile Include="Helpers\ReflectionExtensions.cs" />
     <Compile Include="Helpers\Tests\TestCollectionsExtensions.cs" />
     <Compile Include="Infrastructure\TestAspClient.cs" />

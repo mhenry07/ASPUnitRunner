@@ -38,7 +38,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Core\Html\HtmlDocument.cs" />
+    <Compile Include="Core\Html\HtmlDocumentFactory.cs" />
+    <Compile Include="Core\Html\HtmlElement.cs" />
+    <Compile Include="Core\Html\HtmlCollection.cs" />
+    <Compile Include="Core\Html\HtmlElementParser.cs" />
+    <Compile Include="Core\Html\IHtmlDocument.cs" />
+    <Compile Include="Core\Html\IHtmlDocumentFactory.cs" />
+    <Compile Include="Core\Html\IHtmlElement.cs" />
+    <Compile Include="Core\Html\IHtmlCollection.cs" />
     <Compile Include="Core\IResponseDecoder.cs" />
+    <Compile Include="Core\IResultParser.cs" />
+    <Compile Include="Core\NameValueList.cs" />
     <Compile Include="Core\ResultDetail.cs" />
     <Compile Include="Core\ResultParser.cs" />
     <Compile Include="Core\ResultType.cs" />
