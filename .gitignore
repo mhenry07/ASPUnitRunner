@@ -2,6 +2,7 @@
 *.user
 *.VisualState.xml
 TestResult.xml
+.nuget/nuget.exe
 sample/*/bin/*
 sample/*/obj/*
 src/*/bin/*
