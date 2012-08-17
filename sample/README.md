@@ -76,8 +76,8 @@ To run the sample from non-root IIS/IIS Express directory:
 * If credentials are required, configure them by calling `WithCredentials` 
   after the `Runner.Create()` call in Tests.NUnit\TestAsp.cs. E.g.
 
-	Runner.Create()
-		.WithCredentials(new NetworkCredential("username", "password"));
+		Runner.Create()
+			.WithCredentials(new NetworkCredential("username", "password"));
 
 * Update `AspTestUrl` in Tests.NUnit\TestAsp.cs to point to your ASPUnit test
   fixture and recompile AspUnitRunner.Sample.Tests.NUnit
