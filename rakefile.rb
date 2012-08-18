@@ -9,6 +9,7 @@ MAIN_SOLUTION = "src/AspUnitRunner.sln"
 CORE_PROJECT = "src/Core/AspUnitRunner.csproj"
 MAIN_TESTS = "src/Tests/AspUnitRunner.Tests.csproj"
 SAMPLE_SOLUTION = "sample/AspUnitRunner.Sample.sln"
+SAMPLE_TESTS = "sample/Tests.NUnit/AspUnitRunner.Sample.Tests.NUnit.csproj"
 
 task :default => :test
 
@@ -58,6 +59,18 @@ namespace :test do
 	nunit :main => [ "build:main", NUNIT_CONSOLE ] do |nunit|
 		nunit.command = NUNIT_CONSOLE
 		nunit.assemblies MAIN_TESTS
+	end
+
+	desc "Run AspUnitRunner sample tests"
+	task :sample => [ "build:sample", NUNIT_CONSOLE ] do
+		nunit = NUnitTestRunner.new
+		nunit.command = NUNIT_CONSOLE
+		nunit.assemblies SAMPLE_TESTS
+		begin
+			nunit.execute
+		rescue RuntimeError
+			puts "Note: test failures in FailureTest were expected"
+		end
 	end
 
 	# use NuGet to get NUnit.Runners
