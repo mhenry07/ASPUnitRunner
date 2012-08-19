@@ -27,6 +27,15 @@ namespace AspUnitRunner {
         public int Failures { get; internal set; }
 
         /// <summary>
+        /// Gets a bool indicating whether all tests ran successfully.
+        /// </summary>
+        public bool Successful {
+            get {
+                return Errors == 0 && Failures == 0;
+            }
+        }
+
+        /// <summary>
         /// Gets the collection of test details.
         /// </summary>
         public IEnumerable<ResultDetail> Details { get; internal set; }

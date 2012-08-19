@@ -35,8 +35,7 @@ with ASPUnit tests.
 	  `WithTestContainerAndCase` to your *Runner.Create()* call.
 * Call the `Run` method with the web address of your ASPUnit test suite. This
   will return a Results object containing your test results.
-* Assert that the `Errors` and `Failures` properties of the Results object 
-  both equal 0.
+* Assert that the `Successful` property of the Results object is true.
 * Optionally, use the `Format` method for the assertion failure message.
 * Note that to run your tests, your web server will have to be started when 
   tests are executing.
@@ -59,8 +58,7 @@ with ASPUnit tests.
 		// path to your ASPUnit test suite
 		var results = runner.Run("http://localhost:54831/tests/Default.asp");
 	
-		if (results.Errors != 0 || results.Failures != 0)
-			Assert.Fail(results.Format());
+		Assert.That(results.Successful, results.Format());
 	}
 
 

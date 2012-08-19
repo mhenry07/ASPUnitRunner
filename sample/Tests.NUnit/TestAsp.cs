@@ -23,7 +23,8 @@ namespace AspUnitRunner.Sample.Tests.NUnit {
                 .WithTestContainer(testContainer);
             var results = runner.Run(AspTestUrl);
 
-            if (results.Errors != 0 || results.Failures != 0)
+            // this results in slightly cleaner output than Assert.That(results.Successful...)
+            if (!results.Successful)
                 Assert.Fail(results.Format());
 
             if (results.Tests == 0)
