@@ -15,6 +15,55 @@ Mike Henry
 <http://www.mikehenry.name/>
 
 
+## Usage
+
+See the sample project for an example.
+
+The following assumes you already have a classic ASP web site or application
+with ASPUnit tests.
+
+* Get AspUnitRunner.dll and reference it from your .NET test project (NUnit
+  or other framework).
+	* For the latest, get the source and build it yourself (see [Development
+	  Environment][] below)
+	* Or download binaries from
+	  <https://github.com/mhenry07/ASPUnitRunner/downloads>
+* From your test case method in .NET, create a new Runner object via 
+  `Runner.Create()`.
+	* Configure the runner fluently by chaining zero or more of the following
+	  methods: `WithCredentials`, `WithEncoding`, `WithTestContainer` and 
+	  `WithTestContainerAndCase` to your *Runner.Create()* call.
+* Call the `Run` method with the web address of your ASPUnit test suite. This
+  will return a Results object containing your test results.
+* Assert that the `Errors` and `Failures` properties of the Results object 
+  both equal 0.
+* Optionally, use the `Format` method for the assertion failure message.
+* Note that to run your tests, your web server will have to be started when 
+  tests are executing.
+* As a security reminder, you probably don't want to publish your unit tests 
+  and the ASPUnit directory when you deploy your application to a 
+  production web server.
+
+### NUnit Example
+
+	using AspUnitRunner;
+	//...
+	
+	[Test]
+	public void CalculatorTest() {
+		var runner = Runner.Create()
+			.WithCredentials(new NetworkCredential("username", "password"))
+			.WithEncoding(Encoding.UTF8)
+			.WithTestContainer("CalculatorTest"); // run all tests within CalculatorTest
+	
+		// path to your ASPUnit test suite
+		var results = runner.Run("http://localhost:54831/tests/Default.asp");
+	
+		if (results.Errors != 0 || results.Failures != 0)
+			Assert.Fail(results.Format());
+	}
+
+
 ## Development Environment
 
 * [Microsoft .NET Framework 4][] (although the core project targets .NET
@@ -43,6 +92,8 @@ Then, you can build the main project and run tests via `rake`.
 		* Note: You may first need to configure the AspUnitRunner.Sample.Web 
 		  site in IIS Express. The easiest way is to open the sample solution
 		  (sample/AspUnitRunner.Sample.sln) in Visual Studio.
+	* To view the sample web site, run `rake web:start` to start the web 
+	  site. Then, navigate to the indicated URL from your web browser.
 	* Other web servers (namely IIS) which support classic ASP should work 
 	  but will likely require modifying the sample.
 * [Visual Studio 2010][] SP1 or [Visual Web Developer Express 2010][] SP1
