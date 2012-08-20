@@ -9,8 +9,9 @@ namespace AspUnitRunner {
     /// Runs ASPUnit tests from the given URL and returns test results.
     /// </summary>
     public class Runner {
-        public const string AllTestContainers = "All Test Containers";
-        public const string AllTestCases = "All Test Cases";
+        internal const string AllTestContainers = "All Test Containers";
+        internal const string AllTestCases = "All Test Cases";
+
         private const string RunCommand = "Run Tests";
         private const string ResultsQueryString = "?UnitRunner=results";
 
