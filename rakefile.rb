@@ -7,6 +7,7 @@ NUNIT_CONSOLE = "#{PACKAGES_DIR}/#{NUNIT_PACKAGE}/tools/nunit-console.exe"
 
 IIS_EXPRESS_EXE = "iisexpress.exe"
 IIS_EXPRESS_DIR = "IIS Express"
+SITE_NAME = "AspUnitRunner.Sample.Web"
 WEB_SAMPLE_DIR = "sample/Web"
 WEB_PORT = "54831"
 WEB_ADDRESS = "http://localhost:#{WEB_PORT}"
@@ -74,7 +75,7 @@ namespace :test do
 	end
 
 	desc "Run AspUnitRunner sample tests"
-	task :sample => [ "build:sample", NUNIT_CONSOLE ] do
+	task :sample => [ "build:sample", "web:register", NUNIT_CONSOLE ] do
 		nunit = NUnitTestRunner.new
 		nunit.assemblies SAMPLE_TESTS
 		begin
@@ -97,7 +98,7 @@ namespace :web do
 	task :start do
 		puts "Starting the sample web site at #{WEB_ADDRESS}"
 		puts
-		command = %{"#{get_iis_express_path}" /path:"#{get_web_sample_path}" /port:#{WEB_PORT}}
+		command = %{"#{get_iis_express_exe_path}" /path:"#{get_web_sample_path}" /port:#{WEB_PORT}}
 		sh %{START "" #{command}}
 	end
 
@@ -111,18 +112,29 @@ namespace :web do
 		sh %{TASKKILL /PID #{process_id}}
 	end
 
-	def get_iis_express_path()
-		path = build_iis_express_path("ProgramFiles")
+	# note that the rake start/stop tasks use the path instead of the registered site
+	# however, the test:sample task depends on it (since it starts iisexpress from code)
+	desc "Register the AspUnitRunner sample web site in IIS Express"
+	task :register do
+		add_site_to_iis_express
+	end
+
+	def get_iis_express_exe_path()
+		return get_iis_express_path(IIS_EXPRESS_EXE)
+	end
+
+	def get_iis_express_path(file)
+		path = build_iis_express_path("ProgramFiles", file)
 		return path if File.exists?(path)
 
-		path = build_iis_express_path("ProgramFiles(x86)")
+		path = build_iis_express_path("ProgramFiles(x86)", file)
 		return path if File.exists?(path)
 
 		fail "Could not find IIS Express"
 	end
 
-	def build_iis_express_path(program_files_var)
-		return [ ENV[program_files_var], IIS_EXPRESS_DIR, IIS_EXPRESS_EXE ].join('\\')
+	def build_iis_express_path(program_files_var, file)
+		return [ ENV[program_files_var], IIS_EXPRESS_DIR, file ].join('\\')
 	end
 
 	# IIS Express seems to require backslashes in path
@@ -132,5 +144,18 @@ namespace :web do
 
 	def backslashify(path)
 		return path.gsub(/\//, '\\')
+	end
+
+	def add_site_to_iis_express()
+		appcmd = get_iis_express_path("appcmd.exe")
+		site_listing = `"#{appcmd}" list SITE "#{SITE_NAME}"`.strip
+		unless site_listing.empty? then
+			puts "The site \"#{SITE_NAME}\" already exists"
+			puts "#{site_listing}"
+			return
+		end
+		puts "Creating new site \"#{SITE_NAME}\" in IIS Express"
+		puts
+		sh %{"#{appcmd}" add SITE /name:"#{SITE_NAME}" /bindings:"http/*:#{WEB_PORT}:localhost" /physicalPath:"#{get_web_sample_path}"}
 	end
 end

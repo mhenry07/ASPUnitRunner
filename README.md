@@ -87,9 +87,8 @@ Then, you can build the main project and run tests via `rake`.
 	* Tested with IIS 8.0 Express (which is included with Visual Web 
 	  Developer 2010 SP1)
 	* Run `rake test:sample` to build and run the sample tests.
-		* Note: You may first need to configure the AspUnitRunner.Sample.Web 
-		  site in IIS Express. The easiest way is to open the sample solution
-		  (sample/AspUnitRunner.Sample.sln) in Visual Studio.
+		* A new site "AspUnitRunner.Sample.Web" will be added to IIS Express
+		  if it does not already exist.
 	* To view the sample web site, run `rake web:start` to start the web 
 	  site. Then, navigate to the indicated URL from your web browser.
 	* Other web servers (namely IIS) which support classic ASP should work 
