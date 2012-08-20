@@ -17,6 +17,13 @@ MAIN_TESTS = "src/Tests/AspUnitRunner.Tests.csproj"
 SAMPLE_SOLUTION = "sample/AspUnitRunner.Sample.sln"
 SAMPLE_TESTS = "sample/Tests.NUnit/AspUnitRunner.Sample.Tests.NUnit.csproj"
 
+BUILD_CONFIGURATION = "Release"
+
+Albacore.configure do |config|
+	config.nunit.command = NUNIT_CONSOLE
+	config.nunit.options = [ "/config:#{BUILD_CONFIGURATION}" ]
+end
+
 task :default => :test
 
 desc "Build AspUnitRunner core and tests"
@@ -48,7 +55,7 @@ namespace :build do
 
 	def build_project(project)
 		msb = MSBuild.new
-		msb.properties :configuration =>  :Debug
+		msb.properties :configuration => BUILD_CONFIGURATION
 		msb.targets :Clean, :Build
 		msb.solution = project
 		msb.verbosity = "minimal"
@@ -63,14 +70,12 @@ namespace :test do
 
 	# desc "Run AspUnitRunner tests"
 	nunit :main => [ "build:main", NUNIT_CONSOLE ] do |nunit|
-		nunit.command = NUNIT_CONSOLE
 		nunit.assemblies MAIN_TESTS
 	end
 
 	desc "Run AspUnitRunner sample tests"
 	task :sample => [ "build:sample", NUNIT_CONSOLE ] do
 		nunit = NUnitTestRunner.new
-		nunit.command = NUNIT_CONSOLE
 		nunit.assemblies SAMPLE_TESTS
 		begin
 			nunit.execute
