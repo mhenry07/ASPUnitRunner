@@ -3,6 +3,8 @@
 *.VisualState.xml
 TestResult.xml
 .nuget/nuget.exe
+build/
+deliverables/
 lib/*
 !lib/repositories.config
 sample/*/bin/*

@@ -12,13 +12,20 @@ WEB_SAMPLE_DIR = "sample/Web"
 WEB_PORT = "54831"
 WEB_ADDRESS = "http://localhost:#{WEB_PORT}"
 
-MAIN_SOLUTION = "src/AspUnitRunner.sln"
-CORE_PROJECT = "src/Core/AspUnitRunner.csproj"
+MAIN_NAME = "AspUnitRunner"
+MAIN_SOLUTION = "src/#{MAIN_NAME}.sln"
+CORE_PROJECT = "src/Core/#{MAIN_NAME}.csproj"
 MAIN_TESTS = "src/Tests/AspUnitRunner.Tests.csproj"
 SAMPLE_SOLUTION = "sample/AspUnitRunner.Sample.sln"
 SAMPLE_TESTS = "sample/Tests.NUnit/AspUnitRunner.Sample.Tests.NUnit.csproj"
 
 BUILD_CONFIGURATION = "Release"
+BUILD_DIR = "build/" # note the ending slash to avoid conflict with :build task
+DELIVERABLES_DIR = "deliverables/"
+
+# suppress DSL deprecation errors from albacore output tasks for now
+# see https://github.com/derickbailey/Albacore/issues/165
+Rake.application.options.ignore_deprecate = true
 
 Albacore.configure do |config|
 	config.nunit.command = NUNIT_CONSOLE
@@ -33,6 +40,9 @@ task :build => "build:main"
 desc "Run AspUnitRunner tests"
 task :test => "test:main"
 
+desc "Build core project and package deliverables into .zip file"
+task :package => [ "build:core", "zip:core" ]
+
 # note: not using rake dependencies for builds because firing up multiple 
 # instances of msbuild is slow and makes the build script more complex
 namespace :build do
@@ -40,18 +50,48 @@ namespace :build do
 	task :all => [ :main, :sample ]
 
 	desc "Build AspUnitRunner core"
-	task :core do
-		build_project CORE_PROJECT
-	end
+	task :core => [ "clean:core", "compile:core", "copy:core" ]
 
 	# desc "Build AspUnitRunner core and tests"
-	task :main do
-		build_project MAIN_SOLUTION
-	end
+	task :main => [ "clean:core", "compile:main", "copy:core" ]
 
 	desc "Build AspUnitRunner sample"
 	task :sample do
 		build_project SAMPLE_SOLUTION
+	end
+
+	namespace :compile do
+		task :core do
+			build_project CORE_PROJECT
+		end
+
+		task :main do
+			build_project MAIN_SOLUTION
+		end
+	end
+
+	# note this only cleans the ./build directory
+	namespace :clean do
+		task :core do
+			FileUtils.rmtree File.join(BUILD_DIR, MAIN_NAME)
+		end
+	end
+
+	namespace :copy do
+		output :core => BUILD_DIR do |out|
+			source_dir = "src/Core/bin/#{BUILD_CONFIGURATION}"
+			core_build_dir = File.join(BUILD_DIR, MAIN_NAME)
+
+			files = []
+			out.from source_dir
+			out.to core_build_dir
+			Dir.chdir source_dir do
+				files = Dir.glob "#{MAIN_NAME}.{dll,pdb,xml}"
+			end
+			files.each {|file| out.file file }
+		end
+
+		directory BUILD_DIR
 	end
 
 	def build_project(project)
@@ -158,4 +198,15 @@ namespace :web do
 		puts
 		sh %{"#{appcmd}" add SITE /name:"#{SITE_NAME}" /bindings:"http/*:#{WEB_PORT}:localhost" /physicalPath:"#{get_web_sample_path}"}
 	end
+end
+
+namespace :zip do
+	zip :core => DELIVERABLES_DIR do |zip|
+		zip.directories_to_zip File.join(BUILD_DIR, MAIN_NAME)
+		zip.output_file = "#{MAIN_NAME}.zip"
+		zip.output_path = DELIVERABLES_DIR
+		puts "Created " + File.join(zip.output_path, zip.output_file)
+	end
+
+	directory DELIVERABLES_DIR
 end
