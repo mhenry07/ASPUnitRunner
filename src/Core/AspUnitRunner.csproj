@@ -39,6 +39,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\CommonAssemblyInfo.cs">
+      <Link>Properties\CommonAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="Core\Html\HtmlDocument.cs" />
     <Compile Include="Core\Html\HtmlDocumentFactory.cs" />
     <Compile Include="Core\Html\HtmlElement.cs" />

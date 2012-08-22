@@ -43,6 +43,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\src\CommonAssemblyInfo.cs">
+      <Link>Properties\CommonAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="IisExpressServer.cs" />
     <Compile Include="TestAsp.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
