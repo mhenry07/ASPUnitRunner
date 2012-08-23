@@ -23,6 +23,9 @@ BUILD_CONFIGURATION = "Release"
 BUILD_DIR = "build/" # note the ending slash to avoid conflict with :build task
 DELIVERABLES_DIR = "deliverables/"
 
+VERSION_FILE = "VERSION.txt"
+COMMON_ASSEMBLY_TEMPLATE = File.join("src", "CommonAssemblyInfo.template.cs")
+
 # suppress DSL deprecation errors from albacore output tasks for now
 # see https://github.com/derickbailey/Albacore/issues/165
 Rake.application.options.ignore_deprecate = true
@@ -43,6 +46,9 @@ task :test => "test:main"
 desc "Build core project and package deliverables into .zip file"
 task :package => [ "build:core", "zip:core" ]
 
+desc "Generate assembly version information"
+task :version => "version:set"
+
 # note: not using rake dependencies for builds because firing up multiple 
 # instances of msbuild is slow and makes the build script more complex
 namespace :build do
@@ -50,13 +56,13 @@ namespace :build do
 	task :all => [ :main, :sample ]
 
 	desc "Build AspUnitRunner core"
-	task :core => [ "clean:core", "compile:core", "copy:core" ]
+	task :core => [ "clean:core", :version, "compile:core", "copy:core" ]
 
 	# desc "Build AspUnitRunner core and tests"
-	task :main => [ "clean:core", "compile:main", "copy:core" ]
+	task :main => [ "clean:core", :version, "compile:main", "copy:core" ]
 
 	desc "Build AspUnitRunner sample"
-	task :sample do
+	task :sample => :version do
 		build_project SAMPLE_SOLUTION
 	end
 
@@ -197,6 +203,43 @@ namespace :web do
 		puts "Creating new site \"#{SITE_NAME}\" in IIS Express"
 		puts
 		sh %{"#{appcmd}" add SITE /name:"#{SITE_NAME}" /bindings:"http/*:#{WEB_PORT}:localhost" /physicalPath:"#{get_web_sample_path}"}
+	end
+end
+
+namespace :version do
+	# desc "Generate assembly version information"
+	assemblyinfo :set => COMMON_ASSEMBLY_TEMPLATE do |asm|
+		base_version = get_base_version
+		# build # based on date (2-digit year, 3-digit day of year, e.g. 12235)
+		build_number = Date.today.strftime("%y%j")
+		git_commit = `git rev-parse --short HEAD`.strip
+		semantic_version = "#{base_version}+build.#{build_number}.#{git_commit}"
+		configuration = " (#{BUILD_CONFIGURATION})" unless BUILD_CONFIGURATION == "Release"
+
+		asm.description = "#{MAIN_NAME} v#{semantic_version}#{configuration}"
+		asm.version = format_asm_version(base_version)
+		asm.file_version = "#{base_version}.#{build_number}"
+		asm.custom_attributes :AssemblyInformationalVersion => semantic_version
+		asm.input_file = COMMON_ASSEMBLY_TEMPLATE
+		asm.output_file = File.join("src", "CommonAssemblyInfo.cs")
+	end
+
+	# this is a workaround to limit number of times template is written to.
+	# there is a bug in assemblyinfo task that generates extra newline with
+	# every rewrite (see https://github.com/derickbailey/Albacore/issues/214 )
+	file COMMON_ASSEMBLY_TEMPLATE => VERSION_FILE do
+		asm = AssemblyInfo.new
+		asm.version = format_asm_version(get_base_version)
+		asm.use COMMON_ASSEMBLY_TEMPLATE
+		asm.execute
+	end
+
+	def get_base_version()
+		return File.read(VERSION_FILE).strip
+	end
+
+	def format_asm_version(base_version)
+		return "#{base_version}.0"
 	end
 end
 
