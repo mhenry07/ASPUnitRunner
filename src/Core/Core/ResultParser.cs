@@ -25,7 +25,7 @@ namespace AspUnitRunner.Core {
         public IResults Parse(string htmlResults) {
             _results = new Results {
                 Html = htmlResults,
-                Details = new List<ResultDetail>()
+                DetailList = new List<ResultDetail>()
             };
 
             var doc = _htmlDocumentFactory.Create(_results.Html);
@@ -48,7 +48,7 @@ namespace AspUnitRunner.Core {
             var cells = row.GetElementsByTagName("TD");
 
             if (IsDetailRow(row, cells)) {
-                var details = (IList<ResultDetail>)_results.Details;
+                var details = (IList<ResultDetail>)_results.DetailList;
                 details.Add(ParseDetail(cells));
                 return;
             }

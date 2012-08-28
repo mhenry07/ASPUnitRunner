@@ -39,7 +39,7 @@ namespace AspUnitRunner {
         /// <summary>
         /// Gets the collection of test details.
         /// </summary>
-        public IEnumerable<ResultDetail> Details { get; internal set; }
+        public IEnumerable<ResultDetail> DetailList { get; internal set; }
 
         /// <summary>
         /// Gets the raw HTML test results.
@@ -61,7 +61,7 @@ namespace AspUnitRunner {
         internal string FormatDetails() {
             var newline = "";
             var stringBuilder = new StringBuilder();
-            foreach (var detail in Details) {
+            foreach (var detail in DetailList) {
                 stringBuilder.Append(newline);
                 stringBuilder.AppendFormat("{0}: {1}: {2}",
                     detail.Type, detail.Name, detail.Description);

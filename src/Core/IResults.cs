@@ -29,7 +29,7 @@ namespace AspUnitRunner {
         /// <summary>
         /// Gets the collection of test details.
         /// </summary>
-        IEnumerable<ResultDetail> Details { get; }
+        IEnumerable<ResultDetail> DetailList { get; }
 
         /// <summary>
         /// Gets the raw HTML test results.

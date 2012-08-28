@@ -69,18 +69,18 @@ namespace AspUnitRunner.Tests.Core {
         }
 
         [Test]
-        public void Parse_passing_test_should_return_empty_details() {
+        public void Parse_passing_test_should_return_empty_detail_list() {
             var details = new ResultDetail[] { };
             var htmlTestResults = FakeTestFormatter.FormatResults(1, 0, 0, details);
             var parser = CreateResultParser(htmlTestResults);
 
             var results = parser.Parse(htmlTestResults);
-            Assert.That(results.Details,
+            Assert.That(results.DetailList,
                 Is.InstanceOf<IEnumerable<ResultDetail>>().And.Empty);
         }
 
         [Test]
-        public void Parse_erroneous_test_should_return_expected_detail() {
+        public void Parse_erroneous_test_should_return_expected_detail_list() {
             var details = new List<ResultDetail> {
                 new ResultDetail(ResultType.Error, "TestContainer.TestCase", "Error description")
             };
@@ -88,7 +88,7 @@ namespace AspUnitRunner.Tests.Core {
             var parser = CreateResultParser(htmlTestResults);
 
             var results = parser.Parse(htmlTestResults);
-            Assert.That(results.Details, Is.EqualTo(details)
+            Assert.That(results.DetailList, Is.EqualTo(details)
                 .Using(new ResultDetailEqualityComparer()));
         }
 
