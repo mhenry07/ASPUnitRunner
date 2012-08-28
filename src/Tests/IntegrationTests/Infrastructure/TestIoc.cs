@@ -10,7 +10,7 @@ namespace AspUnitRunner.Tests.IntegrationTests.Infrastructure {
         [Test]
         public void ResolveRunner_should_return_expected_object_graph() {
             var runner = Ioc.ResolveRunner();
-            Assert.That(runner, Is.InstanceOf<Runner>());
+            Assert.That(runner, Is.InstanceOf<AspRunner>());
 
             var client = runner.GetField("_client");
             Assert.That(client, Is.InstanceOf<AspClient>());

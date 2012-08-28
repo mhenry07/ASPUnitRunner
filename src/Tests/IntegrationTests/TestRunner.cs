@@ -1,5 +1,6 @@
 ﻿using NUnit.Framework;
 using AspUnitRunner;
+using AspUnitRunner.Core;
 using AspUnitRunner.Tests.Helpers;
 
 namespace AspUnitRunner.Tests.IntegrationTests {
@@ -12,7 +13,7 @@ namespace AspUnitRunner.Tests.IntegrationTests {
             const string address = "http://path/to/test-runner";
             var runner = Runner.Create(address);
 
-            Assert.That(runner, Is.InstanceOf<Runner>());
+            Assert.That(runner, Is.InstanceOf<AspRunner>());
             Assert.That(runner.GetField(AddressField), Is.EqualTo(address));
         }
     }
