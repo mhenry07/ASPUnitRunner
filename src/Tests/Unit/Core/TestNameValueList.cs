@@ -2,7 +2,7 @@
 using NUnit.Framework;
 using AspUnitRunner.Core;
 
-namespace AspUnitRunner.Tests.Core {
+namespace AspUnitRunner.Tests.Unit.Core {
     [TestFixture]
     public class TestNameValueList {
         [TestCase]

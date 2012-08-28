@@ -2,7 +2,7 @@
 using NUnit.Framework;
 using AspUnitRunner.Infrastructure;
 
-namespace AspUnitRunner.Tests.Infrastructure {
+namespace AspUnitRunner.Tests.Unit.Infrastructure {
     [TestFixture]
     public class TestWebClientFactory {
         [Test]

@@ -7,7 +7,7 @@ using AspUnitRunner;
 using AspUnitRunner.Core;
 using AspUnitRunner.Tests.Helpers;
 
-namespace AspUnitRunner.Tests {
+namespace AspUnitRunner.Tests.Unit.Core {
     [TestFixture]
     public class TestAspRunner {
         private const string AddressField = "_address";

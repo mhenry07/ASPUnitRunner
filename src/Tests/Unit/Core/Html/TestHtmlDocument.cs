@@ -2,7 +2,7 @@
 using AspUnitRunner.Core.Html;
 using AspUnitRunner.Tests.Helpers;
 
-namespace AspUnitRunner.Tests.Core.Html {
+namespace AspUnitRunner.Tests.Unit.Core.Html {
     [TestFixture]
     public class TestHtmlDocument {
         [Test]

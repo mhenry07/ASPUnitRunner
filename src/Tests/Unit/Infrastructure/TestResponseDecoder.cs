@@ -4,7 +4,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using AspUnitRunner.Infrastructure;
 
-namespace AspUnitRunner.Tests.Infrastructure {
+namespace AspUnitRunner.Tests.Unit.Infrastructure {
     [TestFixture]
     public class TestResponseDecoder {
         // from http://www.columbia.edu/~fdc/utf8/
