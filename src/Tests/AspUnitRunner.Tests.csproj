@@ -1,0 +1,98 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{EF5D5FE1-BB40-4283-AF34-3F7E632CE886}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>AspUnitRunner.Tests</RootNamespace>
+    <AssemblyName>AspUnitRunner.Tests</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="nunit.framework, Version=2.6.1.12217, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\NUnit.2.6.1\lib\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="Rhino.Mocks, Version=3.6.0.0, Culture=neutral, PublicKeyToken=0b3305902db7183f, processorArchitecture=MSIL">
+      <HintPath>..\..\lib\RhinoMocks.3.6.1\lib\net\Rhino.Mocks.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\CommonAssemblyInfo.cs">
+      <Link>Properties\CommonAssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="Core\Html\TestHtmlCollection.cs" />
+    <Compile Include="Core\Html\TestHtmlDocument.cs" />
+    <Compile Include="Core\Html\TestHtmlDocumentFactory.cs" />
+    <Compile Include="Core\Html\TestHtmlElement.cs" />
+    <Compile Include="Core\Html\TestHtmlElementParser.cs" />
+    <Compile Include="Core\TestNameValueList.cs" />
+    <Compile Include="Core\TestResultDetail.cs" />
+    <Compile Include="Core\TestAspRunner.cs" />
+    <Compile Include="Helpers\CollectionsExtensions.cs" />
+    <Compile Include="Helpers\HtmlElementEqualityComparer.cs" />
+    <Compile Include="Helpers\ReflectionExtensions.cs" />
+    <Compile Include="Helpers\Tests\TestCollectionsExtensions.cs" />
+    <Compile Include="Infrastructure\TestAspClient.cs" />
+    <Compile Include="Infrastructure\TestResponseDecoder.cs" />
+    <Compile Include="Infrastructure\TestWebClientFactory.cs" />
+    <Compile Include="IntegrationTests\Infrastructure\TestIoc.cs" />
+    <Compile Include="Helpers\FakeTestFormatter.cs" />
+    <Compile Include="Core\TestResultParser.cs" />
+    <Compile Include="IntegrationTests\TestRunner.cs" />
+    <Compile Include="TestResults.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Core\AspUnitRunner.csproj">
+      <Project>{DC6503A6-459C-4AEE-85CD-8DACE2BF62DE}</Project>
+      <Name>AspUnitRunner</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(SolutionDir)\..\.nuget\nuget.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>$(SolutionDir)init-assembly-info.cmd</PreBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

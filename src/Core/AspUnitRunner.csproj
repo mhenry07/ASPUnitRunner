@@ -1,0 +1,85 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{DC6503A6-459C-4AEE-85CD-8DACE2BF62DE}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>AspUnitRunner</RootNamespace>
+    <AssemblyName>AspUnitRunner</AssemblyName>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release\AspUnitRunner.xml</DocumentationFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\CommonAssemblyInfo.cs">
+      <Link>Properties\CommonAssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="Core\AspRunner.cs" />
+    <Compile Include="Core\Html\HtmlDocument.cs" />
+    <Compile Include="Core\Html\HtmlDocumentFactory.cs" />
+    <Compile Include="Core\Html\HtmlElement.cs" />
+    <Compile Include="Core\Html\HtmlCollection.cs" />
+    <Compile Include="Core\Html\HtmlElementParser.cs" />
+    <Compile Include="Core\Html\IHtmlDocument.cs" />
+    <Compile Include="Core\Html\IHtmlDocumentFactory.cs" />
+    <Compile Include="Core\Html\IHtmlElement.cs" />
+    <Compile Include="Core\Html\IHtmlCollection.cs" />
+    <Compile Include="Core\IResponseDecoder.cs" />
+    <Compile Include="Core\IResultParser.cs" />
+    <Compile Include="Core\NameValueList.cs" />
+    <Compile Include="Core\ResultDetail.cs" />
+    <Compile Include="Core\ResultParser.cs" />
+    <Compile Include="Core\ResultType.cs" />
+    <Compile Include="Core\IAspClient.cs" />
+    <Compile Include="Infrastructure\AspClient.cs" />
+    <Compile Include="Infrastructure\Ioc.cs" />
+    <Compile Include="Core\IWebClientFactory.cs" />
+    <Compile Include="Infrastructure\ResponseDecoder.cs" />
+    <Compile Include="Infrastructure\WebClientFactory.cs" />
+    <Compile Include="IResultDetail.cs" />
+    <Compile Include="IResults.cs" />
+    <Compile Include="IRunner.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Results.cs" />
+    <Compile Include="Runner.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>$(ProjectDir)..\init-assembly-info.cmd</PreBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -2,7 +2,13 @@
 *.user
 *.VisualState.xml
 TestResult.xml
-samples/*/bin/*
-samples/*/obj/*
+.nuget/nuget.exe
+build/
+deliverables/
+lib/*
+!lib/repositories.config
+sample/*/bin/*
+sample/*/obj/*
 src/*/bin/*
 src/*/obj/*
+src/CommonAssemblyInfo.cs
