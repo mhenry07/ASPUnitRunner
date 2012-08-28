@@ -4,7 +4,7 @@ using AspUnitRunner.Core.Html;
 using AspUnitRunner.Infrastructure;
 using AspUnitRunner.Tests.Helpers;
 
-namespace AspUnitRunner.Tests.Infrastructure {
+namespace AspUnitRunner.Tests.IntegrationTests.Infrastructure {
     [TestFixture]
     public class TestIoc {
         [Test]
