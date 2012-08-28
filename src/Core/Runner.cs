@@ -8,7 +8,7 @@ namespace AspUnitRunner {
     /// <summary>
     /// Runs ASPUnit tests from the given URL and returns test results.
     /// </summary>
-    public class Runner {
+    public class Runner : IRunner {
         internal const string AllTestContainers = "All Test Containers";
         internal const string AllTestCases = "All Test Cases";
 
@@ -32,12 +32,12 @@ namespace AspUnitRunner {
         /// </summary>
         /// <param name="address">The URL for the ASPUnit tests.</param>
         /// <returns>A new AspUnitRunner.Runner instance.</returns>
-        public static Runner Create(string address) {
+        public static IRunner Create(string address) {
             return Infrastructure.Ioc.ResolveRunner()
                 .WithAddress(address);
         }
 
-        internal Runner WithAddress(string address) {
+        internal IRunner WithAddress(string address) {
             _address = address;
             return this;
         }
@@ -47,8 +47,8 @@ namespace AspUnitRunner {
         /// and returns the current Runner object.
         /// </summary>
         /// <param name="credentials">The network credentials.</param>
-        /// <returns>The current Runner object.</returns>
-        public Runner WithCredentials(ICredentials credentials) {
+        /// <returns>The current IRunner object.</returns>
+        public IRunner WithCredentials(ICredentials credentials) {
             _client.Credentials = credentials;
             return this;
         }
@@ -58,9 +58,9 @@ namespace AspUnitRunner {
         /// response and returns the current Runner object.
         /// </summary>
         /// <param name="encoding">The encoding.</param>
-        /// <returns>The current Runner object.</returns>
+        /// <returns>The current IRunner object.</returns>
         /// <remarks>A charset in the response headers will take precedence.</remarks>
-        public Runner WithEncoding(Encoding encoding) {
+        public IRunner WithEncoding(Encoding encoding) {
             _client.Encoding = encoding;
             return this;
         }
@@ -70,8 +70,8 @@ namespace AspUnitRunner {
         /// and returns the current Runner object.
         /// </summary>
         /// <param name="testContainer">The test container.</param>
-        /// <returns>The current Runner object.</returns>
-        public Runner WithTestContainer(string testContainer) {
+        /// <returns>The current IRunner object.</returns>
+        public IRunner WithTestContainer(string testContainer) {
             return WithTestContainerAndCase(testContainer, AllTestCases);
         }
 
@@ -81,8 +81,8 @@ namespace AspUnitRunner {
         /// </summary>
         /// <param name="testContainer">The test container containing the test case.</param>
         /// <param name="testCase">The test case to execute.</param>
-        /// <returns>The current Runner object.</returns>
-        public Runner WithTestContainerAndCase(string testContainer, string testCase) {
+        /// <returns>The current IRunner object.</returns>
+        public IRunner WithTestContainerAndCase(string testContainer, string testCase) {
             if (IsSpecified(testCase, AllTestCases) && !IsSpecified(testContainer, AllTestContainers))
                 throw new ArgumentException("A test container must be specified if a test case is specified.", "testContainer");
 
