@@ -2,7 +2,7 @@
 using NUnit.Framework;
 using AspUnitRunner.Core;
 
-namespace AspUnitRunner.Tests {
+namespace AspUnitRunner.Tests.Core {
     [TestFixture]
     public class TestResults {
         [Test]
