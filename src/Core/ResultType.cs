@@ -1,4 +1,4 @@
-﻿namespace AspUnitRunner.Core {
+﻿namespace AspUnitRunner {
     /// <summary>
     /// An enumeration of test result types/statuses.
     /// </summary>
