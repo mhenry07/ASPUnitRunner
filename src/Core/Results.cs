@@ -41,6 +41,15 @@ namespace AspUnitRunner {
         public IEnumerable<IResultDetail> DetailList { get; internal set; }
 
         /// <summary>
+        /// Use IResults.Format() instead.
+        /// </summary>
+        /// <returns>A string containing formatted test results.</returns>
+        [Obsolete]
+        public string Details {
+            get { return Format(); }
+        }
+
+        /// <summary>
         /// Gets the raw HTML test results.
         /// </summary>
         /// <remarks>
