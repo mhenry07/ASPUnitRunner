@@ -22,7 +22,7 @@ namespace AspUnitRunner.Core {
             _htmlDocumentFactory = htmlDocumentFactory;
         }
 
-        public Results Parse(string htmlResults) {
+        public IResults Parse(string htmlResults) {
             _results = new Results {
                 Html = htmlResults,
                 Details = new List<ResultDetail>()

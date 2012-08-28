@@ -1,5 +1,5 @@
 ﻿namespace AspUnitRunner.Core {
     internal interface IResultParser {
-        Results Parse(string htmlResults);
+        IResults Parse(string htmlResults);
     }
 }

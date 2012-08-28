@@ -4,10 +4,11 @@ using System.Text;
 using AspUnitRunner.Core;
 
 namespace AspUnitRunner {
+    // TODO: move to Core and make internal after old api has been removed
     /// <summary>
     /// Contains ASPUnit test results.
     /// </summary>
-    public class Results {
+    public class Results : IResults {
         internal Results() {
         }
 

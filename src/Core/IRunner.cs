@@ -43,7 +43,7 @@ namespace AspUnitRunner {
         /// <summary>
         /// Runs ASPUnit tests and returns results.
         /// </summary>
-        /// <returns>An AspUnitRunner.Results containing the test results.</returns>
-        Results Run();
+        /// <returns>An AspUnitRunner.IResults containing the test results.</returns>
+        IResults Run();
     }
 }

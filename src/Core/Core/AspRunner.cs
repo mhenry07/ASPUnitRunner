@@ -52,7 +52,7 @@ namespace AspUnitRunner.Core {
             return this;
         }
 
-        public Results Run() {
+        public IResults Run() {
             var htmlResults = _client.PostRequest(FormatUrl(_address), GetPostData());
             return _resultParser.Parse(htmlResults);
         }
