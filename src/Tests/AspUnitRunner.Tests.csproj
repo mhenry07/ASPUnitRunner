@@ -51,26 +51,26 @@
     <Compile Include="..\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="Core\Html\TestHtmlCollection.cs" />
-    <Compile Include="Core\Html\TestHtmlDocument.cs" />
-    <Compile Include="Core\Html\TestHtmlDocumentFactory.cs" />
-    <Compile Include="Core\Html\TestHtmlElement.cs" />
-    <Compile Include="Core\Html\TestHtmlElementParser.cs" />
-    <Compile Include="Core\TestNameValueList.cs" />
-    <Compile Include="Core\TestResultDetail.cs" />
-    <Compile Include="Core\TestAspRunner.cs" />
+    <Compile Include="Unit\Core\Html\TestHtmlCollection.cs" />
+    <Compile Include="Unit\Core\Html\TestHtmlDocument.cs" />
+    <Compile Include="Unit\Core\Html\TestHtmlDocumentFactory.cs" />
+    <Compile Include="Unit\Core\Html\TestHtmlElement.cs" />
+    <Compile Include="Unit\Core\Html\TestHtmlElementParser.cs" />
+    <Compile Include="Unit\Core\TestNameValueList.cs" />
+    <Compile Include="Unit\Core\TestResultDetail.cs" />
+    <Compile Include="Unit\Core\TestAspRunner.cs" />
     <Compile Include="Helpers\CollectionsExtensions.cs" />
     <Compile Include="Helpers\HtmlElementEqualityComparer.cs" />
     <Compile Include="Helpers\ReflectionExtensions.cs" />
     <Compile Include="Helpers\Tests\TestCollectionsExtensions.cs" />
-    <Compile Include="Infrastructure\TestAspClient.cs" />
-    <Compile Include="Infrastructure\TestResponseDecoder.cs" />
-    <Compile Include="Infrastructure\TestWebClientFactory.cs" />
+    <Compile Include="Unit\Infrastructure\TestAspClient.cs" />
+    <Compile Include="Unit\Infrastructure\TestResponseDecoder.cs" />
+    <Compile Include="Unit\Infrastructure\TestWebClientFactory.cs" />
     <Compile Include="Integration\Infrastructure\TestIoc.cs" />
     <Compile Include="Helpers\FakeTestFormatter.cs" />
-    <Compile Include="Core\TestResultParser.cs" />
+    <Compile Include="Unit\Core\TestResultParser.cs" />
     <Compile Include="Integration\TestRunner.cs" />
-    <Compile Include="Core\TestResults.cs" />
+    <Compile Include="Unit\Core\TestResults.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

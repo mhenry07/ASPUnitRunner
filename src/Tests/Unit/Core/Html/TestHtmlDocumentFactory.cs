@@ -1,7 +1,7 @@
 ﻿using NUnit.Framework;
 using AspUnitRunner.Core.Html;
 
-namespace AspUnitRunner.Tests.Core.Html {
+namespace AspUnitRunner.Tests.Unit.Core.Html {
     [TestFixture]
     public class TestHtmlDocumentFactory {
         [Test]

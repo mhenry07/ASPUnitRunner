@@ -6,7 +6,7 @@ using Rhino.Mocks;
 using AspUnitRunner.Core;
 using AspUnitRunner.Infrastructure;
 
-namespace AspUnitRunner.Tests.Infrastructure {
+namespace AspUnitRunner.Tests.Unit.Infrastructure {
     [TestFixture]
     public class TestAspClient {
         private IWebClientFactory _factory;

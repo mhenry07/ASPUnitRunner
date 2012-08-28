@@ -6,7 +6,7 @@ using AspUnitRunner.Core;
 using AspUnitRunner.Core.Html;
 using AspUnitRunner.Tests.Helpers;
 
-namespace AspUnitRunner.Tests.Core {
+namespace AspUnitRunner.Tests.Unit.Core {
     // These tests for ResultParser are more integration tests than unit
     // tests.
     // For the most part, we're using the actual collaborators for these
