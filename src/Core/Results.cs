@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using AspUnitRunner.Core;
 
 namespace AspUnitRunner {
+    // TODO: move to Core and make internal after old api has been removed
     /// <summary>
     /// Contains ASPUnit test results.
     /// </summary>
-    public class Results {
+    public class Results : IResults {
         internal Results() {
         }
 
@@ -38,7 +38,7 @@ namespace AspUnitRunner {
         /// <summary>
         /// Gets the collection of test details.
         /// </summary>
-        public IEnumerable<ResultDetail> Details { get; internal set; }
+        public IEnumerable<IResultDetail> DetailList { get; internal set; }
 
         /// <summary>
         /// Gets the raw HTML test results.
@@ -60,7 +60,7 @@ namespace AspUnitRunner {
         internal string FormatDetails() {
             var newline = "";
             var stringBuilder = new StringBuilder();
-            foreach (var detail in Details) {
+            foreach (var detail in DetailList) {
                 stringBuilder.Append(newline);
                 stringBuilder.AppendFormat("{0}: {1}: {2}",
                     detail.Type, detail.Name, detail.Description);

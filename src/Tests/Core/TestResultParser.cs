@@ -69,26 +69,26 @@ namespace AspUnitRunner.Tests.Core {
         }
 
         [Test]
-        public void Parse_passing_test_should_return_empty_details() {
-            var details = new ResultDetail[] { };
+        public void Parse_passing_test_should_return_empty_detail_list() {
+            var details = new IResultDetail[] { };
             var htmlTestResults = FakeTestFormatter.FormatResults(1, 0, 0, details);
             var parser = CreateResultParser(htmlTestResults);
 
             var results = parser.Parse(htmlTestResults);
-            Assert.That(results.Details,
-                Is.InstanceOf<IEnumerable<ResultDetail>>().And.Empty);
+            Assert.That(results.DetailList,
+                Is.InstanceOf<IEnumerable<IResultDetail>>().And.Empty);
         }
 
         [Test]
-        public void Parse_erroneous_test_should_return_expected_detail() {
-            var details = new List<ResultDetail> {
+        public void Parse_erroneous_test_should_return_expected_detail_list() {
+            var details = new List<IResultDetail> {
                 new ResultDetail(ResultType.Error, "TestContainer.TestCase", "Error description")
             };
             var htmlTestResults = FakeTestFormatter.FormatResults(1, 1, 0, details);
             var parser = CreateResultParser(htmlTestResults);
 
             var results = parser.Parse(htmlTestResults);
-            Assert.That(results.Details, Is.EqualTo(details)
+            Assert.That(results.DetailList, Is.EqualTo(details)
                 .Using(new ResultDetailEqualityComparer()));
         }
 
@@ -111,14 +111,14 @@ namespace AspUnitRunner.Tests.Core {
             return new ResultParser(_htmlDocumentFactory);
         }
 
-        private class ResultDetailEqualityComparer : IEqualityComparer<ResultDetail> {
-            public bool Equals(ResultDetail x, ResultDetail y) {
+        private class ResultDetailEqualityComparer : IEqualityComparer<IResultDetail> {
+            public bool Equals(IResultDetail x, IResultDetail y) {
                 return x.Type.Equals(y.Type)
                     && x.Name.Equals(y.Name)
                     && x.Description.Equals(y.Description);
             }
 
-            public int GetHashCode(ResultDetail obj) {
+            public int GetHashCode(IResultDetail obj) {
                 throw new NotImplementedException();
             }
         }

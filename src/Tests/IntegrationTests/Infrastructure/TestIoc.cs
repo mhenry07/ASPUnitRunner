@@ -4,13 +4,13 @@ using AspUnitRunner.Core.Html;
 using AspUnitRunner.Infrastructure;
 using AspUnitRunner.Tests.Helpers;
 
-namespace AspUnitRunner.Tests.Infrastructure {
+namespace AspUnitRunner.Tests.IntegrationTests.Infrastructure {
     [TestFixture]
     public class TestIoc {
         [Test]
         public void ResolveRunner_should_return_expected_object_graph() {
             var runner = Ioc.ResolveRunner();
-            Assert.That(runner, Is.InstanceOf<Runner>());
+            Assert.That(runner, Is.InstanceOf<AspRunner>());
 
             var client = runner.GetField("_client");
             Assert.That(client, Is.InstanceOf<AspClient>());

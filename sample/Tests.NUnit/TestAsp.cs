@@ -17,11 +17,11 @@ namespace AspUnitRunner.Sample.Tests.NUnit {
         public void TestCase(
             // set ASPUnit test containers here
             [Values("CalculatorTest", "StringUtilityTest", "FailureTest")] string testContainer
-            ) {
-            var runner = Runner.Create()
+        ) {
+            var runner = Runner.Create(AspTestUrl)
                 .WithEncoding(Encoding.UTF8)
                 .WithTestContainer(testContainer);
-            var results = runner.Run(AspTestUrl);
+            var results = runner.Run();
 
             // this results in slightly cleaner output than Assert.That(results.Successful...)
             if (!results.Successful)

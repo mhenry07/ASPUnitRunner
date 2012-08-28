@@ -9,7 +9,8 @@ using AspUnitRunner.Tests.Helpers;
 
 namespace AspUnitRunner.Tests {
     [TestFixture]
-    public class TestRunner {
+    public class TestAspRunner {
+        private const string AddressField = "_address";
         private const string TestContainerField = "_testContainer";
         private const string TestCaseField = "_testCase";
 
@@ -19,11 +20,6 @@ namespace AspUnitRunner.Tests {
         [SetUp]
         public void SetUp() {
             _client = MockRepository.GenerateMock<IAspClient>();
-            _client.Stub(c =>
-                    c.PostRequest(
-                        Arg<string>.Is.Anything,
-                        Arg<NameValueCollection>.Is.Anything))
-                .Return(FakeTestFormatter.FormatSummary(1, 0, 0));
             _resultParser = MockRepository.GenerateStub<IResultParser>();
         }
 
@@ -32,33 +28,47 @@ namespace AspUnitRunner.Tests {
             var runner = CreateRunner();
 
             Assert.That(runner.GetField(TestContainerField),
-                Is.EqualTo(Runner.AllTestContainers));
+                Is.EqualTo(AspRunner.AllTestContainers));
             Assert.That(runner.GetField(TestCaseField),
-                Is.EqualTo(Runner.AllTestCases));
+                Is.EqualTo(AspRunner.AllTestCases));
             _client.AssertWasNotCalled(c => c.Credentials = Arg<ICredentials>.Is.NotNull);
         }
 
         [Test]
-        public void Running_tests_should_return_expected_results() {
-            var expectedResults = new Results();
-            _resultParser.Stub(p => p.Parse(Arg<string>.Is.Anything))
-                .Return(expectedResults);
-            var runner = CreateRunner();
+        public void WithAddress_should_set_address() {
+            const string address = "http://path/to/test-runner";
+            var runner = CreateRunner()
+                .WithAddress(address);
 
-            var results = runner.Run("http://path/to/test-runner");
+            Assert.That(runner.GetField(AddressField), Is.EqualTo(address));
+        }
+
+        [Test]
+        public void Running_tests_should_return_expected_results() {
+            var expectedHtml = "<HTML></HTML>";
+            var expectedResults = new Results();
+            _client.Stub(c => c.PostRequest(Arg<string>.Is.Anything, Arg<NameValueCollection>.Is.Anything))
+                .Return(expectedHtml);
+            _resultParser.Stub(p => p.Parse(expectedHtml))
+                .Return(expectedResults);
+
+            var runner = CreateRunner()
+                .WithAddress("http://path/to/test-runner");
+            var results = runner.Run();
             Assert.That(results, Is.EqualTo(expectedResults));
         }
 
         [Test]
         public void Running_tests_should_post_request_to_expected_address_with_all_test_containers() {
-            var expectedData = new NameValueCollection() {
-                { "cboTestContainers", Runner.AllTestContainers },
-                { "cboTestCases", Runner.AllTestCases },
+            var expectedData = new NameValueCollection {
+                { "cboTestContainers", AspRunner.AllTestContainers },
+                { "cboTestCases", AspRunner.AllTestCases },
                 { "cmdRun", "Run Tests"}
             };
 
-            var runner = CreateRunner();
-            var results = runner.Run("http://path/to/test-runner");
+            var runner = CreateRunner()
+                .WithAddress("http://path/to/test-runner");
+            var results = runner.Run();
 
             _client.AssertWasCalled(c =>
                 c.PostRequest(
@@ -69,15 +79,16 @@ namespace AspUnitRunner.Tests {
         [Test]
         public void Running_test_container_should_post_request_with_test_container() {
             const string testContainer = "TestContainer";
-            var expectedData = new NameValueCollection() {
+            var expectedData = new NameValueCollection {
                 { "cboTestContainers", testContainer },
-                { "cboTestCases", Runner.AllTestCases },
+                { "cboTestCases", AspRunner.AllTestCases },
                 { "cmdRun", "Run Tests"}
             };
 
             var runner = CreateRunner()
+                .WithAddress("http://path/to/test-runner")
                 .WithTestContainer(testContainer);
-            var results = runner.Run("http://path/to/test-runner");
+            var results = runner.Run();
 
             _client.AssertWasCalled(c =>
                 c.PostRequest(
@@ -89,15 +100,16 @@ namespace AspUnitRunner.Tests {
         public void Running_test_case_should_post_request_with_test_container_and_test_case() {
             const string testContainer = "TestContainer";
             const string testCase = "TestCase";
-            var expectedData = new NameValueCollection() {
+            var expectedData = new NameValueCollection {
                 { "cboTestContainers", testContainer },
                 { "cboTestCases", testCase },
                 { "cmdRun", "Run Tests"}
             };
 
             var runner = CreateRunner()
+                .WithAddress("http://path/to/test-runner")
                 .WithTestContainerAndCase(testContainer, testCase);
-            var results = runner.Run("http://path/to/test-runner");
+            var results = runner.Run();
 
             _client.AssertWasCalled(c =>
                 c.PostRequest(
@@ -130,7 +142,7 @@ namespace AspUnitRunner.Tests {
             var runner = CreateRunner();
 
             Assert.That(
-                () => runner.WithTestContainerAndCase(Runner.AllTestContainers, "TestCase"),
+                () => runner.WithTestContainerAndCase(AspRunner.AllTestContainers, "TestCase"),
                 Throws.InstanceOf<System.ArgumentException>());
         }
 
@@ -150,7 +162,7 @@ namespace AspUnitRunner.Tests {
                 .WithTestContainer(null);
 
             Assert.That(runner.GetField(TestContainerField),
-                Is.EqualTo(Runner.AllTestContainers));
+                Is.EqualTo(AspRunner.AllTestContainers));
         }
 
         [Test]
@@ -159,7 +171,7 @@ namespace AspUnitRunner.Tests {
                 .WithTestContainer("");
 
             Assert.That(runner.GetField(TestContainerField),
-                Is.EqualTo(Runner.AllTestContainers));
+                Is.EqualTo(AspRunner.AllTestContainers));
         }
 
         [Test]
@@ -181,7 +193,7 @@ namespace AspUnitRunner.Tests {
                 .WithTestContainerAndCase("TestContainer", null);
 
             Assert.That(runner.GetField(TestCaseField),
-                Is.EqualTo(Runner.AllTestCases));
+                Is.EqualTo(AspRunner.AllTestCases));
         }
 
         [Test]
@@ -190,11 +202,11 @@ namespace AspUnitRunner.Tests {
                 .WithTestContainerAndCase("TestContainer", "");
 
             Assert.That(runner.GetField(TestCaseField),
-                Is.EqualTo(Runner.AllTestCases));
+                Is.EqualTo(AspRunner.AllTestCases));
         }
 
-        private Runner CreateRunner() {
-            return new Runner(_client, _resultParser);
+        private AspRunner CreateRunner() {
+            return new AspRunner(_client, _resultParser);
         }
     }
 }

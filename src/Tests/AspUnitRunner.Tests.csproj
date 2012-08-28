@@ -58,6 +58,7 @@
     <Compile Include="Core\Html\TestHtmlElementParser.cs" />
     <Compile Include="Core\TestNameValueList.cs" />
     <Compile Include="Core\TestResultDetail.cs" />
+    <Compile Include="Core\TestAspRunner.cs" />
     <Compile Include="Helpers\CollectionsExtensions.cs" />
     <Compile Include="Helpers\HtmlElementEqualityComparer.cs" />
     <Compile Include="Helpers\ReflectionExtensions.cs" />
@@ -65,11 +66,11 @@
     <Compile Include="Infrastructure\TestAspClient.cs" />
     <Compile Include="Infrastructure\TestResponseDecoder.cs" />
     <Compile Include="Infrastructure\TestWebClientFactory.cs" />
-    <Compile Include="Infrastructure\TestIoc.cs" />
+    <Compile Include="IntegrationTests\Infrastructure\TestIoc.cs" />
     <Compile Include="Helpers\FakeTestFormatter.cs" />
     <Compile Include="Core\TestResultParser.cs" />
+    <Compile Include="IntegrationTests\TestRunner.cs" />
     <Compile Include="TestResults.cs" />
-    <Compile Include="TestRunner.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

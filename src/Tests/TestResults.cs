@@ -41,7 +41,7 @@ namespace AspUnitRunner.Tests {
         [Test]
         public void FormatDetails_with_empty_detail_should_return_empty_string() {
             var results = new Results {
-                Details = new ResultDetail[] { }
+                DetailList = new IResultDetail[] { }
             };
 
             Assert.That(results.FormatDetails(), Is.Empty);
@@ -50,7 +50,7 @@ namespace AspUnitRunner.Tests {
         [Test]
         public void FormatDetails_with_one_detail_should_return_expected_string() {
             var results = new Results {
-                Details = new[] {
+                DetailList = new IResultDetail[] {
                     new ResultDetail(ResultType.Failure, "Container.TestCase", "Description")
                 }
             };
@@ -64,7 +64,7 @@ namespace AspUnitRunner.Tests {
             var expectedFormat = "Failure: Container.Test1: First" + Environment.NewLine
                 + "Error: Container.Test2: Second";
             var results = new Results {
-                Details = new[] {
+                DetailList = new IResultDetail[] {
                     new ResultDetail(ResultType.Failure, "Container.Test1", "First"),
                     new ResultDetail(ResultType.Error, "Container.Test2", "Second")
                 }
@@ -94,7 +94,7 @@ namespace AspUnitRunner.Tests {
                 Tests = 5,
                 Errors = 1,
                 Failures = 1,
-                Details = new[] {
+                DetailList = new IResultDetail[] {
                     new ResultDetail(ResultType.Failure, "Container.Test1", "First"),
                     new ResultDetail(ResultType.Error, "Container.Test2", "Second")
                 }

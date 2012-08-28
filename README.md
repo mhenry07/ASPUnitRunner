@@ -28,38 +28,42 @@ with ASPUnit tests.
 	  Environment][] below)
 	* Or download binaries from
 	  <https://github.com/mhenry07/ASPUnitRunner/downloads>
-* From your test case method in .NET, create a new Runner object via 
-  `Runner.Create()`.
+* From your test case method in .NET, create a new IRunner instance via
+  `Runner.Create("http://localhost:port/path/to/tests")`.
+	* Specify the web address of your ASPUnit test suite.
 	* Configure the runner fluently by chaining zero or more of the following
 	  methods: `WithCredentials`, `WithEncoding`, `WithTestContainer` and 
 	  `WithTestContainerAndCase` to your *Runner.Create()* call.
-* Call the `Run` method with the web address of your ASPUnit test suite. This
-  will return a Results object containing your test results.
-* Assert that the `Successful` property of the Results object is true.
+* Call the `Run` method. This will run the ASPUnit tests and return an
+  IResults object containing your test results.
+* Assert that the `Successful` property of the IResults object is true.
 * Optionally, use the `Format` method for the assertion failure message.
-* Note that to run your tests, your web server will have to be started when 
+* Note that to run your tests, your web server will have to be running when 
   tests are executing.
 * As a security reminder, you probably don't want to publish your unit tests 
-  and the ASPUnit directory when you deploy your application to a 
-  production web server.
+  nor the ASPUnit directory when you deploy your application to a production 
+  web server.
+
 
 ### NUnit Example
 
+```csharp
 	using AspUnitRunner;
 	//...
 	
 	[Test]
 	public void CalculatorTest() {
-		var runner = Runner.Create()
+		// path to your ASPUnit test suite
+		var runner = Runner.Create("http://localhost:54831/tests/Default.asp")
 			.WithCredentials(new NetworkCredential("username", "password"))
 			.WithEncoding(Encoding.UTF8)
 			.WithTestContainer("CalculatorTest"); // run all tests within CalculatorTest
 	
-		// path to your ASPUnit test suite
-		var results = runner.Run("http://localhost:54831/tests/Default.asp");
+		var results = runner.Run();
 	
 		Assert.That(results.Successful, results.Format());
 	}
+```
 
 
 ## Development Environment
