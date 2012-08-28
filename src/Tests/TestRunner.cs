@@ -10,6 +10,7 @@ using AspUnitRunner.Tests.Helpers;
 namespace AspUnitRunner.Tests {
     [TestFixture]
     public class TestRunner {
+        private const string AddressField = "_address";
         private const string TestContainerField = "_testContainer";
         private const string TestCaseField = "_testCase";
 
@@ -36,6 +37,15 @@ namespace AspUnitRunner.Tests {
             Assert.That(runner.GetField(TestCaseField),
                 Is.EqualTo(Runner.AllTestCases));
             _client.AssertWasNotCalled(c => c.Credentials = Arg<ICredentials>.Is.NotNull);
+        }
+
+        [Test]
+        public void WithAddress_should_set_address() {
+            const string address = "http://path/to/test-runner";
+            var runner = CreateRunner()
+                .WithAddress(address);
+
+            Assert.That(runner.GetField(AddressField), Is.EqualTo(address));
         }
 
         [Test]

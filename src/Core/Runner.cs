@@ -18,6 +18,7 @@ namespace AspUnitRunner {
         private readonly IAspClient _client;
         private readonly IResultParser _resultParser;
 
+        private string _address;
         private string _testContainer = AllTestContainers;
         private string _testCase = AllTestCases;
 
@@ -29,9 +30,16 @@ namespace AspUnitRunner {
         /// <summary>
         /// Creates a new AspUnitRunner.Runner instance.
         /// </summary>
+        /// <param name="address">The URL for the ASPUnit tests.</param>
         /// <returns>A new AspUnitRunner.Runner instance.</returns>
-        public static Runner Create() {
-            return Infrastructure.Ioc.ResolveRunner();
+        public static Runner Create(string address) {
+            return Infrastructure.Ioc.ResolveRunner()
+                .WithAddress(address);
+        }
+
+        internal Runner WithAddress(string address) {
+            _address = address;
+            return this;
         }
 
         /// <summary>
