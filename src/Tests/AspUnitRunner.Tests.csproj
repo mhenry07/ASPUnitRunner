@@ -66,10 +66,10 @@
     <Compile Include="Infrastructure\TestAspClient.cs" />
     <Compile Include="Infrastructure\TestResponseDecoder.cs" />
     <Compile Include="Infrastructure\TestWebClientFactory.cs" />
-    <Compile Include="IntegrationTests\Infrastructure\TestIoc.cs" />
+    <Compile Include="Integration\Infrastructure\TestIoc.cs" />
     <Compile Include="Helpers\FakeTestFormatter.cs" />
     <Compile Include="Core\TestResultParser.cs" />
-    <Compile Include="IntegrationTests\TestRunner.cs" />
+    <Compile Include="Integration\TestRunner.cs" />
     <Compile Include="Core\TestResults.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

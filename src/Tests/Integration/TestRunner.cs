@@ -3,7 +3,7 @@ using AspUnitRunner;
 using AspUnitRunner.Core;
 using AspUnitRunner.Tests.Helpers;
 
-namespace AspUnitRunner.Tests.IntegrationTests {
+namespace AspUnitRunner.Tests.Integration {
     [TestFixture]
     public class TestRunner {
         private const string AddressField = "_address";
