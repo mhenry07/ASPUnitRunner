@@ -68,7 +68,7 @@
     <Compile Include="IResults.cs" />
     <Compile Include="IRunner.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Results.cs" />
+    <Compile Include="Core\Results.cs" />
     <Compile Include="Runner.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

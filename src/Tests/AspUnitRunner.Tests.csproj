@@ -70,7 +70,7 @@
     <Compile Include="Helpers\FakeTestFormatter.cs" />
     <Compile Include="Core\TestResultParser.cs" />
     <Compile Include="IntegrationTests\TestRunner.cs" />
-    <Compile Include="TestResults.cs" />
+    <Compile Include="Core\TestResults.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
