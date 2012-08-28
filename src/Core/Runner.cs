@@ -95,10 +95,9 @@ namespace AspUnitRunner {
         /// <summary>
         /// Runs ASPUnit tests and returns results.
         /// </summary>
-        /// <param name="address">The URL for the ASPUnit tests.</param>
         /// <returns>An AspUnitRunner.Results containing the test results.</returns>
-        public Results Run(string address) {
-            var htmlResults = _client.PostRequest(FormatUrl(address), GetPostData());
+        public Results Run() {
+            var htmlResults = _client.PostRequest(FormatUrl(_address), GetPostData());
             return _resultParser.Parse(htmlResults);
         }
 

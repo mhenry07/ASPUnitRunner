@@ -20,11 +20,6 @@ namespace AspUnitRunner.Tests {
         [SetUp]
         public void SetUp() {
             _client = MockRepository.GenerateMock<IAspClient>();
-            _client.Stub(c =>
-                    c.PostRequest(
-                        Arg<string>.Is.Anything,
-                        Arg<NameValueCollection>.Is.Anything))
-                .Return(FakeTestFormatter.FormatSummary(1, 0, 0));
             _resultParser = MockRepository.GenerateStub<IResultParser>();
         }
 
@@ -50,25 +45,30 @@ namespace AspUnitRunner.Tests {
 
         [Test]
         public void Running_tests_should_return_expected_results() {
+            var expectedHtml = "<HTML></HTML>";
             var expectedResults = new Results();
-            _resultParser.Stub(p => p.Parse(Arg<string>.Is.Anything))
+            _client.Stub(c => c.PostRequest(Arg<string>.Is.Anything, Arg<NameValueCollection>.Is.Anything))
+                .Return(expectedHtml);
+            _resultParser.Stub(p => p.Parse(expectedHtml))
                 .Return(expectedResults);
-            var runner = CreateRunner();
 
-            var results = runner.Run("http://path/to/test-runner");
+            var runner = CreateRunner()
+                .WithAddress("http://path/to/test-runner");
+            var results = runner.Run();
             Assert.That(results, Is.EqualTo(expectedResults));
         }
 
         [Test]
         public void Running_tests_should_post_request_to_expected_address_with_all_test_containers() {
-            var expectedData = new NameValueCollection() {
+            var expectedData = new NameValueCollection {
                 { "cboTestContainers", Runner.AllTestContainers },
                 { "cboTestCases", Runner.AllTestCases },
                 { "cmdRun", "Run Tests"}
             };
 
-            var runner = CreateRunner();
-            var results = runner.Run("http://path/to/test-runner");
+            var runner = CreateRunner()
+                .WithAddress("http://path/to/test-runner");
+            var results = runner.Run();
 
             _client.AssertWasCalled(c =>
                 c.PostRequest(
@@ -79,15 +79,16 @@ namespace AspUnitRunner.Tests {
         [Test]
         public void Running_test_container_should_post_request_with_test_container() {
             const string testContainer = "TestContainer";
-            var expectedData = new NameValueCollection() {
+            var expectedData = new NameValueCollection {
                 { "cboTestContainers", testContainer },
                 { "cboTestCases", Runner.AllTestCases },
                 { "cmdRun", "Run Tests"}
             };
 
             var runner = CreateRunner()
+                .WithAddress("http://path/to/test-runner")
                 .WithTestContainer(testContainer);
-            var results = runner.Run("http://path/to/test-runner");
+            var results = runner.Run();
 
             _client.AssertWasCalled(c =>
                 c.PostRequest(
@@ -99,15 +100,16 @@ namespace AspUnitRunner.Tests {
         public void Running_test_case_should_post_request_with_test_container_and_test_case() {
             const string testContainer = "TestContainer";
             const string testCase = "TestCase";
-            var expectedData = new NameValueCollection() {
+            var expectedData = new NameValueCollection {
                 { "cboTestContainers", testContainer },
                 { "cboTestCases", testCase },
                 { "cmdRun", "Run Tests"}
             };
 
             var runner = CreateRunner()
+                .WithAddress("http://path/to/test-runner")
                 .WithTestContainerAndCase(testContainer, testCase);
-            var results = runner.Run("http://path/to/test-runner");
+            var results = runner.Run();
 
             _client.AssertWasCalled(c =>
                 c.PostRequest(
