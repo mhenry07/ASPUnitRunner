@@ -12,7 +12,7 @@ ASPUnit is an xUnit framework for classic ASP/VBScript. See
 ASPUnitRunner and ASPUnit.
 
 Mike Henry  
-<http://www.mikehenry.name/>
+<https://github.com/mhenry07/ASPUnitRunner>
 
 
 ## Usage
@@ -104,7 +104,7 @@ Then, you can build the main project and run tests via `rake`.
 of Microsoft tools.
 
 [Microsoft .NET Framework 4]: http://www.microsoft.com/en-us/download/details.aspx?id=17851
-[Visual Web Developer Express 2010 SP1]: http://www.microsoft.com/visualstudio/en-us/products/2010-editions/visual-web-developer-express
+[Visual Web Developer Express 2010]: http://www.microsoft.com/visualstudio/en-us/products/2010-editions/visual-web-developer-express
 [Visual Studio 2010]: http://www.microsoft.com/visualstudio/en-us/products/2010-editions
 [IIS Express]: http://learn.iis.net/page.aspx/860/iis-express/
 [Microsoft Web Platform Installer]: http://www.microsoft.com/web/downloads/platform.aspx
