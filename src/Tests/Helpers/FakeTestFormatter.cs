@@ -32,7 +32,7 @@ namespace AspUnitRunner.Tests.Helpers {
             return string.Format(htmlTestResults, summaryRow);
         }
 
-        public static string FormatResults(int tests, int errors, int failures, IEnumerable<ResultDetail> details) {
+        public static string FormatResults(int tests, int errors, int failures, IEnumerable<IResultDetail> details) {
             var stringBuilder = new StringBuilder();
             foreach (var detail in details)
                 stringBuilder.Append(FormatDetailRow(detail));
@@ -40,7 +40,7 @@ namespace AspUnitRunner.Tests.Helpers {
             return string.Format(htmlTestResults, stringBuilder.ToString());
         }
 
-        private static string FormatDetailRow(ResultDetail detail) {
+        private static string FormatDetailRow(IResultDetail detail) {
             return string.Format(testDetailRow,
                 GetRowClass(detail.Type), detail.Type.ToString(), detail.Name, detail.Description);
         }

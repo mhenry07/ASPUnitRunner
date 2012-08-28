@@ -25,7 +25,7 @@ namespace AspUnitRunner.Core {
         public IResults Parse(string htmlResults) {
             _results = new Results {
                 Html = htmlResults,
-                DetailList = new List<ResultDetail>()
+                DetailList = new List<IResultDetail>()
             };
 
             var doc = _htmlDocumentFactory.Create(_results.Html);
@@ -48,7 +48,7 @@ namespace AspUnitRunner.Core {
             var cells = row.GetElementsByTagName("TD");
 
             if (IsDetailRow(row, cells)) {
-                var details = (IList<ResultDetail>)_results.DetailList;
+                var details = (IList<IResultDetail>)_results.DetailList;
                 details.Add(ParseDetail(cells));
                 return;
             }
@@ -79,7 +79,7 @@ namespace AspUnitRunner.Core {
             return cell.GetAttribute("COLSPAN") == "3";
         }
 
-        private static ResultDetail ParseDetail(IHtmlCollection cells) {
+        private static IResultDetail ParseDetail(IHtmlCollection cells) {
             var type = ParseResultType(cells[DetailTypeIndex].Text);
 
             return new ResultDetail(type,

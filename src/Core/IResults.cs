@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using AspUnitRunner.Core;
 
 namespace AspUnitRunner {
     /// <summary>
@@ -29,7 +28,7 @@ namespace AspUnitRunner {
         /// <summary>
         /// Gets the collection of test details.
         /// </summary>
-        IEnumerable<ResultDetail> DetailList { get; }
+        IEnumerable<IResultDetail> DetailList { get; }
 
         /// <summary>
         /// Gets the raw HTML test results.

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using AspUnitRunner.Core;
 
 namespace AspUnitRunner {
     // TODO: move to Core and make internal after old api has been removed
@@ -39,7 +38,7 @@ namespace AspUnitRunner {
         /// <summary>
         /// Gets the collection of test details.
         /// </summary>
-        public IEnumerable<ResultDetail> DetailList { get; internal set; }
+        public IEnumerable<IResultDetail> DetailList { get; internal set; }
 
         /// <summary>
         /// Gets the raw HTML test results.
