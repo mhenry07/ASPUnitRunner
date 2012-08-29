@@ -15,14 +15,18 @@ namespace AspUnitRunner.Core {
         }
 
         public IEnumerable<string> ParseContainers(string html) {
-            var document = _htmlDocumentFactory.Create(html);
-            var selectorForm = GetSelectorForm(document);
-            var testContainersSelect = GetSelectElement(selectorForm, TestContainersSelectName);
-            return ParseSelectorOptions(testContainersSelect);
+            return ParseSelectorOptions(html, TestContainersSelectName);
         }
 
         public IEnumerable<string> ParseTestCases(string html) {
-            throw new NotImplementedException();
+            return ParseSelectorOptions(html, TestCasesSelectName);
+        }
+
+        private IEnumerable<string> ParseSelectorOptions(string html, string selectName) {
+            var document = _htmlDocumentFactory.Create(html);
+            var selectorForm = GetSelectorForm(document);
+            var selectElement = GetSelectElement(selectorForm, selectName);
+            return GetSelectorOptionContents(selectElement);
         }
 
         private static IHtmlElement GetSelectorForm(IHtmlDocument document) {
@@ -43,7 +47,7 @@ namespace AspUnitRunner.Core {
         }
 
         // ignores the first option (All Test Containers or All Test Cases)
-        private static IEnumerable<string> ParseSelectorOptions(IHtmlElement selectElement) {
+        private static IEnumerable<string> GetSelectorOptionContents(IHtmlElement selectElement) {
             var result = new List<string>();
             var optionElements = HtmlElementParser.GetOptionElements(selectElement.InnerHtml);
             foreach (var option in optionElements)

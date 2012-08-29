@@ -29,6 +29,29 @@ namespace AspUnitRunner.Tests.Unit.Core {
             Assert.That(containers, Is.EqualTo(expectedContainers));
         }
 
+        [Test]
+        public void ParseTestCases_empty_should_return_empty_list() {
+            var html = FakeTestFormatter.FormatSelector(new string[] { }, new string[] { });
+
+            var parser = CreateSelectorParser(html);
+            var testCases = parser.ParseTestCases(html);
+            Assert.That(testCases, Is.Empty);
+        }
+
+        [Test]
+        public void ParseTestCases_should_return_expected_test_cases() {
+            var testContainers = new[] { "Container" };
+            var expectedTestCases = new[] {
+                "first",
+                "second"
+            };
+            var html = FakeTestFormatter.FormatSelector(testContainers, expectedTestCases);
+
+            var parser = CreateSelectorParser(html);
+            var testCases = parser.ParseTestCases(html);
+            Assert.That(testCases, Is.EqualTo(expectedTestCases));
+        }
+
         private SelectorParser CreateSelectorParser(string html) {
             var htmlDocumentFactory = MockRepository.GenerateStub<IHtmlDocumentFactory>();
             htmlDocumentFactory.Stub(f => f.Create(html))
