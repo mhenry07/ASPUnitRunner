@@ -22,12 +22,6 @@ namespace AspUnitRunner.Core {
         private string _testContainer = AllTestContainers;
         private string _testCase = AllTestCases;
 
-        [Obsolete]
-        internal AspRunner(IAspClient client, IResultParser resultParser) {
-            _client = client;
-            _resultParser = resultParser;
-        }
-
         internal AspRunner(IAspClient client, IResultParser resultParser, ISelectorParser selectorParser) {
             _client = client;
             _resultParser = resultParser;
