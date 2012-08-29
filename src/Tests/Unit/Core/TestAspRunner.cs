@@ -16,11 +16,13 @@ namespace AspUnitRunner.Tests.Unit.Core {
 
         private IAspClient _client;
         private IResultParser _resultParser;
+        private ISelectorParser _selectorParser;
 
         [SetUp]
         public void SetUp() {
             _client = MockRepository.GenerateMock<IAspClient>();
             _resultParser = MockRepository.GenerateStub<IResultParser>();
+            _selectorParser = MockRepository.GenerateStub<ISelectorParser>();
         }
 
         [Test]
@@ -118,6 +120,36 @@ namespace AspUnitRunner.Tests.Unit.Core {
         }
 
         [Test]
+        public void GetTestContainers_should_return_expected_collection() {
+            const string expectedHtml = "<HTML></HTML>";
+            var expectedContainers = new[] {
+                "FirstContainer",
+                "SecondContainer"
+            };
+            _client.Stub(c => c.PostRequest(Arg<string>.Is.Anything, Arg<NameValueCollection>.Is.Anything))
+                .Return(expectedHtml);
+            _selectorParser.Stub(p => p.ParseContainers(expectedHtml))
+                .Return(expectedContainers);
+
+            var runner = (AspRunner)CreateRunner()
+                .WithAddress("http://path/to/test-runner");
+            var testContainers = runner.GetTestContainers();
+            Assert.That(testContainers, Is.EqualTo(expectedContainers));
+        }
+
+        [Test]
+        public void GetTestContainers_should_post_request_to_expected_address() {
+            var runner = (AspRunner)CreateRunner()
+                .WithAddress("http://path/to/test-runner");
+            var testContainers = runner.GetTestContainers();
+
+            _client.AssertWasCalled(c =>
+                c.PostRequest(
+                    Arg.Is("http://path/to/test-runner?UnitRunner=selector"),
+                    Arg<NameValueCollection>.Is.Anything));
+        }
+
+        [Test]
         public void WithCredentials_should_set_client_credentials() {
             var credentials = new NetworkCredential("username", "password");
 
@@ -206,7 +238,7 @@ namespace AspUnitRunner.Tests.Unit.Core {
         }
 
         private AspRunner CreateRunner() {
-            return new AspRunner(_client, _resultParser);
+            return new AspRunner(_client, _resultParser, _selectorParser);
         }
     }
 }

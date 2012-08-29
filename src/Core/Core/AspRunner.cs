@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Net;
 using System.Text;
@@ -9,18 +10,28 @@ namespace AspUnitRunner.Core {
         internal const string AllTestCases = "All Test Cases";
 
         private const string RunCommand = "Run Tests";
-        private const string ResultsQueryString = "?UnitRunner=results";
+        private const string RunnerQueryString = "?UnitRunner={0}";
+        private const string RunnerSelector = "selector";
+        private const string RunnerResults = "results";
 
         private readonly IAspClient _client;
         private readonly IResultParser _resultParser;
+        private readonly ISelectorParser _selectorParser;
 
         private string _address;
         private string _testContainer = AllTestContainers;
         private string _testCase = AllTestCases;
 
+        [Obsolete]
         internal AspRunner(IAspClient client, IResultParser resultParser) {
             _client = client;
             _resultParser = resultParser;
+        }
+
+        internal AspRunner(IAspClient client, IResultParser resultParser, ISelectorParser selectorParser) {
+            _client = client;
+            _resultParser = resultParser;
+            _selectorParser = selectorParser;
         }
 
         internal IRunner WithAddress(string address) {
@@ -53,12 +64,21 @@ namespace AspUnitRunner.Core {
         }
 
         public IResults Run() {
-            var htmlResults = _client.PostRequest(FormatUrl(_address), GetPostData());
+            var htmlResults = _client.PostRequest(FormatResultsUrl(_address), GetPostData());
             return _resultParser.Parse(htmlResults);
         }
 
-        private string FormatUrl(string address) {
-            return address + ResultsQueryString;
+        public IEnumerable<string> GetTestContainers() {
+            var htmlResults = _client.PostRequest(FormatSelectorUrl(_address), GetPostData());
+            return _selectorParser.ParseContainers(htmlResults);
+        }
+
+        private string FormatResultsUrl(string address) {
+            return address + string.Format(RunnerQueryString, RunnerResults);
+        }
+
+        private string FormatSelectorUrl(string address) {
+            return address + string.Format(RunnerQueryString, RunnerSelector);
         }
 
         private NameValueCollection GetPostData() {
