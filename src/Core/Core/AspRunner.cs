@@ -71,7 +71,7 @@ namespace AspUnitRunner.Core {
         public IEnumerable<string> GetTestCases(string testContainer) {
             var htmlResults = _client.PostRequest(
                 FormatSelectorUrl(_address), GetPostData(testContainer, AllTestCases));
-            return _selectorParser.ParseTestCases(htmlResults, testContainer);
+            return _selectorParser.ParseTestCases(htmlResults);
         }
 
         private string FormatResultsUrl(string address) {

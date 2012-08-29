@@ -159,7 +159,7 @@ namespace AspUnitRunner.Tests.Unit.Core {
             };
             _client.Stub(c => c.PostRequest(Arg<string>.Is.Anything, Arg<NameValueCollection>.Is.Anything))
                 .Return(expectedHtml);
-            _selectorParser.Stub(p => p.ParseTestCases(expectedHtml, testContainer))
+            _selectorParser.Stub(p => p.ParseTestCases(expectedHtml))
                 .Return(expectedTestCases);
 
             var runner = (AspRunner)CreateRunner()

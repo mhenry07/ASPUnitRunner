@@ -21,7 +21,7 @@ namespace AspUnitRunner.Core {
             return ParseSelectorOptions(testContainersSelect);
         }
 
-        public IEnumerable<string> ParseTestCases(string html, string container) {
+        public IEnumerable<string> ParseTestCases(string html) {
             throw new NotImplementedException();
         }
 
