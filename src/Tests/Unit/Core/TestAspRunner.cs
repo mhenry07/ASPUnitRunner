@@ -150,6 +150,39 @@ namespace AspUnitRunner.Tests.Unit.Core {
         }
 
         [Test]
+        public void GetTestCases_should_return_expected_collection() {
+            const string testContainer = "Container";
+            const string expectedHtml = "<HTML></HTML>";
+            var expectedTestCases = new[] {
+                "FirstTest",
+                "SecondTest"
+            };
+            _client.Stub(c => c.PostRequest(Arg<string>.Is.Anything, Arg<NameValueCollection>.Is.Anything))
+                .Return(expectedHtml);
+            _selectorParser.Stub(p => p.ParseTestCases(expectedHtml, testContainer))
+                .Return(expectedTestCases);
+
+            var runner = (AspRunner)CreateRunner()
+                .WithAddress("http://path/to/test-runner");
+            var testCases = runner.GetTestCases(testContainer);
+            Assert.That(testCases, Is.EqualTo(expectedTestCases));
+        }
+
+        [Test]
+        public void GetTestCases_should_post_request_with_expected_address_and_container() {
+            const string testContainer = "Container";
+
+            var runner = (AspRunner)CreateRunner()
+                .WithAddress("http://path/to/test-runner");
+            var testContainers = runner.GetTestCases(testContainer);
+
+            _client.AssertWasCalled(c =>
+                c.PostRequest(
+                    Arg.Is("http://path/to/test-runner?UnitRunner=selector"),
+                    Arg<NameValueCollection>.Matches(arg => arg["cboTestContainers"] == testContainer)));
+        }
+
+        [Test]
         public void WithCredentials_should_set_client_credentials() {
             var credentials = new NetworkCredential("username", "password");
 

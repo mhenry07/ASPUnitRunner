@@ -69,8 +69,15 @@ namespace AspUnitRunner.Core {
         }
 
         public IEnumerable<string> GetTestContainers() {
-            var htmlResults = _client.PostRequest(FormatSelectorUrl(_address), GetPostData());
+            var htmlResults = _client.PostRequest(
+                FormatSelectorUrl(_address), GetPostData(AllTestContainers, AllTestCases));
             return _selectorParser.ParseContainers(htmlResults);
+        }
+
+        public IEnumerable<string> GetTestCases(string testContainer) {
+            var htmlResults = _client.PostRequest(
+                FormatSelectorUrl(_address), GetPostData(testContainer, AllTestCases));
+            return _selectorParser.ParseTestCases(htmlResults, testContainer);
         }
 
         private string FormatResultsUrl(string address) {
@@ -82,9 +89,13 @@ namespace AspUnitRunner.Core {
         }
 
         private NameValueCollection GetPostData() {
+            return GetPostData(_testContainer, _testCase);
+        }
+
+        private NameValueCollection GetPostData(string testContainer, string testCase) {
             return new NameValueCollection {
-                { "cboTestContainers", _testContainer },
-                { "cboTestCases", _testCase },
+                { "cboTestContainers", testContainer },
+                { "cboTestCases", testCase },
                 { "cmdRun", RunCommand }
             };
         }

@@ -16,6 +16,8 @@ namespace AspUnitRunner.Tests.Integration.Infrastructure {
             Assert.That(client, Is.InstanceOf<AspClient>());
             var resultParser = runner.GetField("_resultParser");
             Assert.That(resultParser, Is.InstanceOf<ResultParser>());
+            //var selectorParser = runner.GetField("_selectorParser");
+            //Assert.That(selectorParser, Is.InstanceOf<SelectorParser>());
 
             Assert.That(client.GetField("_factory"),
                 Is.InstanceOf<WebClientFactory>());
