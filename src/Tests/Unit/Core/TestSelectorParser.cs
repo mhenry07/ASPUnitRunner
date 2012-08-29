@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System;
+using NUnit.Framework;
 using Rhino.Mocks;
 using AspUnitRunner.Core;
 using AspUnitRunner.Core.Html;
@@ -30,6 +31,15 @@ namespace AspUnitRunner.Tests.Unit.Core {
         }
 
         [Test]
+        public void ParseContainers_invalid_response_should_throw_format_exception() {
+            var parser = CreateSelectorParser("");
+
+            Assert.That(
+                () => parser.ParseContainers(""),
+                Throws.InstanceOf<FormatException>());
+        }
+
+        [Test]
         public void ParseTestCases_empty_should_return_empty_list() {
             var html = FakeTestFormatter.FormatSelector(new string[] { }, new string[] { });
 
@@ -50,6 +60,15 @@ namespace AspUnitRunner.Tests.Unit.Core {
             var parser = CreateSelectorParser(html);
             var testCases = parser.ParseTestCases(html);
             Assert.That(testCases, Is.EqualTo(expectedTestCases));
+        }
+
+        [Test]
+        public void ParseTestCases_invalid_response_should_throw_format_exception() {
+            var parser = CreateSelectorParser("");
+
+            Assert.That(
+                () => parser.ParseTestCases(""),
+                Throws.InstanceOf<FormatException>());
         }
 
         private SelectorParser CreateSelectorParser(string html) {
