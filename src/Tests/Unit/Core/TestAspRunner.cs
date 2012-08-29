@@ -131,7 +131,7 @@ namespace AspUnitRunner.Tests.Unit.Core {
             _selectorParser.Stub(p => p.ParseContainers(expectedHtml))
                 .Return(expectedContainers);
 
-            var runner = (AspRunner)CreateRunner()
+            var runner = CreateRunner()
                 .WithAddress("http://path/to/test-runner");
             var testContainers = runner.GetTestContainers();
             Assert.That(testContainers, Is.EqualTo(expectedContainers));
@@ -139,7 +139,7 @@ namespace AspUnitRunner.Tests.Unit.Core {
 
         [Test]
         public void GetTestContainers_should_post_request_to_expected_address() {
-            var runner = (AspRunner)CreateRunner()
+            var runner = CreateRunner()
                 .WithAddress("http://path/to/test-runner");
             var testContainers = runner.GetTestContainers();
 
@@ -162,7 +162,7 @@ namespace AspUnitRunner.Tests.Unit.Core {
             _selectorParser.Stub(p => p.ParseTestCases(expectedHtml))
                 .Return(expectedTestCases);
 
-            var runner = (AspRunner)CreateRunner()
+            var runner = CreateRunner()
                 .WithAddress("http://path/to/test-runner");
             var testCases = runner.GetTestCases(testContainer);
             Assert.That(testCases, Is.EqualTo(expectedTestCases));
@@ -172,7 +172,7 @@ namespace AspUnitRunner.Tests.Unit.Core {
         public void GetTestCases_should_post_request_with_expected_address_and_container() {
             const string testContainer = "Container";
 
-            var runner = (AspRunner)CreateRunner()
+            var runner = CreateRunner()
                 .WithAddress("http://path/to/test-runner");
             var testContainers = runner.GetTestCases(testContainer);
 
