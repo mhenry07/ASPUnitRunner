@@ -4,8 +4,10 @@ using NUnit.Framework;
 using AspUnitRunner;
 
 namespace AspUnitRunner.Sample.Tests.NUnit {
+    // demonstrates manually specifying test container names for an ASPUnit test suite
+    // (one NUnit test per ASPUnit container)
     [TestFixture]
-    public class TestAsp {
+    public class TestManual {
         // set the URL for your ASPUnit tests
         private const string AspTestUrl = "http://localhost:54831/tests/Default.asp";
         // set the site name as configured in IIS Express (defaults to name of sample web project: AspUnitRunner.Sample.Web)
@@ -14,7 +16,7 @@ namespace AspUnitRunner.Sample.Tests.NUnit {
         private IisExpressServer _iisServer;
 
         [Test]
-        public void TestCase(
+        public void TestContainer(
             // set ASPUnit test containers here
             [Values("CalculatorTest", "StringUtilityTest", "FailureTest")] string testContainer
         ) {
