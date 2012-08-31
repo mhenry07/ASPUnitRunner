@@ -24,18 +24,20 @@ with ASPUnit tests.
 
 * Get AspUnitRunner.dll and reference it from your .NET test project (NUnit
   or other framework).
-	* For the latest, get the source and build it yourself (see [Development
-	  Environment][] below)
+	* For the latest, get the source and build it yourself (see *Development
+	  Environment* below)
 	* Or download binaries from
 	  <https://github.com/mhenry07/ASPUnitRunner/downloads>
 * From your test case method in .NET, create a new IRunner instance via
   `Runner.Create("http://localhost:port/path/to/tests")`.
 	* Specify the web address of your ASPUnit test suite.
 	* Configure the runner fluently by chaining zero or more of the following
-	  methods: `WithCredentials`, `WithEncoding`, `WithTestContainer` and 
-	  `WithTestContainerAndCase` to your *Runner.Create()* call.
+	  methods: `WithCredentials` and `WithEncoding` to your *Runner.Create()*
+	  call.
 * Call the `Run` method. This will run the ASPUnit tests and return an
   IResults object containing your test results.
+	* Optionally, specify the ASPUnit test container and test case you wish
+	  to run.
 * Assert that the `Successful` property of the IResults object is true.
 * Optionally, use the `Format` method for the assertion failure message.
 * Note that to run your tests, your web server will have to be running when 
@@ -56,10 +58,9 @@ with ASPUnit tests.
 		// path to your ASPUnit test suite
 		var runner = Runner.Create("http://localhost:54831/tests/Default.asp")
 			.WithCredentials(new NetworkCredential("username", "password"))
-			.WithEncoding(Encoding.UTF8)
-			.WithTestContainer("CalculatorTest"); // run all tests within CalculatorTest
+			.WithEncoding(Encoding.UTF8);
 	
-		var results = runner.Run();
+		var results = runner.Run("CalculatorTest"); // run all tests within CalculatorTest
 	
 		Assert.That(results.Successful, results.Format());
 	}
