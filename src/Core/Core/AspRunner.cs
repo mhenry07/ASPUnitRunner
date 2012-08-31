@@ -43,10 +43,12 @@ namespace AspUnitRunner.Core {
             return this;
         }
 
+        [Obsolete]
         public IRunner WithTestContainer(string testContainer) {
             return WithTestContainerAndCase(testContainer, AllTestCases);
         }
 
+        [Obsolete]
         public IRunner WithTestContainerAndCase(string testContainer, string testCase) {
             if (IsSpecified(testCase, AllTestCases) && !IsSpecified(testContainer, AllTestContainers))
                 throw new ArgumentException("A test container must be specified if a test case is specified.", "testContainer");

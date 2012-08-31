@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Text;
 
@@ -25,20 +26,24 @@ namespace AspUnitRunner {
         IRunner WithEncoding(Encoding encoding);
 
         /// <summary>
+        /// Deprecated: Use Run(testContainer) instead.
         /// Sets the name of the test container from which to run tests
         /// and returns the current IRunner instance.
         /// </summary>
         /// <param name="testContainer">The test container.</param>
         /// <returns>The current IRunner instance.</returns>
+        [Obsolete]
         IRunner WithTestContainer(string testContainer);
 
         /// <summary>
+        /// Deprecated: Use Run(testContainer, testCase) instead.
         /// Sets the name of the test container and test case to execute
         /// and returns the current IRunner object.
         /// </summary>
         /// <param name="testContainer">The test container containing the test case.</param>
         /// <param name="testCase">The test case to execute.</param>
         /// <returns>The current IRunner instance.</returns>
+        [Obsolete]
         IRunner WithTestContainerAndCase(string testContainer, string testCase);
 
         /// <summary>
