@@ -58,7 +58,16 @@ namespace AspUnitRunner.Core {
         }
 
         public IResults Run() {
-            var htmlResults = _client.PostRequest(FormatResultsUrl(_address), GetPostData());
+            return Run(_testContainer ?? AllTestContainers, _testCase ?? AllTestCases);
+        }
+
+        public IResults Run(string testContainer) {
+            return Run(testContainer, AllTestCases);
+        }
+
+        public IResults Run(string testContainer, string testCase) {
+            var htmlResults = _client.PostRequest(
+                FormatResultsUrl(_address), GetPostData(testContainer, testCase));
             return _resultParser.Parse(htmlResults);
         }
 

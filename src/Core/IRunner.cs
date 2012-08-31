@@ -50,6 +50,25 @@ namespace AspUnitRunner {
         IResults Run();
 
         /// <summary>
+        /// Runs tests from the ASPUnit test container and returns results.
+        /// </summary>
+        /// <param name="testContainer">The ASPUnit test container.</param>
+        /// <returns>
+        /// An AspUnitRunner.IResults instance containing the test results.
+        /// </returns>
+        IResults Run(string testContainer);
+
+        /// <summary>
+        /// Runs the specified ASPUnit test case and returns results.
+        /// </summary>
+        /// <param name="testContainer">The ASPUnit test container.</param>
+        /// <param name="testCase">The ASPUnit test case.</param>
+        /// <returns>
+        /// An AspUnitRunner.IResults instance containing the test results.
+        /// </returns>
+        IResults Run(string testContainer, string testCase);
+
+        /// <summary>
         /// Retrieves the list of ASPUnit test containers.
         /// </summary>
         /// <returns>An IEnumerable&lt;string&gt; of test container names.</returns>
