@@ -1,30 +1,34 @@
 require 'albacore'
 
-NUGET = ".nuget/nuget.exe"
-PACKAGES_DIR = "lib"
+ROOT = File.expand_path(File.dirname(__FILE__))
+BUILD_DIR = File.join(ROOT, "build")
+DELIVERABLES_DIR = File.join(ROOT, "deliverables")
+PACKAGES_DIR = File.join(ROOT, "lib")
+SAMPLE_DIR = File.join(ROOT, "sample")
+SOURCE_DIR = File.join(ROOT, "src")
+
+NUGET = File.join(ROOT, ".nuget", "nuget.exe")
 NUNIT_PACKAGE = "NUnit.Runners"
-NUNIT_CONSOLE = "#{PACKAGES_DIR}/#{NUNIT_PACKAGE}/tools/nunit-console.exe"
+NUNIT_CONSOLE = File.join(PACKAGES_DIR, NUNIT_PACKAGE, "tools", "nunit-console.exe")
 
 IIS_EXPRESS_EXE = "iisexpress.exe"
 IIS_EXPRESS_DIR = "IIS Express"
 SITE_NAME = "AspUnitRunner.Sample.Web"
-WEB_SAMPLE_DIR = "sample/Web"
+WEB_SAMPLE_DIR = File.join(SAMPLE_DIR, "Web")
 WEB_PORT = "54831"
 WEB_ADDRESS = "http://localhost:#{WEB_PORT}"
 
 MAIN_NAME = "AspUnitRunner"
-MAIN_SOLUTION = "src/#{MAIN_NAME}.sln"
-CORE_PROJECT = "src/Core/#{MAIN_NAME}.csproj"
-MAIN_TESTS = "src/Tests/AspUnitRunner.Tests.csproj"
-SAMPLE_SOLUTION = "sample/AspUnitRunner.Sample.sln"
-SAMPLE_TESTS = "sample/Tests.NUnit/AspUnitRunner.Sample.Tests.NUnit.csproj"
+MAIN_SOLUTION = File.join(SOURCE_DIR, "#{MAIN_NAME}.sln")
+CORE_PROJECT = File.join(SOURCE_DIR, "Core", "#{MAIN_NAME}.csproj")
+MAIN_TESTS = File.join(SOURCE_DIR, "Tests", "AspUnitRunner.Tests.csproj")
+SAMPLE_SOLUTION = File.join(SAMPLE_DIR, "AspUnitRunner.Sample.sln")
+SAMPLE_TESTS = File.join(SAMPLE_DIR, "Tests.NUnit", "AspUnitRunner.Sample.Tests.NUnit.csproj")
 
 BUILD_CONFIGURATION = "Release"
-BUILD_DIR = "build/" # note the ending slash to avoid conflict with :build task
-DELIVERABLES_DIR = "deliverables/"
 
-VERSION_FILE = "VERSION.txt"
-COMMON_ASSEMBLY_TEMPLATE = File.join("src", "CommonAssemblyInfo.template.cs")
+VERSION_FILE = File.join(ROOT, "VERSION.txt")
+COMMON_ASSEMBLY_TEMPLATE = File.join(SOURCE_DIR, "CommonAssemblyInfo.template.cs")
 
 # suppress DSL deprecation errors from albacore output tasks for now
 # see https://github.com/derickbailey/Albacore/issues/165
@@ -85,7 +89,7 @@ namespace :build do
 
 	namespace :copy do
 		output :core => BUILD_DIR do |out|
-			source_dir = "src/Core/bin/#{BUILD_CONFIGURATION}"
+			source_dir = File.join(SOURCE_DIR, "Core", "bin", BUILD_CONFIGURATION)
 			core_build_dir = File.join(BUILD_DIR, MAIN_NAME)
 
 			files = []
@@ -134,7 +138,7 @@ namespace :test do
 	# use NuGet to get NUnit.Runners
 	# note: if nuget.exe was missing, a build prereq should've grabbed it
 	file NUNIT_CONSOLE do
-		sh %{#{NUGET} install #{NUNIT_PACKAGE} -o #{PACKAGES_DIR} -x}
+		sh %{"#{NUGET}" install #{NUNIT_PACKAGE} -o "#{PACKAGES_DIR}" -x}
 	end
 end
 
@@ -185,7 +189,7 @@ namespace :web do
 
 	# IIS Express seems to require backslashes in path
 	def get_web_sample_path()
-		return backslashify(File.join(Dir.pwd, WEB_SAMPLE_DIR))
+		return backslashify(WEB_SAMPLE_DIR)
 	end
 
 	def backslashify(path)
@@ -210,7 +214,7 @@ namespace :version do
 	# desc "Generate assembly version information"
 	assemblyinfo :set => COMMON_ASSEMBLY_TEMPLATE do |asm|
 		base_version = get_base_version
-		# build # based on date (2-digit year, 3-digit day of year, e.g. 12235)
+		# build number based on date (2-digit year, 3-digit day of year, e.g. 12235)
 		build_number = Date.today.strftime("%y%j")
 		git_commit = `git rev-parse --short HEAD`.strip
 		semantic_version = "#{base_version}+build.#{build_number}.#{git_commit}"
@@ -221,7 +225,7 @@ namespace :version do
 		asm.file_version = "#{base_version}.#{build_number}"
 		asm.custom_attributes :AssemblyInformationalVersion => semantic_version
 		asm.input_file = COMMON_ASSEMBLY_TEMPLATE
-		asm.output_file = File.join("src", "CommonAssemblyInfo.cs")
+		asm.output_file = File.join(SOURCE_DIR, "CommonAssemblyInfo.cs")
 	end
 
 	# this is a workaround to limit number of times template is written to.
