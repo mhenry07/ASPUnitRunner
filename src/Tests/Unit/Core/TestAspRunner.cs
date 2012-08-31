@@ -139,6 +139,42 @@ namespace AspUnitRunner.Tests.Unit.Core {
         }
 
         [Test]
+        public void Run_null_container_should_post_request_with_all_test_containers() {
+            var expectedData = new NameValueCollection {
+                { "cboTestContainers", AspRunner.AllTestContainers },
+                { "cboTestCases", AspRunner.AllTestCases },
+                { "cmdRun", "Run Tests"}
+            };
+
+            var runner = CreateRunner()
+                .WithAddress("http://path/to/test-runner");
+            var results = runner.Run(null);
+
+            _client.AssertWasCalled(c =>
+                c.PostRequest(
+                    Arg<string>.Is.Anything,
+                    Arg<NameValueCollection>.Matches(arg => arg.SequenceEqual(expectedData))));
+        }
+
+        [Test]
+        public void Run_empty_container_should_post_request_with_all_test_containers() {
+            var expectedData = new NameValueCollection {
+                { "cboTestContainers", AspRunner.AllTestContainers },
+                { "cboTestCases", AspRunner.AllTestCases },
+                { "cmdRun", "Run Tests"}
+            };
+
+            var runner = CreateRunner()
+                .WithAddress("http://path/to/test-runner");
+            var results = runner.Run("");
+
+            _client.AssertWasCalled(c =>
+                c.PostRequest(
+                    Arg<string>.Is.Anything,
+                    Arg<NameValueCollection>.Matches(arg => arg.SequenceEqual(expectedData))));
+        }
+
+        [Test]
         public void Run_test_case_should_post_request_with_test_container_and_test_case() {
             const string testContainer = "TestContainer";
             const string testCase = "TestCase";
@@ -151,6 +187,53 @@ namespace AspUnitRunner.Tests.Unit.Core {
             var runner = CreateRunner()
                 .WithAddress("http://path/to/test-runner");
             var results = runner.Run(testContainer, testCase);
+
+            _client.AssertWasCalled(c =>
+                c.PostRequest(
+                    Arg<string>.Is.Anything,
+                    Arg<NameValueCollection>.Matches(arg => arg.SequenceEqual(expectedData))));
+        }
+
+        [Test]
+        public void Run_test_case_for_all_containers_should_throw_exception() {
+            var runner = CreateRunner();
+
+            Assert.That(
+                () => runner.Run(AspRunner.AllTestContainers, "TestCase"),
+                Throws.InstanceOf<System.ArgumentException>());
+        }
+
+        [Test]
+        public void Run_null_test_case_should_post_request_with_test_container_and_all_test_cases() {
+            const string testContainer = "TestContainer";
+            var expectedData = new NameValueCollection {
+                { "cboTestContainers", testContainer },
+                { "cboTestCases", AspRunner.AllTestCases },
+                { "cmdRun", "Run Tests"}
+            };
+
+            var runner = CreateRunner()
+                .WithAddress("http://path/to/test-runner");
+            var results = runner.Run(testContainer, null);
+
+            _client.AssertWasCalled(c =>
+                c.PostRequest(
+                    Arg<string>.Is.Anything,
+                    Arg<NameValueCollection>.Matches(arg => arg.SequenceEqual(expectedData))));
+        }
+
+        [Test]
+        public void Run_empty_test_case_should_post_request_with_test_container_and_all_test_cases() {
+            const string testContainer = "TestContainer";
+            var expectedData = new NameValueCollection {
+                { "cboTestContainers", testContainer },
+                { "cboTestCases", AspRunner.AllTestCases },
+                { "cmdRun", "Run Tests"}
+            };
+
+            var runner = CreateRunner()
+                .WithAddress("http://path/to/test-runner");
+            var results = runner.Run(testContainer, "");
 
             _client.AssertWasCalled(c =>
                 c.PostRequest(

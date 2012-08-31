@@ -51,7 +51,8 @@ namespace AspUnitRunner.Core {
         [Obsolete]
         public IRunner WithTestContainerAndCase(string testContainer, string testCase) {
             if (IsSpecified(testCase, AllTestCases) && !IsSpecified(testContainer, AllTestContainers))
-                throw new ArgumentException("A test container must be specified if a test case is specified.", "testContainer");
+                throw new ArgumentException("A test container must be specified if a test case is specified.",
+                    "testContainer");
 
             _testContainer = Normalize(testContainer, AllTestContainers);
             _testCase = Normalize(testCase, AllTestCases);
@@ -68,8 +69,14 @@ namespace AspUnitRunner.Core {
         }
 
         public IResults Run(string testContainer, string testCase) {
-            var htmlResults = _client.PostRequest(
-                FormatResultsUrl(_address), GetPostData(testContainer, testCase));
+            if (IsSpecified(testCase, AllTestCases) && !IsSpecified(testContainer, AllTestContainers))
+                throw new ArgumentException("A test container must be specified if a test case is specified.",
+                    "testContainer");
+
+            var postData = GetPostData(
+                Normalize(testContainer, AllTestContainers),
+                Normalize(testCase, AllTestCases));
+            var htmlResults = _client.PostRequest(FormatResultsUrl(_address), postData);
             return _resultParser.Parse(htmlResults);
         }
 
@@ -91,10 +98,6 @@ namespace AspUnitRunner.Core {
 
         private string FormatSelectorUrl(string address) {
             return address + string.Format(RunnerQueryString, RunnerSelector);
-        }
-
-        private NameValueCollection GetPostData() {
-            return GetPostData(_testContainer, _testCase);
         }
 
         private NameValueCollection GetPostData(string testContainer, string testCase) {
