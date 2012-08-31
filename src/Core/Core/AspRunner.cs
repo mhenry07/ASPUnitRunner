@@ -43,13 +43,16 @@ namespace AspUnitRunner.Core {
             return this;
         }
 
+        [Obsolete]
         public IRunner WithTestContainer(string testContainer) {
             return WithTestContainerAndCase(testContainer, AllTestCases);
         }
 
+        [Obsolete]
         public IRunner WithTestContainerAndCase(string testContainer, string testCase) {
             if (IsSpecified(testCase, AllTestCases) && !IsSpecified(testContainer, AllTestContainers))
-                throw new ArgumentException("A test container must be specified if a test case is specified.", "testContainer");
+                throw new ArgumentException("A test container must be specified if a test case is specified.",
+                    "testContainer");
 
             _testContainer = Normalize(testContainer, AllTestContainers);
             _testCase = Normalize(testCase, AllTestCases);
@@ -58,7 +61,22 @@ namespace AspUnitRunner.Core {
         }
 
         public IResults Run() {
-            var htmlResults = _client.PostRequest(FormatResultsUrl(_address), GetPostData());
+            return Run(_testContainer ?? AllTestContainers, _testCase ?? AllTestCases);
+        }
+
+        public IResults Run(string testContainer) {
+            return Run(testContainer, AllTestCases);
+        }
+
+        public IResults Run(string testContainer, string testCase) {
+            if (IsSpecified(testCase, AllTestCases) && !IsSpecified(testContainer, AllTestContainers))
+                throw new ArgumentException("A test container must be specified if a test case is specified.",
+                    "testContainer");
+
+            var postData = GetPostData(
+                Normalize(testContainer, AllTestContainers),
+                Normalize(testCase, AllTestCases));
+            var htmlResults = _client.PostRequest(FormatResultsUrl(_address), postData);
             return _resultParser.Parse(htmlResults);
         }
 
@@ -80,10 +98,6 @@ namespace AspUnitRunner.Core {
 
         private string FormatSelectorUrl(string address) {
             return address + string.Format(RunnerQueryString, RunnerSelector);
-        }
-
-        private NameValueCollection GetPostData() {
-            return GetPostData(_testContainer, _testCase);
         }
 
         private NameValueCollection GetPostData(string testContainer, string testCase) {
