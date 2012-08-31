@@ -20,9 +20,8 @@ namespace AspUnitRunner.Sample.Tests.NUnit {
             [Values("CalculatorTest", "StringUtilityTest", "FailureTest")] string testContainer
         ) {
             var runner = Runner.Create(AspTestUrl)
-                .WithEncoding(Encoding.UTF8)
-                .WithTestContainer(testContainer);
-            var results = runner.Run();
+                .WithEncoding(Encoding.UTF8);
+            var results = runner.Run(testContainer);
 
             // this results in slightly cleaner output than Assert.That(results.Successful...)
             if (!results.Successful)

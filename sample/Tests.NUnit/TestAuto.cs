@@ -16,9 +16,8 @@ namespace AspUnitRunner.Sample.Tests.NUnit {
 
         [Test, TestCaseSource("GetAspUnitTests")]
         public void Test(string testContainer, string testCase) {
-            var runner = GetConfiguredRunner()
-                .WithTestContainerAndCase(testContainer, testCase);
-            var results = runner.Run();
+            var runner = GetConfiguredRunner();
+            var results = runner.Run(testContainer, testCase);
 
             if (!results.Successful)
                 Assert.Fail(results.Format());
