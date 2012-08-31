@@ -17,8 +17,9 @@ namespace AspUnitRunner.Sample.Tests.NUnit {
         }
 
         // set path to IIS Express .exe
-        public void SetExecPath(string path) {
+        public IisExpressServer WithExecPath(string path) {
             _execPath = path;
+            return this;
         }
 
         public void Start() {
