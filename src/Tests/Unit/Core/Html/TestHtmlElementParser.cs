@@ -6,6 +6,7 @@ using AspUnitRunner.Tests.Helpers;
 namespace AspUnitRunner.Tests.Unit.Core.Html {
     [TestFixture]
     public class TestHtmlElementParser {
+        // GetElementsByTagName tests
         [Test]
         public void GetElementsByTagName_should_return_empty_collection() {
             var elements = HtmlElementParser.GetElementsByTagName("", "p");
@@ -125,6 +126,77 @@ namespace AspUnitRunner.Tests.Unit.Core.Html {
             };
 
             var elements = HtmlElementParser.GetElementsByTagName(html, "TD");
+            Assert.That(elements, Is.EqualTo(expectedElements)
+                .Using(new HtmlElementEqualityComparer()));
+        }
+
+        // GetOptionElements tests
+        [Test]
+        public void GetOptionElements_for_empty_select_should_return_empty_collection() {
+            const string html = "<SELECT></SELECT>";
+
+            var elements = HtmlElementParser.GetOptionElements(html);
+            Assert.That(elements, Is.Empty);
+        }
+
+        [Test]
+        public void GetOptionElements_for_single_option_with_end_tag_should_return_expected_element() {
+            const string html = "<OPTION>text</OPTION>";
+            var expectedElements = new[] {
+                new HtmlElement { TagName = "OPTION", InnerHtml = "text" }
+            };
+
+            var elements = HtmlElementParser.GetOptionElements(html);
+            Assert.That(elements, Is.EqualTo(expectedElements)
+                .Using(new HtmlElementEqualityComparer()));
+        }
+
+        [Test]
+        public void GetOptionElements_for_single_option_without_end_tag_should_return_expected_element() {
+            const string html = "<OPTION>text";
+            var expectedElements = new[] {
+                new HtmlElement { TagName = "OPTION", InnerHtml = "text" }
+            };
+
+            var elements = HtmlElementParser.GetOptionElements(html);
+            Assert.That(elements, Is.EqualTo(expectedElements)
+                .Using(new HtmlElementEqualityComparer()));
+        }
+
+        [Test]
+        public void GetOptionElements_for_selected_option_should_return_expected_element() {
+            const string html = "<OPTION SELECTED>text";
+            var expectedElements = new[] {
+                new HtmlElement { TagName = "OPTION", InnerHtml = "text" }
+            };
+            expectedElements[0].SetAttribute("SELECTED", "");
+
+            var elements = HtmlElementParser.GetOptionElements(html);
+            Assert.That(elements, Is.EqualTo(expectedElements)
+                .Using(new HtmlElementEqualityComparer()));
+        }
+
+        [Test]
+        public void GetOptionElements_for_two_options_without_end_tags_should_return_expected_elements() {
+            const string html = "<OPTION>first<OPTION>second";
+            var expectedElements = new[] {
+                new HtmlElement { TagName = "OPTION", InnerHtml = "first" },
+                new HtmlElement { TagName = "OPTION", InnerHtml = "second" }
+            };
+
+            var elements = HtmlElementParser.GetOptionElements(html);
+            Assert.That(elements, Is.EqualTo(expectedElements)
+                .Using(new HtmlElementEqualityComparer()));
+        }
+
+        [Test]
+        public void GetOptionElements_for_option_within_select_should_return_expected_element() {
+            const string html = "<SELECT><OPTION>text</SELECT>";
+            var expectedElements = new[] {
+                new HtmlElement { TagName = "OPTION", InnerHtml = "text" }
+            };
+
+            var elements = HtmlElementParser.GetOptionElements(html);
             Assert.That(elements, Is.EqualTo(expectedElements)
                 .Using(new HtmlElementEqualityComparer()));
         }

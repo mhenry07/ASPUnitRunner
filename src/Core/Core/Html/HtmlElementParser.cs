@@ -10,21 +10,29 @@ namespace AspUnitRunner.Core.Html {
         // note that this only matches elements with the pattern: <tag>...</tag>
         private const string HtmlElementRegex =
             @"<(?<tagName>{0}\b)(?<attributes>[^>]*)>(?<innerHtml>(?:.(?!<{0}\b))*)</{0}>";
+        // note that this does not allow child elements/tags
+        private const string HtmlOptionRegex =
+            @"<(?<tagName>{0}\b)(?<attributes>[^>]*)>(?<innerHtml>[^<]*)(?:</{0}>)?";
         private const string HtmlAttributeRegex =
             @"\s+(?<name>[A-Za-z][-\w:.]*)(?:=(?:""(?<value>[^""]*)""|'(?<value>[^']*)'|(?<value>[-\w:.]*)(?=$|[\s/>])))?";
 
         public static IHtmlCollection GetElementsByTagName(string html, string tagName) {
-            var elementMatches = GetElementMatches(html, tagName);
+            var elementMatches = GetElementMatches(html, tagName, HtmlElementRegex);
             return CreateCollection(elementMatches);
         }
 
-        private static MatchCollection GetElementMatches(string html, string tagName) {
-            var elementRegex = GetElementRegex(tagName);
+        public static IHtmlCollection GetOptionElements(string html) {
+            var optionMatches = GetElementMatches(html, "OPTION", HtmlOptionRegex);
+            return CreateCollection(optionMatches);
+        }
+
+        private static MatchCollection GetElementMatches(string html, string tagName, string regexFormat) {
+            var elementRegex = GetElementRegex(tagName, regexFormat);
             return elementRegex.Matches(html);
         }
 
-        private static Regex GetElementRegex(string tagName) {
-            var elementPattern = string.Format(HtmlElementRegex, tagName);
+        private static Regex GetElementRegex(string tagName, string regexFormat) {
+            var elementPattern = string.Format(regexFormat, tagName);
             return new Regex(elementPattern,
                 RegexOptions.Singleline | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
         }

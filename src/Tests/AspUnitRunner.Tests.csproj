@@ -63,6 +63,7 @@
     <Compile Include="Helpers\HtmlElementEqualityComparer.cs" />
     <Compile Include="Helpers\ReflectionExtensions.cs" />
     <Compile Include="Helpers\Tests\TestCollectionsExtensions.cs" />
+    <Compile Include="Unit\Core\TestSelectorParser.cs" />
     <Compile Include="Unit\Infrastructure\TestAspClient.cs" />
     <Compile Include="Unit\Infrastructure\TestResponseDecoder.cs" />
     <Compile Include="Unit\Infrastructure\TestWebClientFactory.cs" />

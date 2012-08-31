@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Net;
 using System.Text;
@@ -9,18 +10,22 @@ namespace AspUnitRunner.Core {
         internal const string AllTestCases = "All Test Cases";
 
         private const string RunCommand = "Run Tests";
-        private const string ResultsQueryString = "?UnitRunner=results";
+        private const string RunnerQueryString = "?UnitRunner={0}";
+        private const string RunnerSelector = "selector";
+        private const string RunnerResults = "results";
 
         private readonly IAspClient _client;
         private readonly IResultParser _resultParser;
+        private readonly ISelectorParser _selectorParser;
 
         private string _address;
         private string _testContainer = AllTestContainers;
         private string _testCase = AllTestCases;
 
-        internal AspRunner(IAspClient client, IResultParser resultParser) {
+        internal AspRunner(IAspClient client, IResultParser resultParser, ISelectorParser selectorParser) {
             _client = client;
             _resultParser = resultParser;
+            _selectorParser = selectorParser;
         }
 
         internal IRunner WithAddress(string address) {
@@ -53,18 +58,38 @@ namespace AspUnitRunner.Core {
         }
 
         public IResults Run() {
-            var htmlResults = _client.PostRequest(FormatUrl(_address), GetPostData());
+            var htmlResults = _client.PostRequest(FormatResultsUrl(_address), GetPostData());
             return _resultParser.Parse(htmlResults);
         }
 
-        private string FormatUrl(string address) {
-            return address + ResultsQueryString;
+        public IEnumerable<string> GetTestContainers() {
+            var htmlResults = _client.PostRequest(
+                FormatSelectorUrl(_address), GetPostData(AllTestContainers, AllTestCases));
+            return _selectorParser.ParseContainers(htmlResults);
+        }
+
+        public IEnumerable<string> GetTestCases(string testContainer) {
+            var htmlResults = _client.PostRequest(
+                FormatSelectorUrl(_address), GetPostData(testContainer, AllTestCases));
+            return _selectorParser.ParseTestCases(htmlResults);
+        }
+
+        private string FormatResultsUrl(string address) {
+            return address + string.Format(RunnerQueryString, RunnerResults);
+        }
+
+        private string FormatSelectorUrl(string address) {
+            return address + string.Format(RunnerQueryString, RunnerSelector);
         }
 
         private NameValueCollection GetPostData() {
+            return GetPostData(_testContainer, _testCase);
+        }
+
+        private NameValueCollection GetPostData(string testContainer, string testCase) {
             return new NameValueCollection {
-                { "cboTestContainers", _testContainer },
-                { "cboTestCases", _testCase },
+                { "cboTestContainers", testContainer },
+                { "cboTestCases", testCase },
                 { "cmdRun", RunCommand }
             };
         }

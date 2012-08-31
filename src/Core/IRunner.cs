@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System.Collections.Generic;
+using System.Net;
 using System.Text;
 
 namespace AspUnitRunner {
@@ -47,5 +48,18 @@ namespace AspUnitRunner {
         /// An AspUnitRunner.IResults instance containing the test results.
         /// </returns>
         IResults Run();
+
+        /// <summary>
+        /// Retrieves the list of ASPUnit test containers.
+        /// </summary>
+        /// <returns>An IEnumerable&lt;string&gt; of test container names.</returns>
+        IEnumerable<string> GetTestContainers();
+
+        /// <summary>
+        /// Retrieves the list of ASPUnit test cases for the specified test container.
+        /// </summary>
+        /// <param name="testContainer">The test container.</param>
+        /// <returns>An IEnumerable&lt;string&gt; of test case names.</returns>
+        IEnumerable<string> GetTestCases(string testContainer);
     }
 }
