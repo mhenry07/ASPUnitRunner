@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using System.Text;
-using System.Threading;
 using NUnit.Framework;
 
 namespace AspUnitRunner.Sample.Tests.NUnit {
@@ -31,14 +30,14 @@ namespace AspUnitRunner.Sample.Tests.NUnit {
         // note that this runs in a separate instance from when tests run
         public IEnumerable GetAspUnitTests() {
             var runner = GetConfiguredRunner();
-            StartServer();
-            foreach (var container in runner.GetTestContainers()) {
-                foreach (var testCase in runner.GetTestCases(container)) {
-                    var name = string.Format("{0}.{1}", container, testCase);
-                    yield return new TestCaseData(container, testCase).SetName(name);
+            using (var iisServer = StartIisExpress()) {
+                foreach (var container in runner.GetTestContainers()) {
+                    foreach (var testCase in runner.GetTestCases(container)) {
+                        var name = string.Format("{0}.{1}", container, testCase);
+                        yield return new TestCaseData(container, testCase).SetName(name);
+                    }
                 }
             }
-            StopServer();
         }
 
         // configure encoding and credentials here
@@ -49,14 +48,18 @@ namespace AspUnitRunner.Sample.Tests.NUnit {
 
         [TestFixtureSetUp]
         public void StartServer() {
-            _iisServer = new IisExpressServer(AspSiteName);
-            var thread = new Thread(_iisServer.Start) { IsBackground = true };
-            thread.Start();
+            _iisServer = StartIisExpress();
         }
 
         [TestFixtureTearDown]
         public void StopServer() {
             _iisServer.Stop();
+        }
+
+        private IisExpressServer StartIisExpress() {
+            var server = new IisExpressServer(AspSiteName);
+            server.Start();
+            return server;
         }
     }
 }

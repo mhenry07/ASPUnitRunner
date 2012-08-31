@@ -1,5 +1,4 @@
 ﻿using System.Text;
-using System.Threading;
 using NUnit.Framework;
 using AspUnitRunner;
 
@@ -34,14 +33,13 @@ namespace AspUnitRunner.Sample.Tests.NUnit {
         }
 
         [TestFixtureSetUp]
-        public void TestFixtureSetUp() {
+        public void StartServer() {
             _iisServer = new IisExpressServer(AspSiteName);
-            var thread = new Thread(_iisServer.Start) { IsBackground = true };
-            thread.Start();
+            _iisServer.Start();
         }
 
         [TestFixtureTearDown]
-        public void TestFixtureTearDown() {
+        public void StopServer() {
             _iisServer.Stop();
         }
     }
